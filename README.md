@@ -14,6 +14,20 @@ python manage.py createsuperuser                    # for /admin/
 python manage.py runserver
 ```
 
+## Configuration (environment variables)
+
+DEBUG is **off** by default. Set these on the server (or in your shell for local work):
+
+| Variable | Example | Purpose |
+|---|---|---|
+| `DJANGO_SECRET_KEY` | a long random string | **Required for a live site** (a dev fallback is used if unset) |
+| `DJANGO_ALLOWED_HOSTS` | `bnnengineering.co.ke,www.bnnengineering.co.ke` | Domains the site answers on (default `localhost,127.0.0.1`) |
+| `DJANGO_CSRF_TRUSTED_ORIGINS` | `https://bnnengineering.co.ke` | Needed for forms when served over HTTPS on a domain |
+| `DJANGO_DEBUG` | `True` | Turn on Django's debug pages for local development only |
+| `DJANGO_SERVE_MEDIA` | `False` | Set if your web server (e.g. Nginx) serves `/media/` itself |
+
+Static files (CSS/JS/video) are served by WhiteNoise; run `python manage.py collectstatic` when deploying.
+
 ## Site map
 
 | URL | Page |

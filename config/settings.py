@@ -10,22 +10,27 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+# Security settings can be overridden with environment variables on the server:
+#   DJANGO_SECRET_KEY      – a long random secret (required for a live site)
+#   DJANGO_DEBUG           – "True" only for local development (default: False)
+#   DJANGO_ALLOWED_HOSTS   – comma-separated domains, e.g. "bnnengineering.co.ke,www.bnnengineering.co.ke"
+#   DJANGO_CSRF_TRUSTED_ORIGINS – comma-separated, e.g. "https://bnnengineering.co.ke"
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'django-insecure--#e!#5*!%7ql)2b(uh%6r1ymkv*n(j09uh%fo5*0!^d6ml)1p*',  # development fallback only
+)
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--#e!#5*!%7ql)2b(uh%6r1ymkv*n(j09uh%fo5*0!^d6ml)1p*'
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False').strip().lower() in ('1', 'true', 'yes')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [h.strip() for h in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()]
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()]
 
 
 # Application definition
@@ -48,6 +53,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # serves CSS/JS/video when DEBUG is off
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -128,6 +134,11 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+# WhiteNoise: serve static files directly from the app (works without running collectstatic first)
+WHITENOISE_USE_FINDERS = True
+# Serve uploaded media (product photos, adverts) from Django. Set DJANGO_SERVE_MEDIA=False
+# if your web server (e.g. Nginx) serves /media/ itself.
+SERVE_MEDIA = os.environ.get('DJANGO_SERVE_MEDIA', 'True').strip().lower() in ('1', 'true', 'yes')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
