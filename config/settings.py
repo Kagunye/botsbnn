@@ -31,6 +31,11 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'False').strip().lower() in ('1', 'true',
 
 ALLOWED_HOSTS = [h.strip() for h in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()]
 CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()]
+if os.environ.get('VERCEL'):
+    # Vercel preview/production domains (*.vercel.app); add your own domain via the variables above
+    ALLOWED_HOSTS += ['.vercel.app']
+    CSRF_TRUSTED_ORIGINS += ['https://*.vercel.app']
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
@@ -95,6 +100,18 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Hosted database (e.g. Vercel Postgres / Neon / Supabase): set DATABASE_URL=postgres://...
+if os.environ.get('DATABASE_URL'):
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.parse(os.environ['DATABASE_URL'], conn_max_age=0, ssl_require=True)
+
+# On Vercel the file system is read-only. Without DATABASE_URL the bundled SQLite file can still be READ
+# (pages, products, services show), and sessions are kept in signed cookies so the cart and admin login work.
+# Saving anything (quote requests, orders, admin edits) needs DATABASE_URL.
+ON_VERCEL = bool(os.environ.get('VERCEL'))
+if ON_VERCEL and not os.environ.get('DATABASE_URL'):
+    SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 
 # Password validation
