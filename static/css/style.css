@@ -789,6 +789,20 @@ a { color: inherit; }
 @media (max-width: 575.98px) { .shop-ads-track { grid-auto-columns: 82%; } .shop-ads-arrow { display: none; } .ad-grid { gap: .8rem; } }
 
 /* ===== Smaller base text size (all rem-based text and spacing scale with it) ===== */
-html { font-size: 93.75%; }                                   /* 15px on phones and tablets */
-@media (min-width: 1200px) { html { font-size: 87.5%; } }    /* 14px on desktop */
+html { font-size: 93.75%; }   /* 15px base on every screen (similar to Claude's interface) */
+
+/* ===== Calm, Claude-like type scale: readable body, modest headings ===== */
+body { line-height: 1.6; }
+.eng-hero h1 { font-size: clamp(1.9rem, 3.2vw, 2.4rem); font-weight: 700; line-height: 1.15; letter-spacing: -.01em; }
+.eng-hero .lead { font-size: 1.05rem; }
+.section-title-lg { font-size: clamp(1.45rem, 2.4vw, 1.75rem); font-weight: 700; letter-spacing: -.01em; }
+.method-title, .company-title { font-size: clamp(1.5rem, 2.4vw, 1.85rem); font-weight: 700; letter-spacing: -.01em; }
+.banner h1 { font-size: clamp(1.6rem, 2.8vw, 2.2rem); font-weight: 700; }
+.service-hero h1 { font-size: clamp(1.45rem, 2.4vw, 1.85rem); }
+.page-hero h1 { font-size: 1.6rem; font-weight: 700; }
+.hero-stats strong, .company-stats strong { font-size: 1.5rem; }
+.method-num { font-size: 2.8rem; }
+.method-body h3, .news-title, .service-card h3, .project-title, .photo-card-title, .cover-title { font-weight: 700; }
+.photo-grid > .photo-card:first-child .photo-card-title { font-size: 1.5rem; }
+.ft-cta h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); font-weight: 700; }
 
