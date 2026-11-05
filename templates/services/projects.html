@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Completed Projects | {{ shop.name }}{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <nav aria-label="breadcrumb"><ol class="breadcrumb mb-1">
+      <li class="breadcrumb-item"><a href="{% url 'services:home' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Projects</li>
+    </ol></nav>
+    <h1>Completed Projects</h1>
+    <p class="mb-0 opacity-75">Real installations by the {{ shop.name }} team.</p>
+  </div>
+</div>
+
+<div class="container py-5">
+  {% if used_services|length > 1 %}
+  <nav class="service-tabs mb-4">
+    <a href="{% url 'services:projects' %}" class="{% if not active_service %}active{% endif %}">All</a>
+    {% for s in used_services %}<a href="?service={{ s.slug }}" class="{% if active_service == s.slug %}active{% endif %}"><i class="bi bi-{{ s.icon }}"></i> {{ s.name }}</a>{% endfor %}
+  </nav>
+  {% endif %}
+
+  {% if projects %}
+  <div class="project-grid">
+    {% for p in projects %}{% include 'services/_project_card.html' %}{% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <i class="bi bi-images"></i>
+    <h5>Projects coming soon</h5>
+    <p class="text-muted">We're adding photos of our recent installations. In the meantime, ask us for references.</p>
+    <a href="{% url 'services:quote' %}" class="btn btn-brand">Request a quote</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

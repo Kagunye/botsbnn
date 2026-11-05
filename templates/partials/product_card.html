@@ -1,0 +1,33 @@
+{% load humanize %}
+<div class="product-card">
+  {% if product.on_sale %}<span class="sale-badge">SALE</span>{% endif %}
+  <a href="{{ product.get_absolute_url }}" class="product-thumb">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+    {% else %}
+      <span class="product-placeholder ph-{{ product.category.icon }}"><i class="bi bi-{{ product.category.icon }}"></i>
+        {% if product.brand %}<small>{{ product.brand.name }}</small>{% endif %}</span>
+    {% endif %}
+  </a>
+  <div class="product-body">
+    <a href="{{ product.get_absolute_url }}" class="product-name">{{ product.name }}</a>
+    <div class="product-price">
+      {% if not product.has_price %}<span class="price-request">Price on request</span>
+      {% elif product.on_sale %}<del>KSh{{ product.old_price|floatformat:2|intcomma }}</del>
+        <strong>KSh{{ product.price|floatformat:2|intcomma }}</strong>
+      {% else %}<span>KSh{{ product.price|floatformat:2|intcomma }}</span>{% endif %}
+    </div>
+    {% if product.has_price %}
+    <form method="post" action="{% url 'cart:add' product.id %}" class="add-to-cart-form">
+      {% csrf_token %}
+      <input type="hidden" name="quantity" value="1">
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <button type="submit" class="btn btn-add" {% if not product.in_stock %}disabled{% endif %}>
+        {% if product.in_stock %}<i class="bi bi-cart-plus"></i> Add to cart{% else %}Out of stock{% endif %}
+      </button>
+    </form>
+    {% else %}
+    <a href="https://wa.me/{{ shop.whatsapp }}?text={{ 'Hi, please send me a quote for: '|urlencode }}{{ product.name|urlencode }}" target="_blank" rel="noopener" class="btn btn-add"><i class="bi bi-whatsapp"></i> Request quote</a>
+    {% endif %}
+  </div>
+</div>

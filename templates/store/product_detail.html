@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}{{ product.name }} | {{ shop.name }}{% endblock %}
+{% block meta_description %}{{ product.short_description|default:product.name }}{% endblock %}
+
+{% block subnav %}{% include 'partials/shop_nav.html' %}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="{% url 'services:home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'store:home' %}">Shop</a></li>
+      {% if product.category.parent %}<li class="breadcrumb-item"><a href="{{ product.category.parent.get_absolute_url }}">{{ product.category.parent.name }}</a></li>{% endif %}
+      <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+    </ol>
+  </nav>
+
+  <div class="row g-4 product-detail">
+    <div class="col-md-6">
+      <div class="detail-image">
+        {% if product.on_sale %}<span class="sale-badge sale-badge-lg">-{{ product.discount_percent }}%</span>{% endif %}
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" id="mainImage">
+        {% else %}
+          <span class="product-placeholder product-placeholder-lg"><i class="bi bi-{{ product.category.icon }}"></i>{% if product.brand %}<small>{{ product.brand.name }}</small>{% endif %}</span>
+        {% endif %}
+      </div>
+      {% if product.image and product.gallery.all %}
+      <div class="gallery-thumbs">
+        <button type="button" class="active" data-src="{{ product.image.url }}"><img src="{{ product.image.url }}" alt=""></button>
+        {% for g in product.gallery.all %}
+        <button type="button" data-src="{{ g.image.url }}"><img src="{{ g.image.url }}" alt="" loading="lazy"></button>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    <div class="col-md-6">
+      {% if product.brand %}<a href="{{ product.brand.get_absolute_url }}" class="detail-brand">{{ product.brand.name }}</a>{% endif %}
+      <h1 class="detail-title">{{ product.name }}</h1>
+      {% if product.sku %}<p class="small text-muted mb-2">SKU: {{ product.sku }}</p>{% endif %}
+
+      <div class="detail-price">
+        {% if product.has_price %}
+        {% if product.on_sale %}<del>KSh{{ product.old_price|floatformat:2|intcomma }}</del>{% endif %}
+        <strong>KSh{{ product.price|floatformat:2|intcomma }}</strong>
+        {% if product.on_sale %}<span class="badge bg-success ms-2">Save KSh{{ product.savings|floatformat:0|intcomma }}</span>{% endif %}
+        {% else %}
+        <strong>Price on request</strong>
+        {% endif %}
+      </div>
+
+      {% if product.in_stock %}
+        <p class="text-success fw-semibold"><i class="bi bi-check-circle-fill"></i> In stock{% if product.stock < 5 %} – only {{ product.stock }} left{% endif %}</p>
+      {% else %}
+        <p class="text-danger fw-semibold"><i class="bi bi-x-circle-fill"></i> Out of stock</p>
+      {% endif %}
+
+      {% if product.short_description %}<p class="lead fs-6">{{ product.short_description }}</p>{% endif %}
+
+      {% if product.has_price %}
+      <form method="post" action="{% url 'cart:add' product.id %}" class="d-flex gap-2 align-items-stretch my-4 add-to-cart-form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <div class="qty-input">
+          <button type="button" class="btn" data-qty="-1" aria-label="Decrease">−</button>
+          <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" aria-label="Quantity">
+          <button type="button" class="btn" data-qty="1" aria-label="Increase">+</button>
+        </div>
+        <button type="submit" class="btn btn-brand btn-lg flex-grow-1" {% if not product.in_stock %}disabled{% endif %}><i class="bi bi-cart-plus"></i> Add to cart</button>
+      </form>
+      <a href="https://wa.me/{{ shop.whatsapp }}?text={{ 'Hi, I am interested in: '|urlencode }}{{ product.name|urlencode }}" target="_blank" rel="noopener" class="btn btn-success w-100 mb-4"><i class="bi bi-whatsapp"></i> Order / enquire via WhatsApp</a>
+      {% else %}
+      <a href="https://wa.me/{{ shop.whatsapp }}?text={{ 'Hi, please send me a quote for: '|urlencode }}{{ product.name|urlencode }}" target="_blank" rel="noopener" class="btn btn-success btn-lg w-100 my-3"><i class="bi bi-whatsapp"></i> Request a quote on WhatsApp</a>
+      <a href="{% url 'pages:contact' %}" class="btn btn-outline-secondary w-100 mb-4"><i class="bi bi-envelope"></i> Request a quote by email</a>
+      {% endif %}
+
+      <ul class="list-unstyled detail-perks small">
+        <li><i class="bi bi-truck"></i> Free delivery within Nairobi</li>
+        <li><i class="bi bi-patch-check"></i> 100% genuine with manufacturer warranty</li>
+        <li><i class="bi bi-tools"></i> Professional installation available</li>
+      </ul>
+    </div>
+  </div>
+
+  <ul class="nav nav-tabs mt-5" role="tablist">
+    <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#desc" type="button" role="tab">Description</button></li>
+    {% if product.spec_list %}<li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#specs" type="button" role="tab">Specifications</button></li>{% endif %}
+  </ul>
+  <div class="tab-content tab-box">
+    <div class="tab-pane fade show active" id="desc" role="tabpanel">
+      {% with points=product.description_points %}
+      {% if points|length > 1 %}
+        <ul class="desc-points">{% for p in points %}<li>{{ p }}</li>{% endfor %}</ul>
+      {% elif product.description or product.short_description %}
+        {{ product.description|default:product.short_description|linebreaks }}
+      {% else %}
+        <p class="text-muted mb-0">See the Specifications tab for full technical details, or contact us for a datasheet.</p>
+      {% endif %}
+      {% endwith %}
+    </div>
+    {% if product.spec_list %}
+    <div class="tab-pane fade" id="specs" role="tabpanel">
+      <table class="table table-striped mb-0">
+        <tbody>{% for k, v in product.spec_list %}<tr><th style="width:40%">{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody>
+      </table>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if related %}
+  <section class="mt-5">
+    <div class="section-head"><h2>Related Products</h2><a href="{{ product.category.get_absolute_url }}">See All <i class="bi bi-arrow-right"></i></a></div>
+    <div class="product-grid">
+      {% for product in related %}{% include 'partials/product_card.html' %}{% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

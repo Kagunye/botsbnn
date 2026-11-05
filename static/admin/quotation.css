@@ -1,0 +1,12 @@
+.q-totals { border-collapse: collapse; min-width: 340px; font-size: 14px; }
+.q-totals th, .q-totals td { padding: 6px 12px; border-bottom: 1px solid var(--hairline-color, #eee); text-align: left; }
+.q-totals td { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.q-totals .q-grand th, .q-totals .q-grand td { font-size: 17px; color: #1878b4; border-bottom: 3px double #1878b4; }
+.q-muted { opacity: .45; }
+.inline-group .field-description input { width: 22em; }
+.inline-group .field-quantity input { width: 5em; }
+.inline-group .field-unit_price input { width: 9em; }
+.inline-group td.field-line_total_display { font-weight: 600; white-space: nowrap; }
+.inline-group .field-item_code input { width: 8em; }
+.inline-group .field-discount input { width: 7em; }
+.inline-group td.field-vat_display { white-space: nowrap; color: #475569; }

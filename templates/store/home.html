@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block title %}Shop – Solar Panels, Inverters, Batteries & Water Heaters | {{ shop.name }}{% endblock %}
+
+{% block subnav %}{% include 'partials/shop_nav.html' %}{% endblock %}
+
+{% block content %}
+<div class="container py-3">
+
+  <!-- HERO: advert slider (Admin → Pages → Adverts, "Shop top slider"); falls back to banners -->
+  {% if shop_ads %}
+  <section class="news-section shop-ads-hero" aria-label="Offers">
+    <div class="news-track shop-ads-track" data-news-track tabindex="0">
+      {% for ad in shop_ads %}
+      <a href="{{ ad.link|default:'/quote/' }}" class="shop-ad"><img src="{{ ad.image.url }}" alt="{{ ad.title }}"{% if forloop.counter > 3 %} loading="lazy"{% endif %}></a>
+      {% endfor %}
+    </div>
+    <button type="button" class="shop-ads-arrow prev" data-news-prev aria-label="Previous"><i class="bi bi-chevron-left"></i></button>
+    <button type="button" class="shop-ads-arrow next" data-news-next aria-label="Next"><i class="bi bi-chevron-right"></i></button>
+    <div class="news-dots" data-news-dots aria-hidden="true"></div>
+  </section>
+  {% else %}
+  <section class="row g-3 hero">
+    <div class="col-lg-8">
+      {% if hero_main %}
+      <div id="heroCarousel" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="6000">
+        {% if hero_main|length > 1 %}
+        <div class="carousel-indicators">
+          {% for b in hero_main %}<button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>{% endfor %}
+        </div>
+        {% endif %}
+        <div class="carousel-inner h-100">
+          {% for banner in hero_main %}
+          <div class="carousel-item h-100{% if forloop.first %} active{% endif %}">
+            <div class="banner banner-hero theme-{{ banner.theme }}">
+              <div class="banner-content">
+                {% if banner.eyebrow %}<span class="banner-eyebrow">{{ banner.eyebrow }}</span>{% endif %}
+                <h1>{{ banner.title }}</h1>
+                {% for line in banner.subtitle_lines %}<p class="banner-line">{{ line }}</p>{% endfor %}
+                <a href="{{ banner.link }}" class="btn btn-banner btn-lg mt-3">{{ banner.button_text }} <i class="bi bi-arrow-right"></i></a>
+              </div>
+              {% include 'partials/banner_art.html' %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% if hero_main|length > 1 %}
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span></button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span></button>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+    <div class="col-lg-4 d-flex flex-column gap-3">
+      {% for banner in hero_side %}
+      <div class="banner banner-side theme-{{ banner.theme }} flex-fill">
+        <div class="banner-content">
+          <h2>{{ banner.title }}</h2>
+          {% for line in banner.subtitle_lines %}<p class="banner-line">{{ line }}</p>{% endfor %}
+          <a href="{{ banner.link }}" class="btn btn-banner mt-2">{{ banner.button_text }} <i class="bi bi-arrow-right"></i></a>
+        </div>
+        {% include 'partials/banner_art.html' %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="feature"><i class="bi bi-truck"></i><div><h6>Free Delivery</h6><p>For orders within Nairobi</p></div></div>
+    <div class="feature"><i class="bi bi-shield-lock"></i><div><h6>Safe Payment</h6><p>100% secure payment</p></div></div>
+    <div class="feature"><i class="bi bi-hand-thumbs-up"></i><div><h6>Genuine Products</h6><p>Trusted to offer legit products</p></div></div>
+    <div class="feature"><i class="bi bi-emoji-smile"></i><div><h6>Friendly Services</h6><p>30 day satisfaction guarantee</p></div></div>
+  </section>
+
+  <!-- PROMOS: advert grid (Admin → Pages → Adverts, "Shop promo rows"); falls back to banners -->
+  {% if promo_ads %}
+  <section class="ad-grid my-4">
+    {% for ad in promo_ads|slice:":4" %}{% include 'partials/advert_card.html' %}{% endfor %}
+  </section>
+  {% elif promos %}
+  <section class="row g-4 my-2">
+    {% for banner in promos %}
+    <div class="col-md-6">
+      <div class="banner banner-promo theme-{{ banner.theme }}">
+        <div class="banner-content">
+          <h3>{{ banner.title|safe }}</h3>
+          {% for line in banner.subtitle_lines %}<p class="banner-line fst-italic">{{ line }}</p>{% endfor %}
+          <a href="{{ banner.link }}" class="btn btn-banner mt-2">{{ banner.button_text }} <i class="bi bi-arrow-right"></i></a>
+        </div>
+        {% include 'partials/banner_art.html' %}
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  <!-- SHOP BY CATEGORY -->
+  <section class="my-5">
+    <div class="section-head"><h2>Shop by Category</h2><a href="{% url 'store:shop' %}">See All <i class="bi bi-arrow-right"></i></a></div>
+    <div class="cat-grid">
+      {% for cat in home_categories %}
+      <a href="{{ cat.get_absolute_url }}" class="cat-tile">
+        <span class="cat-icon"><i class="bi bi-{{ cat.icon }}"></i></span>
+        <span>{{ cat.name }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<!-- TOP DEALS -->
+{% if top_deals %}
+<section class="product-section">
+  <div class="container">
+    <div class="section-head"><h2>Top Deals of the Day</h2><a href="{% url 'store:shop' %}?sale=1">See All <i class="bi bi-arrow-right"></i></a></div>
+    <div class="product-grid">
+      {% for product in top_deals %}{% include 'partials/product_card.html' %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<div class="container">
+  {% if promo_ads|length > 4 %}
+  <section class="ad-grid my-4">
+    {% for ad in promo_ads|slice:"4:8" %}{% include 'partials/advert_card.html' %}{% endfor %}
+  </section>
+  {% elif promos_alt %}
+  <section class="row g-4 my-4">
+    {% for banner in promos_alt %}
+    <div class="col-md-6">
+      <div class="banner banner-promo banner-promo-tall theme-{{ banner.theme }}">
+        <div class="banner-content">
+          {% if banner.eyebrow %}<span class="banner-tag">{{ banner.eyebrow }}</span>{% endif %}
+          <h3 class="banner-serif">{{ banner.title }}</h3>
+          <a href="{{ banner.link }}" class="btn btn-banner mt-2">{{ banner.button_text }} <i class="bi bi-arrow-right"></i></a>
+        </div>
+        {% include 'partials/banner_art.html' %}
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+</div>
+
+<!-- RECOMMENDED -->
+{% if recommended %}
+<section class="product-section">
+  <div class="container">
+    <div class="section-head"><h2>Recommended for You</h2><a href="{% url 'store:shop' %}">See All <i class="bi bi-arrow-right"></i></a></div>
+    <div class="product-grid">
+      {% for product in recommended %}{% include 'partials/product_card.html' %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- PARTNERS -->
+{% if partners %}
+<section class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="partners-title mb-0">Our Partners</h2>
+    <span class="verified-badge"><i class="bi bi-patch-check-fill"></i> Verified Supplier</span>
+  </div>
+  <div class="partner-grid">
+    {% for brand in partners %}
+    <a href="{{ brand.get_absolute_url }}" class="partner-cell" title="{{ brand.name }}">
+      {% if brand.logo %}<img src="{{ brand.logo.url }}" alt="{{ brand.name }}">{% else %}<span style="color: {{ brand.color }}">{{ brand.name }}</span>{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

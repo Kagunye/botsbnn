@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} | {{ shop.name }} Shop{% endblock %}
+
+{% block subnav %}{% include 'partials/shop_nav.html' %}{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-1">
+        <li class="breadcrumb-item"><a href="{% url 'services:home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'store:home' %}">Shop</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'store:shop' %}">All products</a></li>
+        {% if category.parent %}<li class="breadcrumb-item"><a href="{{ category.parent.get_absolute_url }}">{{ category.parent.name }}</a></li>{% endif %}
+        {% if category or brand %}<li class="breadcrumb-item active" aria-current="page">{{ title }}</li>{% endif %}
+      </ol>
+    </nav>
+    <h1>{{ title }}</h1>
+    {% if category.description %}<p class="mb-0 opacity-75">{{ category.description }}</p>{% endif %}
+  </div>
+</div>
+
+<div class="container py-4">
+  <div class="row g-4">
+    <!-- Filters -->
+    <aside class="col-lg-3">
+      <button class="btn btn-outline-secondary w-100 d-lg-none mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#filters">
+        <i class="bi bi-funnel"></i> Filters
+      </button>
+      <div class="collapse d-lg-block" id="filters">
+        <div class="filter-box">
+          <h6>Categories</h6>
+          <ul class="list-unstyled filter-cats">
+            {% for cat in all_categories %}
+            <li>
+              <a href="{{ cat.get_absolute_url }}" class="{% if category == cat %}active{% endif %}">{{ cat.name }}</a>
+              {% if cat.children.all %}
+              <ul class="list-unstyled ps-3">
+                {% for child in cat.children.all %}<li><a href="{{ child.get_absolute_url }}" class="{% if category == child %}active{% endif %}">{{ child.name }}</a></li>{% endfor %}
+              </ul>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <form method="get" class="filter-box">
+          {% if q %}<input type="hidden" name="q" value="{{ q }}">{% endif %}
+          <input type="hidden" name="sort" value="{{ sort }}">
+          <h6>Price (KSh)</h6>
+          <div class="d-flex gap-2 mb-3">
+            <input type="number" name="min" class="form-control form-control-sm" placeholder="Min" value="{{ request.GET.min }}" min="0">
+            <input type="number" name="max" class="form-control form-control-sm" placeholder="Max" value="{{ request.GET.max }}" min="0">
+          </div>
+          {% if brands and not brand %}
+          <h6>Brand</h6>
+          <div class="brand-filter mb-3">
+            {% for b in brands %}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="brand" value="{{ b.slug }}" id="brand-{{ b.slug }}" {% if b.slug in selected_brands %}checked{% endif %}>
+              <label class="form-check-label" for="brand-{{ b.slug }}">{{ b.name }}</label>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="sale" value="1" id="saleOnly" {% if request.GET.sale %}checked{% endif %}>
+            <label class="form-check-label" for="saleOnly">On sale only</label>
+          </div>
+          <button class="btn btn-brand w-100 btn-sm">Apply filters</button>
+          <a href="{{ request.path }}" class="btn btn-link btn-sm w-100 text-muted">Clear</a>
+        </form>
+      </div>
+    </aside>
+
+    <!-- Results -->
+    <div class="col-lg-9">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <span class="text-muted small">Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }} products</span>
+        <form method="get" class="d-flex align-items-center gap-2">
+          {% for key, values in request.GET.lists %}{% if key != 'sort' and key != 'page' %}{% for v in values %}<input type="hidden" name="{{ key }}" value="{{ v }}">{% endfor %}{% endif %}{% endfor %}
+          <label for="sort" class="small text-muted text-nowrap">Sort by</label>
+          <select name="sort" id="sort" class="form-select form-select-sm" onchange="this.form.submit()">
+            {% for key, label in sort_options %}<option value="{{ key }}" {% if key == sort %}selected{% endif %}>{{ label }}</option>{% endfor %}
+          </select>
+        </form>
+      </div>
+
+      {% if products %}
+      <div class="product-grid product-grid-3">
+        {% for product in products %}{% include 'partials/product_card.html' %}{% endfor %}
+      </div>
+
+      {% if page_obj.has_other_pages %}
+      <nav class="mt-4" aria-label="Pagination">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?{{ querystring }}&page={{ page_obj.previous_page_number }}">&laquo;</a></li>{% endif %}
+          {% for n in page_obj.paginator.page_range %}
+            <li class="page-item {% if n == page_obj.number %}active{% endif %}"><a class="page-link" href="?{{ querystring }}&page={{ n }}">{{ n }}</a></li>
+          {% endfor %}
+          {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?{{ querystring }}&page={{ page_obj.next_page_number }}">&raquo;</a></li>{% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+      {% else %}
+      <div class="empty-state">
+        <i class="bi bi-search"></i>
+        <h5>No products found</h5>
+        <p class="text-muted">Try a different search or clear your filters.</p>
+        <a href="{% url 'store:shop' %}" class="btn btn-brand">Browse all products</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

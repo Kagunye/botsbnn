@@ -1,0 +1,30 @@
+{% load static %}{% load humanize %}{% with pay=shop.payment %}
+<div class="pay-box">
+  <div class="pay-option">
+    <div class="pay-head"><img src="{% static 'img/mpesa-logo.png' %}" alt="M-PESA" class="mpesa-logo" style="height:30px"><strong>Pay via M-PESA Paybill</strong></div>
+    <dl class="pay-fields">
+      <div><dt>Business No. (Paybill)</dt><dd><span>{{ pay.paybill }}</span><button type="button" class="copy-btn" data-copy="{{ pay.paybill }}" aria-label="Copy paybill number"><i class="bi bi-copy"></i></button></dd></div>
+      <div><dt>Account No.</dt><dd><span>{{ pay.account_no }}</span><button type="button" class="copy-btn" data-copy="{{ pay.account_no }}" aria-label="Copy account number"><i class="bi bi-copy"></i></button></dd></div>
+      {% if amount %}<div><dt>Amount</dt><dd><span>KSh {{ amount|floatformat:0|intcomma }}</span></dd></div>{% endif %}
+    </dl>
+    <ol class="pay-steps">
+      <li>Go to <strong>M-PESA</strong> → <strong>Lipa na M-PESA</strong> → <strong>Pay Bill</strong></li>
+      <li>Business number: <strong>{{ pay.paybill }}</strong></li>
+      <li>Account number: <strong>{{ pay.account_no }}</strong></li>
+      <li>Enter the amount{% if amount %} (<strong>KSh {{ amount|floatformat:0|intcomma }}</strong>){% endif %} and your M-PESA PIN</li>
+      <li>Confirm the recipient is <strong>{{ pay.account_name }}</strong></li>
+    </ol>
+  </div>
+  <div class="pay-option">
+    <div class="pay-head"><span class="pay-logo bank"><i class="bi bi-bank"></i></span><strong>Bank deposit / transfer</strong></div>
+    <dl class="pay-fields">
+      <div><dt>Bank</dt><dd><span>{{ pay.bank }}</span></dd></div>
+      <div><dt>Account Name</dt><dd><span>{{ pay.account_name }}</span></dd></div>
+      <div><dt>Account No.</dt><dd><span>{{ pay.account_no }}</span><button type="button" class="copy-btn" data-copy="{{ pay.account_no }}" aria-label="Copy account number"><i class="bi bi-copy"></i></button></dd></div>
+    </dl>
+  </div>
+  <p class="pay-note"><i class="bi bi-info-circle-fill"></i> After paying, send the M-PESA confirmation message or bank slip{% if order %} with your order number <strong>#{{ order.id }}</strong>{% endif %} to
+    <a href="https://wa.me/{{ shop.whatsapp }}?text={{ 'Payment confirmation'|urlencode }}{% if order %}{{ ' for order #'|urlencode }}{{ order.id }}{% endif %}" target="_blank" rel="noopener">WhatsApp</a> or
+    <a href="mailto:{{ shop.email }}">{{ shop.email }}</a>.</p>
+</div>
+{% endwith %}

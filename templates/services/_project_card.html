@@ -1,0 +1,13 @@
+<a href="{{ p.get_absolute_url }}" class="project-card">
+  <span class="project-img"><img src="{{ p.cover_image.url }}" alt="{{ p.title }}" loading="lazy">
+    {% if p.service %}<span class="project-tag"><i class="bi bi-{{ p.service.icon }}"></i> {{ p.service.name }}</span>{% endif %}
+  </span>
+  <span class="project-body">
+    <span class="project-title">{{ p.title }}</span>
+    <span class="project-meta">
+      {% if p.location %}<span><i class="bi bi-geo-alt"></i> {{ p.location }}</span>{% endif %}
+      {% if p.completed_on %}<span><i class="bi bi-calendar-check"></i> {{ p.completed_on|date:"M Y" }}</span>{% endif %}
+    </span>
+    <span class="project-summary">{{ p.summary }}</span>
+  </span>
+</a>

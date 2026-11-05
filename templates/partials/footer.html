@@ -1,0 +1,96 @@
+{% load static %}<footer class="site-footer ft">
+  <!-- Call to action -->
+  <div class="container">
+    <div class="ft-cta">
+      <div class="ft-cta-text">
+        <span class="ft-cta-kicker">Let's work together</span>
+        <h3>Ready to start your project?</h3>
+        <p>Talk to our engineers about backup power, wiring, security or solar — free site survey and an itemised quote.</p>
+      </div>
+      <div class="ft-cta-actions">
+        <a href="{% url 'services:quote' %}" class="btn ft-btn-light">Get a free quote <i class="bi bi-arrow-right"></i></a>
+        <a href="tel:{{ shop.phones.0|cut:' ' }}" class="btn ft-btn-outline"><i class="bi bi-telephone"></i> {{ shop.phones.0 }}</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main columns -->
+  <div class="container">
+    <div class="ft-main">
+      <div class="ft-brand">
+        <a href="{% url 'services:home' %}" class="footer-logo d-inline-block">
+          <img src="{% static 'img/logo-horizontal-light.png' %}" alt="{{ shop.name }}" width="760" height="128">
+        </a>
+        <p>{{ shop.footer_about }}</p>
+        <div class="ft-social">
+          {% if shop.facebook %}<a href="{{ shop.facebook }}" target="_blank" rel="noopener" aria-label="Facebook"><i class="bi bi-facebook"></i></a>{% endif %}
+          {% if shop.instagram %}<a href="{{ shop.instagram }}" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a>{% endif %}
+          {% if shop.linkedin %}<a href="{{ shop.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>{% endif %}
+          {% if shop.twitter %}<a href="{{ shop.twitter }}" target="_blank" rel="noopener" aria-label="X"><i class="bi bi-twitter-x"></i></a>{% endif %}
+          <a href="https://wa.me/{{ shop.whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+          <a href="mailto:{{ shop.email }}" aria-label="Email"><i class="bi bi-envelope"></i></a>
+        </div>
+      </div>
+
+      <nav class="ft-col" aria-label="Services">
+        <h6>Services</h6>
+        <ul>
+          {% for cat in nav_service_categories %}<li><a href="{% url 'services:list' %}#{{ cat.slug }}">{{ cat.name }}</a></li>{% endfor %}
+          <li><a href="{% url 'services:projects' %}">Completed projects</a></li>
+        </ul>
+      </nav>
+
+      <nav class="ft-col" aria-label="Company">
+        <h6>Company</h6>
+        <ul>
+          <li><a href="{% url 'pages:about' %}">About us</a></li>
+          <li><a href="{% url 'store:home' %}">Shop</a></li>
+          <li><a href="{% url 'services:quote' %}">Request a quote</a></li>
+          <li><a href="{% url 'pages:how_to_pay' %}">How to pay</a></li>
+          <li><a href="{% url 'pages:contact' %}">Contact us</a></li>
+          <li><a href="{% url 'accounts:my_account' %}">My account</a></li>
+        </ul>
+      </nav>
+
+      <div class="ft-col ft-contact">
+        <h6>Contact</h6>
+        <ul>
+          <li><span class="ft-ico"><i class="bi bi-geo-alt"></i></span><div><small>Office</small>{{ shop.address }}</div></li>
+          <li><span class="ft-ico"><i class="bi bi-telephone"></i></span><div><small>Call us</small>{% for p in shop.phones %}<a href="tel:{{ p|cut:' ' }}">{{ p }}</a>{% if not forloop.last %}<br>{% endif %}{% endfor %}</div></li>
+          <li><span class="ft-ico"><i class="bi bi-envelope"></i></span><div><small>Email</small><a href="mailto:{{ shop.email }}">{{ shop.email }}</a></div></li>
+          <li><span class="ft-ico"><i class="bi bi-clock"></i></span><div><small>Working hours</small>{{ shop.hours }}<br><span class="ft-emergency">Emergency call-outs 24/7</span></div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Payment strip -->
+    <div class="ft-pay">
+      <div class="ft-pay-item">
+        <span class="mpesa-chip"><img src="{% static 'img/mpesa-logo.png' %}" alt="M-PESA" class="mpesa-logo"></span>
+        <span class="footer-pay-text">Paybill {{ shop.payment.paybill }}<br>Acc. {{ shop.payment.account_no }}</span>
+      </div>
+      <div class="ft-pay-item">
+        <span class="ft-bank"><i class="bi bi-bank"></i></span>
+        <span class="ft-pay-bank"><small>{{ shop.payment.bank }}</small>{{ shop.payment.account_name }}</span>
+      </div>
+      <div class="ft-pay-item ft-pay-accept">
+        <small>We accept</small>
+        {% include 'partials/pay_badges.html' %}
+      </div>
+      <a href="{% url 'pages:how_to_pay' %}" class="ft-pay-link">How to pay <i class="bi bi-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="footer-bottom ft-bottom">
+    <div class="container">
+      <span>&copy; {% now "Y" %} {{ shop.name }}. All rights reserved.</span>
+      <nav class="ft-bottom-links" aria-label="Footer">
+        <a href="{% url 'pages:about' %}">About</a>
+        <a href="{% url 'services:list' %}">Services</a>
+        <a href="{% url 'pages:contact' %}">Contact</a>
+      </nav>
+      <a href="#top" class="ft-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" aria-label="Back to top">Back to top <i class="bi bi-arrow-up"></i></a>
+    </div>
+  </div>
+</footer>

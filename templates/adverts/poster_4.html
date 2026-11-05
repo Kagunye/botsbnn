@@ -1,0 +1,39 @@
+{% extends 'adverts/_base.html' %}
+{% block style %}
+  .poster { background: linear-gradient(180deg, #e9f2f8 0%, #f4f8fb 45%, #e7eef3 100%); }
+  .photo { position: absolute; right: -40px; top: 300px; width: 640px; height: 900px; border-radius: 34px 0 0 34px; overflow: hidden; box-shadow: -30px 40px 80px rgba(12,72,108,.25); }
+  .photo img { width: 100%; height: 100%; object-fit: cover; object-position: 30% center; }
+  .photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(233,242,248,.35), transparent 30%); }
+  .haze { position: absolute; left: -200px; bottom: -200px; width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(24,120,180,.16), transparent 65%); }
+  .logo { top: 60px; }
+  .eyebrow { position: absolute; top: 190px; left: 66px; font: 600 26px 'Montserrat', sans-serif; letter-spacing: 6px; color: #1878b4; }
+  .copy { position: absolute; top: 250px; left: 66px; width: 520px; }
+  .copy h1 { font: 800 100px/1.02 'Montserrat', sans-serif; color: #0a2a45; letter-spacing: -2px; }
+  .copy h1 span { color: #1878b4; }
+  .copy p { font-size: 34px; line-height: 1.4; color: #34495e; margin-top: 34px; }
+  .chips { position: absolute; left: 66px; top: 880px; display: grid; gap: 22px; }
+  .chip { display: inline-flex; align-items: center; gap: 18px; padding: 14px 34px 14px 14px; border-radius: 60px; background: rgba(255,255,255,.75);
+      border: 1px solid rgba(255,255,255,.95); box-shadow: 0 10px 30px rgba(12,72,108,.12); font: 500 32px 'Rubik', sans-serif; color: #0a2a45; width: max-content; }
+  .chip i { width: 58px; height: 58px; border-radius: 50%; background: #1878b4; color: #fff; display: grid; place-items: center; font-size: 28px; }
+  .chip:nth-child(2) { margin-left: 40px; } .chip:nth-child(3) { margin-left: 0; }
+  .foot { position: absolute; left: 66px; bottom: 80px; width: 470px; font-size: 28px; line-height: 1.4; color: #34495e; }
+  .go { position: absolute; right: 60px; bottom: 70px; display: flex; align-items: center; gap: 22px; background: #1878b4; color: #fff;
+      font: 600 32px 'Montserrat', sans-serif; padding: 18px 34px; border-radius: 50px; box-shadow: 0 12px 30px rgba(24,120,180,.4); }
+{% endblock %}
+{% block body %}
+  <div class="haze"></div>
+  <div class="photo"><img src="{{ photo }}" alt=""></div>
+  <img class="logo" src="{{ logo_dark }}" alt="">
+  <div class="eyebrow">CLEAN • RENEWABLE • RELIABLE</div>
+  <div class="copy">
+    <h1>Powering<br>a brighter<br><span>tomorrow</span></h1>
+    <p>Solar energy is more than a choice — it's a smart investment.</p>
+  </div>
+  <div class="chips">
+    <div class="chip"><i class="bi bi-leaf"></i>Eco-Friendly</div>
+    <div class="chip"><i class="bi bi-sun"></i>Cost Effective</div>
+    <div class="chip"><i class="bi bi-patch-check"></i>Professionally Installed</div>
+  </div>
+  <div class="foot">Grid-tie, hybrid &amp; off-grid solar for homes and businesses across Kenya.</div>
+  <div class="go">Get a quote <i class="bi bi-arrow-right"></i></div>
+{% endblock %}

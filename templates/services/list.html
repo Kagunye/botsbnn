@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Services | {{ shop.name }}{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <nav aria-label="breadcrumb"><ol class="breadcrumb mb-1">
+      <li class="breadcrumb-item"><a href="{% url 'services:home' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Services</li>
+    </ol></nav>
+    <h1>Our Services</h1>
+    <p class="mb-0 opacity-75">Power &amp; backup, wiring, industrial panels, security and solar — one engineering team.</p>
+  </div>
+</div>
+
+<div class="service-tabs-wrap">
+  <div class="container">
+    <nav class="service-tabs">
+      {% for cat in categories %}<a href="#{{ cat.slug }}"><i class="bi bi-{{ cat.icon }}"></i> {{ cat.name }}</a>{% endfor %}
+    </nav>
+  </div>
+</div>
+
+<div class="container py-4">
+  {% for cat in categories %}
+  <section id="{{ cat.slug }}" class="service-group">
+    <div class="service-group-head">
+      <span class="group-icon"><i class="bi bi-{{ cat.icon }}"></i></span>
+      <div><h2>{{ cat.name }}</h2><p class="text-muted mb-0">{{ cat.tagline }}</p></div>
+    </div>
+    <div class="service-grid">
+      {% for s in cat.services.all %}{% if s.is_active %}{% include 'services/_card.html' %}{% endif %}{% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+
+  <div class="cta-strip mt-4">
+    <div><h3 class="mb-1">Not sure what you need?</h3><p class="mb-0">Describe the problem and we'll recommend the right solution — free.</p></div>
+    <a href="{% url 'services:quote' %}" class="btn btn-light btn-lg">Talk to an engineer</a>
+  </div>
+</div>
+{% endblock %}

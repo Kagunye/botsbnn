@@ -1,0 +1,7 @@
+<figure class="offer-card">
+  <a href="{{ ad.link|default:'/quote/' }}" class="offer-img"><img src="{{ ad.image.url }}" alt="{{ ad.title }}" loading="lazy"></a>
+  <figcaption>
+    <span>{{ ad.title }}</span>
+    <a href="{{ ad.image.url }}" target="_blank" rel="noopener" class="offer-full" aria-label="View full size"><i class="bi bi-arrows-fullscreen"></i></a>
+  </figcaption>
+</figure>

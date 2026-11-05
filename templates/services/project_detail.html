@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ project.title }} | Projects | {{ shop.name }}{% endblock %}
+{% block meta_description %}{{ project.summary }}{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <nav aria-label="breadcrumb"><ol class="breadcrumb mb-1">
+      <li class="breadcrumb-item"><a href="{% url 'services:home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'services:projects' %}">Projects</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ project.title }}</li>
+    </ol></nav>
+    <h1>{{ project.title }}</h1>
+    <p class="mb-0 opacity-75">{{ project.summary }}</p>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row g-5">
+    <div class="col-lg-8">
+      <div class="project-main">
+        <img src="{{ project.cover_image.url }}" alt="{{ project.title }}" id="projectMain">
+      </div>
+      {% if project.images.all %}
+      <div class="project-thumbs">
+        <button type="button" class="active" data-src="{{ project.cover_image.url }}" aria-label="Main photo"><img src="{{ project.cover_image.url }}" alt=""></button>
+        {% for img in project.images.all %}
+        <button type="button" data-src="{{ img.image.url }}" data-caption="{{ img.caption }}" aria-label="{{ img.caption|default:'Project photo' }}"><img src="{{ img.image.url }}" alt="" loading="lazy"></button>
+        {% endfor %}
+      </div>
+      <p class="small text-muted mt-2 mb-0" id="projectCaption"></p>
+      {% endif %}
+
+      {% if project.description %}
+      <h2 class="h4 fw-bold mt-4">About this project</h2>
+      <div class="fs-6">{{ project.description|linebreaks }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-lg-4">
+      <div class="summary-box">
+        <h5>Project details</h5>
+        <ul class="list-unstyled project-facts">
+          {% if project.service %}<li><i class="bi bi-{{ project.service.icon }}"></i><span>Service</span><a href="{{ project.service.get_absolute_url }}">{{ project.service.name }}</a></li>{% endif %}
+          {% if project.location %}<li><i class="bi bi-geo-alt"></i><span>Location</span><strong>{{ project.location }}</strong></li>{% endif %}
+          {% if project.client %}<li><i class="bi bi-building"></i><span>Client</span><strong>{{ project.client }}</strong></li>{% endif %}
+          {% if project.completed_on %}<li><i class="bi bi-calendar-check"></i><span>Completed</span><strong>{{ project.completed_on|date:"F Y" }}</strong></li>{% endif %}
+        </ul>
+        <a href="{% if project.service %}{{ project.service.get_quote_url }}{% else %}{% url 'services:quote' %}{% endif %}" class="btn btn-brand btn-lg w-100 mt-2">Get a quote for a similar job</a>
+        <a href="https://wa.me/{{ shop.whatsapp }}?text={{ 'Hi, I saw your project: '|urlencode }}{{ project.title|urlencode }}" class="btn btn-success w-100 mt-2" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i> Ask on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
+  {% if more %}
+  <h2 class="h4 fw-bold mt-5 mb-3">More projects</h2>
+  <div class="project-grid">
+    {% for p in more %}{% include 'services/_project_card.html' %}{% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.querySelectorAll('.project-thumbs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('projectMain').src = btn.dataset.src;
+      document.getElementById('projectCaption').textContent = btn.dataset.caption || '';
+      document.querySelectorAll('.project-thumbs button').forEach(b => b.classList.toggle('active', b === btn));
+    });
+  });
+</script>
+{% endblock %}

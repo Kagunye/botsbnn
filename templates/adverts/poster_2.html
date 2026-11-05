@@ -1,0 +1,33 @@
+{% extends 'adverts/_base.html' %}
+{% block style %}
+  .bg { object-position: center 60%; }
+  .warm { position: absolute; inset: 0; background:
+      linear-gradient(180deg, rgba(40,18,4,.78) 0%, rgba(120,60,10,.45) 34%, rgba(0,0,0,.05) 58%, rgba(10,6,2,.55) 100%),
+      linear-gradient(180deg, rgba(255,166,64,.38), rgba(255,140,40,.12) 60%, transparent); mix-blend-mode: normal; }
+  .sun { position: absolute; width: 760px; height: 760px; right: -220px; top: -260px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,214,140,.75), rgba(255,170,70,.25) 40%, transparent 68%); }
+  .copy { position: absolute; left: 66px; top: 230px; color: #fff; }
+  .copy .thin { font: 300 116px/1 'Montserrat', sans-serif; letter-spacing: -2px; color: rgba(255,255,255,.92); }
+  .copy .bold { font: 700 116px/1.02 'Montserrat', sans-serif; letter-spacing: -2px; }
+  .gold { width: 210px; height: 6px; background: #f7b733; border-radius: 4px; margin: 36px 0 30px; }
+  .copy p { font-size: 40px; line-height: 1.35; color: #fff; }
+  .copy p b { color: #f7c548; font-weight: 600; }
+  .pill { position: absolute; right: 60px; bottom: 70px; display: flex; align-items: center; gap: 18px; color: #fff;
+      font: 600 34px 'Montserrat', sans-serif; padding: 14px 18px 14px 34px; border: 2px solid rgba(255,255,255,.85); border-radius: 50px; background: rgba(0,0,0,.25); }
+  .pill i { width: 52px; height: 52px; border-radius: 50%; background: #f7b733; color: #1a1a1a; display: grid; place-items: center; font-size: 28px; }
+  .tags { position: absolute; left: 66px; bottom: 80px; display: flex; gap: 14px; }
+  .tags span { font: 600 26px 'Rubik', sans-serif; color: #fff; padding: 10px 22px; border-radius: 40px; background: rgba(12,72,108,.85); }
+{% endblock %}
+{% block body %}
+  <img class="bg" src="{{ photo }}" alt="">
+  <div class="warm"></div><div class="sun"></div>
+  <img class="logo" src="{{ logo_light }}" alt="">
+  <div class="copy">
+    <h1 class="thin">Backup Power</h1>
+    <h1 class="bold">That Never Sleeps</h1>
+    <div class="gold"></div>
+    <p>Generator supply, installation<br>&amp; <b>scheduled servicing</b> with<br>automatic changeover</p>
+  </div>
+  <div class="tags"><span>Generators</span><span>ATS</span><span>Servicing</span></div>
+  <div class="pill">Keeping Kenya Powered <i class="bi bi-chevron-right"></i></div>
+{% endblock %}

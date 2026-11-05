@@ -1,0 +1,11 @@
+{% load static %}<div class="pay-badges{% if light %} pay-badges-light{% endif %}" aria-label="Accepted payment methods">
+  <span class="pay-tile" title="M-PESA">
+    <img src="{% static 'img/mpesa-logo.png' %}" alt="M-PESA" class="mpesa-logo">
+  </span>
+  <span class="pay-tile" title="Visa">
+    <svg viewBox="0 0 120 40" role="img" aria-label="Visa"><text x="60" y="30" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-style="italic" font-size="27" fill="#1a1f71" letter-spacing="1">VISA</text></svg>
+  </span>
+  <span class="pay-tile" title="Mastercard">
+    <svg viewBox="0 0 120 40" role="img" aria-label="Mastercard"><circle cx="48" cy="17" r="12" fill="#eb001b"/><circle cx="66" cy="17" r="12" fill="#f79e1b"/><path d="M57 9.2a12 12 0 0 1 0 15.6a12 12 0 0 1 0-15.6z" fill="#ff5f00"/><text x="57" y="37" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="8.5" fill="#222">mastercard</text></svg>
+  </span>
+</div>

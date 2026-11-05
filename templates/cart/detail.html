@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Your Cart | {{ shop.name }}{% endblock %}
+
+{% block subnav %}{% include 'partials/shop_nav.html' %}{% endblock %}
+
+{% block content %}
+<div class="page-hero"><div class="container"><h1>Shopping Cart</h1></div></div>
+
+<div class="container py-4">
+  {% if cart|length %}
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+          <table class="table align-middle mb-0 cart-table">
+            <thead><tr><th>Product</th><th class="text-center">Quantity</th><th class="text-end">Total</th><th></th></tr></thead>
+            <tbody>
+              {% for item in cart %}
+              {% with product=item.product %}
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center gap-3">
+                    <a href="{{ product.get_absolute_url }}" class="cart-thumb">
+                      {% if product.image %}<img src="{{ product.image.url }}" alt="">{% else %}<i class="bi bi-{{ product.category.icon }}"></i>{% endif %}
+                    </a>
+                    <div>
+                      <a href="{{ product.get_absolute_url }}" class="fw-semibold text-dark text-decoration-none">{{ product.name }}</a>
+                      <div class="small text-muted">KSh{{ item.price|floatformat:2|intcomma }} each</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <form method="post" action="{% url 'cart:add' product.id %}" class="d-inline-flex qty-input qty-input-sm">
+                    {% csrf_token %}
+                    <input type="hidden" name="override" value="1">
+                    <input type="hidden" name="next" value="{% url 'cart:detail' %}">
+                    <button type="button" class="btn" data-qty="-1" data-autosubmit aria-label="Decrease">−</button>
+                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" onchange="this.form.submit()" aria-label="Quantity">
+                    <button type="button" class="btn" data-qty="1" data-autosubmit aria-label="Increase">+</button>
+                  </form>
+                </td>
+                <td class="text-end fw-semibold text-nowrap">KSh{{ item.total|floatformat:2|intcomma }}</td>
+                <td class="text-end">
+                  <form method="post" action="{% url 'cart:remove' product.id %}">{% csrf_token %}
+                    <button class="btn btn-sm btn-link text-danger" aria-label="Remove"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+              {% endwith %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <a href="{% url 'store:shop' %}" class="btn btn-link text-brand mt-2 px-0"><i class="bi bi-arrow-left"></i> Continue shopping</a>
+    </div>
+    <div class="col-lg-4">
+      <div class="summary-box">
+        <h5>Order Summary</h5>
+        <div class="d-flex justify-content-between"><span>Items ({{ cart|length }})</span><span>KSh{{ cart.subtotal|floatformat:2|intcomma }}</span></div>
+        <div class="d-flex justify-content-between text-muted small"><span>Delivery</span><span>Calculated at checkout</span></div>
+        <hr>
+        <div class="d-flex justify-content-between fs-5 fw-bold"><span>Subtotal</span><span>KSh{{ cart.subtotal|floatformat:2|intcomma }}</span></div>
+        <a href="{% url 'cart:checkout' %}" class="btn btn-brand btn-lg w-100 mt-3">Proceed to Checkout</a>
+        <p class="small text-muted mt-3 mb-0"><i class="bi bi-truck"></i> Free delivery within Nairobi.</p>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <i class="bi bi-bag-x"></i>
+    <h5>Your cart is empty</h5>
+    <p class="text-muted">Browse our solar products and add something you like.</p>
+    <a href="{% url 'store:shop' %}" class="btn btn-brand">Start shopping</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

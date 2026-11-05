@@ -1,0 +1,11 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | BNN Engineering Admin{% endblock %}
+{% block extrahead %}{{ block.super }}<link rel="icon" href="{% static 'img/favicon.ico' %}">{% endblock %}
+{% block branding %}
+<div id="site-name"><a href="{% url 'admin:index' %}" style="display:flex;align-items:center;gap:.6rem">
+  <img src="{% static 'img/logo-horizontal-light.png' %}" alt="BNN Engineering" style="height:34px;width:auto">
+  <span style="font-size:.9rem;opacity:.8">Admin</span></a></div>
+{% if user.is_anonymous %}{% include "admin/color_theme_toggle.html" %}{% endif %}
+{% endblock %}
+{% block nav-global %}{% endblock %}

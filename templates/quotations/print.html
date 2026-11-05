@@ -1,0 +1,194 @@
+{% load static humanize %}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ q.get_doc_type_display }} {{ q.number }} – {{ q.client_name }}</title>
+<link rel="icon" href="{% static 'img/favicon.ico' %}">
+<style>
+  :root { --blue: #1878b4; --navy: #0c486c; --sky: #5b9bd5; --ink: #111; --grey: #c9c9c9; --line: #222; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #e5e9ee; font-family: Arial, Helvetica, sans-serif; color: var(--ink); font-size: 11px; }
+  .toolbar { position: sticky; top: 0; z-index: 5; background: var(--navy); color: #fff; padding: 9px 14px; display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; font-size: 13px; }
+  .toolbar a, .toolbar button { background: #fff; color: var(--navy); border: 0; border-radius: 5px; padding: 7px 14px; font: 600 12.5px Arial, sans-serif; cursor: pointer; text-decoration: none; }
+  .toolbar .primary { background: var(--blue); color: #fff; }
+  .sheet { width: 210mm; min-height: 297mm; margin: 18px auto; background: #fff; padding: 9mm 9mm 8mm; box-shadow: 0 8px 30px rgba(0,0,0,.15); display: flex; flex-direction: column; }
+  /* header */
+  .hdr { display: flex; justify-content: space-between; align-items: stretch; gap: 10px; }
+  .hdr-left img { height: 52px; display: block; }
+  .hdr-left .contact { font-size: 9px; color: #333; margin-top: 4px; }
+  .doc-title { text-align: right; min-width: 240px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .doc-title .small { font-size: 15px; letter-spacing: 2.5px; color: #333; line-height: 1.1; font-weight: 400; white-space: nowrap; text-transform: uppercase; }
+  .doc-title .band { margin-top: 4px; background: var(--navy); color: #fff; font-size: 26px; font-weight: 700; letter-spacing: 3px; padding: 4px 12px 3px 34px; clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%); }
+  .bar { background: var(--sky); color: #fff; text-align: right; font-size: 10px; padding: 2px 6px; margin-top: 4px; }
+  /* company + meta */
+  .top { display: grid; grid-template-columns: 1fr 250px; gap: 10px; margin-top: 4px; }
+  .company { font-size: 10.5px; line-height: 1.45; }
+  .company b { font-size: 11px; }
+  .meta { width: 100%; border-collapse: collapse; font-size: 10.5px; }
+  .meta td { padding: 0 0 1px; vertical-align: top; }
+  .meta td:first-child { width: 88px; color: #222; }
+  /* sold / ship */
+  .parties { display: grid; grid-template-columns: 1fr 1fr 250px; gap: 18px; margin-top: 10px; align-items: start; }
+  .party h4 { margin: 0 0 4px; font-size: 10.5px; }
+  .party .box { border: 1px dotted #555; border-right: 3px solid #222; border-bottom: 3px solid #222; min-height: 26mm; padding: 4px 5px; font-size: 10.5px; line-height: 1.4; text-transform: uppercase; }
+  .side { font-size: 10.5px; line-height: 1.5; padding-top: 14px; }
+  .side p { margin: 0 0 8px; }
+  .cust-vat { margin: 6px 0 4px; font-size: 10.5px; }
+  .cust-vat b { margin-right: 28px; }
+  /* items */
+  .items-wrap { flex: 1; display: flex; flex-direction: column; border: 1.5px solid var(--line); min-height: 120mm; }
+  table.items { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  table.items th { background: var(--grey); border-right: 1px solid var(--line); border-bottom: 1.5px solid var(--line); padding: 6px 4px; font-size: 11px; font-weight: 700; text-align: center; }
+  table.items th:last-child, table.items td:last-child { border-right: 0; }
+  table.items td { border-right: 1px solid var(--line); padding: 3px 4px; vertical-align: top; font-size: 10.5px; }
+  table.items .c { text-align: center; } table.items .r { text-align: right; font-variant-numeric: tabular-nums; }
+  .filler { flex: 1; display: grid; grid-template-columns: var(--cols); }
+  .filler span { border-right: 1px solid var(--line); } .filler span:last-child { border-right: 0; }
+  /* bottom */
+  .bottom { display: grid; grid-template-columns: 1fr 96px 176px; border: 1.5px solid var(--line); border-top: 0; min-height: 34mm; }
+  .notes { padding: 6px 8px; font-size: 10.5px; white-space: pre-line; }
+  .tot-labels { background: var(--grey); border-left: 1.5px solid var(--line); border-right: 1px solid var(--line); }
+  .tot-labels div, .tot-values div { height: 6.6mm; display: flex; align-items: center; padding: 0 6px; font-size: 11.5px; }
+  .tot-labels div { font-weight: 700; }
+  .tot-values div { justify-content: flex-end; font-variant-numeric: tabular-nums; }
+  .tot-values div.grand { border-top: 1px solid var(--line); font-weight: 700; }
+  .page-foot { display: flex; justify-content: space-between; font-size: 9px; color: #666; margin-top: 4px; }
+  /* page 2 */
+  .terms h2 { font-size: 15px; text-decoration: underline; margin: 0 0 14px; }
+  .terms .body { white-space: pre-line; font-size: 11px; line-height: 1.6; }
+  .pay { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+  .pay div { border: 1px solid #bbb; padding: 8px 10px; line-height: 1.55; font-size: 11px; }
+  .pay h4 { margin: 0 0 4px; font-size: 11px; color: var(--navy); text-transform: uppercase; }
+  .sign { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
+  .sign div { border-top: 1px solid #555; padding-top: 5px; font-size: 10.5px; color: #444; }
+  @media print {
+    body { background: #fff; }
+    .toolbar { display: none; }
+    .sheet { margin: 0; box-shadow: none; width: auto; min-height: 0; height: 277mm; padding: 0; }
+    .sheet + .sheet { page-break-before: always; }
+    @page { size: A4; margin: 10mm 9mm; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+  @media (max-width: 820px) { .sheet { width: auto; min-height: 0; margin: 0; } }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <span>{{ q.get_doc_type_display }} {{ q.number }}</span>
+  <button class="primary" onclick="window.print()">🖨 Print / Save as PDF</button>
+  <a href="{% url 'admin:quotations_quotation_change' q.pk %}">✏️ Edit</a>
+  {% if q.doc_type != 'invoice' %}<a href="{% url 'admin:quotations_quotation_convert' q.pk 'invoice' %}">🧾 Convert to Invoice</a>{% endif %}
+  {% if q.client_email %}<a href="mailto:{{ q.client_email }}?subject={{ q.get_doc_type_display|urlencode }}%20{{ q.number|urlencode }}%20-%20{{ shop.name|urlencode }}">✉️ Email client</a>{% endif %}
+</div>
+
+{% with cols="34px 96px 1fr 58px 40px 76px 62px 62px 86px" %}
+<!-- PAGE 1 -->
+<div class="sheet">
+  <div class="hdr">
+    <div class="hdr-left">
+      <img src="{% static 'img/logo-horizontal.png' %}" alt="{{ shop.name }}">
+      <div class="contact">{{ shop.address }}{% if shop.postal_address %}. {{ shop.postal_address }}{% endif %} | Tel: {% for p in shop.phones %}{{ p }}{% if not forloop.last %} / {% endif %}{% endfor %} | Email: {{ shop.email }}</div>
+    </div>
+    <div class="doc-title">
+      <div class="small">{{ shop.tagline }}</div>
+      <div class="band">{{ q.title_upper }}</div>
+    </div>
+  </div>
+  <div class="bar">{{ shop.name }}</div>
+
+  <div class="top">
+    <div class="company">
+      <b>{{ shop.account_name|default:shop.name|upper }}</b><br>
+      {{ shop.address }}<br>
+      {% if shop.postal_address %}{{ shop.postal_address }}<br>{% endif %}
+      <b>Ph:</b> {{ shop.phones|join:" / " }}<br>
+      <b>Email:</b> {{ shop.email }}<br>
+      {% if shop.reg_no or shop.kra_pin %}{% if shop.reg_no %}<b>Reg:</b> {{ shop.reg_no }}&nbsp; {% endif %}{% if shop.kra_pin %}<b>KRA PIN:</b> {{ shop.kra_pin }}{% endif %}{% endif %}
+    </div>
+    <table class="meta">
+      <tr><td>Number:</td><td><b>{{ q.number }}</b></td></tr>
+      <tr><td>Date:</td><td>{{ q.issue_date|date:"d-M-y" }}</td></tr>
+      <tr><td>Page:</td><td>1 of {% if q.terms %}2{% else %}1{% endif %}</td></tr>
+      {% if q.title %}<tr><td>Reference:</td><td>{{ q.title|upper }}</td></tr>{% endif %}
+      {% if q.source %}<tr><td>Quotation ref:</td><td>{{ q.source.number }}</td></tr>{% endif %}
+      {% if q.required_date %}<tr><td>Required:</td><td>{{ q.required_date|date:"d-M-y" }}</td></tr>{% endif %}
+      {% if q.account_no %}<tr><td>Account:</td><td>{{ q.account_no }}</td></tr>{% endif %}
+    </table>
+  </div>
+
+  <div class="parties">
+    <div class="party"><h4>Sold To:</h4>
+      <div class="box">{{ q.client_company|default:q.client_name }}{% if q.client_company %}<br>Attn: {{ q.client_name }}{% endif %}<br>{{ q.client_address|default:"N/A" }}{% if q.client_phone %}<br>{{ q.client_phone }}{% endif %}</div>
+    </div>
+    <div class="party"><h4>Ship To:</h4>
+      <div class="box">{{ q.ship_name }}<br>{{ q.ship_address|default:"N/A" }}</div>
+    </div>
+    <div class="side">
+      <p>{% if q.doc_type == 'invoice' %}Payment due on receipt{% else %}Valid until {{ q.valid_until|date:"d-M-y" }}{% endif %}</p>
+      <p><b>Currency:</b> KES</p>
+      {% if q.sales_person %}<p><b>Sales Person:</b> {{ q.sales_person }}</p>{% endif %}
+      {% if q.sales_phone %}<p><b>Cell Phone:</b> {{ q.sales_phone }}</p>{% endif %}
+    </div>
+  </div>
+  <div class="cust-vat"><b>Customer VAT:</b> {{ q.client_kra_pin|default:"—" }}</div>
+
+  <div class="items-wrap" style="--cols: {{ cols }}">
+    <table class="items">
+      <colgroup><col style="width:34px"><col style="width:96px"><col><col style="width:58px"><col style="width:40px"><col style="width:76px"><col style="width:62px"><col style="width:62px"><col style="width:86px"></colgroup>
+      <thead><tr><th>Line</th><th>Item</th><th>Description</th><th>Quantity</th><th>Unit</th><th>Unit Price</th><th>Discount</th><th>VAT</th><th>Total</th></tr></thead>
+      <tbody>
+        {% for it in q.items.all %}
+        <tr>
+          <td class="c">{{ forloop.counter }}</td>
+          <td>{{ it.item_code|default:it.description|truncatechars:40 }}</td>
+          <td>{{ it.description }}</td>
+          <td class="c">{{ it.quantity|floatformat:"-2" }}</td>
+          <td class="c">{{ it.get_unit_display }}</td>
+          <td class="r">{{ it.unit_price|floatformat:2|intcomma }}</td>
+          <td class="r">{{ it.line_discount|floatformat:2|intcomma }}</td>
+          <td class="r">{{ it.vat_amount|floatformat:2|intcomma }}</td>
+          <td class="r">{{ it.line_total|floatformat:2|intcomma }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="filler">{% for i in "123456789" %}<span></span>{% endfor %}</div>
+  </div>
+
+  <div class="bottom">
+    <div class="notes">{% if q.notes %}{{ q.notes }}{% else %}{{ shop.name }} Notes{% endif %}</div>
+    <div class="tot-labels"><div>Subtotal:</div><div>Discount:</div><div>Delivery:</div><div>VAT{% if q.apply_tax %} ({{ q.tax_rate|floatformat:"-2" }}%){% endif %}:</div><div>Total:</div></div>
+    <div class="tot-values">
+      <div>Ksh {{ q.subtotal|floatformat:2|intcomma }}</div>
+      <div>Ksh {{ q.discount_amount|floatformat:2|intcomma }}</div>
+      <div>Ksh {{ q.delivery_fee|floatformat:2|intcomma }}</div>
+      <div>{% if q.apply_tax %}Ksh {{ q.tax_amount|floatformat:2|intcomma }}{% else %}Not charged{% endif %}</div>
+      <div class="grand">Ksh {{ q.total|floatformat:2|intcomma }}</div>
+    </div>
+  </div>
+  <div class="page-foot"><span>{{ q.get_doc_type_display }} {{ q.number }}</span><span>Page 1</span></div>
+</div>
+{% endwith %}
+
+{% if q.terms %}
+<!-- PAGE 2 -->
+<div class="sheet terms">
+  <h2>Terms and Conditions:</h2>
+  <div class="body">{{ q.terms }}</div>
+
+  <div class="pay">
+    <div><h4>Pay via M-PESA</h4>Paybill: <b>{{ shop.paybill }}</b><br>Account No: <b>{{ shop.account_no }}</b><br>Name: {{ shop.account_name }}</div>
+    <div><h4>Bank deposit / transfer</h4>Bank: <b>{{ shop.bank_name }}</b><br>Account Name: <b>{{ shop.account_name }}</b><br>Account No: <b>{{ shop.account_no }}</b></div>
+  </div>
+
+  <div class="sign">
+    <div>For {{ shop.name }} — signature &amp; stamp</div>
+    <div>Accepted by client — name, signature &amp; date</div>
+  </div>
+  <div style="flex:1"></div>
+  <div class="page-foot"><span>{{ q.get_doc_type_display }} {{ q.number }}</span><span>Page 2</span></div>
+</div>
+{% endif %}
+</body>
+</html>

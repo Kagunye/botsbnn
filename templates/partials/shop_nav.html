@@ -1,0 +1,44 @@
+<div class="shopbar">
+  <div class="container d-flex align-items-center gap-3">
+    <button class="catnav-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#allCategories" aria-label="All categories">
+      <i class="bi bi-list"></i><span class="d-none d-md-inline ms-1 fs-6 fw-semibold">Shop</span>
+    </button>
+    <ul class="catnav-list d-none d-lg-flex">
+      {% for cat in nav_categories %}
+      <li class="catnav-item{% if cat.children.all %} has-children{% endif %}">
+        <a href="{{ cat.get_absolute_url }}">{{ cat.name }}{% if cat.children.all %} <i class="bi bi-chevron-down small"></i>{% endif %}</a>
+        {% if cat.children.all %}
+        <ul class="catnav-dropdown">
+          {% for child in cat.children.all %}<li><a href="{{ child.get_absolute_url }}">{{ child.name }}</a></li>{% endfor %}
+          <li><a href="{{ cat.get_absolute_url }}" class="fw-semibold">All {{ cat.name }} →</a></li>
+        </ul>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    <form action="{% url 'store:shop' %}" method="get" class="search-form flex-grow-1 ms-lg-auto" role="search">
+      <input type="search" name="q" class="form-control" placeholder="Search products..." value="{{ q|default:'' }}" aria-label="Search products">
+      <button class="btn" type="submit" aria-label="Search"><i class="bi bi-search"></i></button>
+    </form>
+  </div>
+</div>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="allCategories" aria-labelledby="allCategoriesLabel">
+  <div class="offcanvas-header bg-brand text-white">
+    <h5 class="offcanvas-title" id="allCategoriesLabel">Shop Categories</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <ul class="list-unstyled mb-0 offcanvas-cats">
+      <li><a href="{% url 'store:shop' %}" class="fw-semibold"><i class="bi bi-grid me-2 text-brand"></i>All products</a></li>
+      {% for cat in nav_categories %}
+      <li>
+        <a href="{{ cat.get_absolute_url }}" class="fw-semibold"><i class="bi bi-{{ cat.icon }} me-2 text-brand"></i>{{ cat.name }}</a>
+        {% if cat.children.all %}
+        <ul class="list-unstyled">{% for child in cat.children.all %}<li><a href="{{ child.get_absolute_url }}">{{ child.name }}</a></li>{% endfor %}</ul>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

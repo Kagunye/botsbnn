@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+{% load humanize static %}
+
+{% block extra_head %}<link rel="preload" as="image" href="{% static 'video/hero-poster.jpg' %}?v=5">{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="eng-hero has-video" style="--hero-poster: url('{% static 'video/hero-poster.jpg' %}?v=5')">
+  {# Video loads only after the page has finished loading (see script below) so it never slows first paint #}
+  <video class="hero-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"
+         poster="{% static 'video/hero-poster.jpg' %}?v=5"
+         data-webm="{% static 'video/hero.webm' %}?v=5" data-mp4="{% static 'video/hero.mp4' %}?v=5"></video>
+  <div class="hero-overlay" aria-hidden="true"></div>
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        {% if shop.hero_badge %}<span class="eyebrow"><i class="bi bi-patch-check-fill"></i> {{ shop.hero_badge }}</span>{% endif %}
+        <h1>{{ shop.hero_title }} <span>{{ shop.hero_highlight }}</span></h1>
+        <p class="lead">{{ shop.hero_text }}</p>
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <a href="{% url 'services:quote' %}" class="btn btn-brand btn-lg">Get a free quote <i class="bi bi-arrow-right"></i></a>
+          <a href="{% url 'services:list' %}" class="btn btn-outline-light btn-lg">Explore services</a>
+        </div>
+        <div class="hero-stats">
+          {% if shop.stat1_value %}<div><strong>{{ shop.stat1_value }}</strong><span>{{ shop.stat1_label }}</span></div>{% endif %}
+          {% if shop.stat2_value %}<div><strong>{{ shop.stat2_value }}</strong><span>{{ shop.stat2_label }}</span></div>{% endif %}
+          {% if shop.stat3_value %}<div><strong>{{ shop.stat3_value }}</strong><span>{{ shop.stat3_label }}</span></div>{% endif %}
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="hero-quote-card">
+          <h2>Request a quote</h2>
+          <p class="small text-muted">Tell us what you need and we'll call you back.</p>
+          {% include 'services/_quote_form.html' with form=quote_form %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE GROUPS -->
+<section class="container py-5 news-section">
+  <div class="news-head">
+    <div>
+      <span class="section-kicker">What we do</span>
+      <h2 class="section-title-lg mb-1">Engineering services</h2>
+      <p class="text-muted mb-0">{{ shop.services_intro }}</p>
+    </div>
+    <div class="news-nav">
+      <a href="{% url 'services:list' %}" class="news-all">View all <i class="bi bi-arrow-right"></i></a>
+      <button type="button" class="news-btn" data-news-prev aria-label="Previous"><i class="bi bi-chevron-left"></i></button>
+      <button type="button" class="news-btn" data-news-next aria-label="Next"><i class="bi bi-chevron-right"></i></button>
+    </div>
+  </div>
+  <div class="news-track" data-news-track tabindex="0" aria-label="Our services">
+    {% for s in slider_services %}{% with img=s.card_image %}
+    <article class="news-card">
+      <a href="{{ s.get_absolute_url }}" class="news-img" tabindex="-1" aria-hidden="true">
+        {% if img %}<img src="{{ img.url }}" alt="" loading="lazy">{% else %}<span class="news-img-fallback"><i class="bi bi-{{ s.icon }}"></i></span>{% endif %}
+        <span class="news-badge"><i class="bi bi-{{ s.category.icon }}"></i> {{ s.category.name }}</span>
+      </a>
+      <div class="news-body">
+        <h3 class="news-title"><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></h3>
+        <p class="news-excerpt">{{ s.summary }}</p>
+        <div class="news-foot">
+          <a href="{{ s.get_absolute_url }}" class="news-more">Read more <i class="bi bi-arrow-right"></i></a>
+          <a href="{{ s.get_quote_url }}" class="news-quote">Get quote</a>
+        </div>
+      </div>
+    </article>
+    {% endwith %}{% endfor %}
+  </div>
+  <div class="news-dots" data-news-dots aria-hidden="true"></div>
+</section>
+
+<!-- FEATURED SERVICES -->
+<section class="bg-soft py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+      <div><span class="section-kicker">Popular</span><h2 class="section-title-lg mb-0">Most requested services</h2></div>
+      <a href="{% url 'services:list' %}" class="btn btn-outline-dark">All services <i class="bi bi-arrow-right"></i></a>
+    </div>
+    <div class="photo-grid">
+      {% for s in featured_services %}{% include 'services/_photo_card.html' %}{% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- OFFERS & UPDATES (Admin → Pages → Adverts) -->
+{% if adverts %}
+<section class="container py-5 news-section offers-section">
+  <div class="news-head">
+    <div>
+      <span class="section-kicker">Offers &amp; updates</span>
+      <h2 class="section-title-lg mb-1">Latest from BNN Engineering</h2>
+      <p class="text-muted mb-0">Current promotions on backup power, solar and water heating.</p>
+    </div>
+    <div class="news-nav">
+      <button type="button" class="news-btn" data-news-prev aria-label="Previous"><i class="bi bi-chevron-left"></i></button>
+      <button type="button" class="news-btn" data-news-next aria-label="Next"><i class="bi bi-chevron-right"></i></button>
+    </div>
+  </div>
+  <div class="news-track offers-track" data-news-track tabindex="0" aria-label="Offers and updates">
+    {% for ad in adverts %}
+    <figure class="offer-card">
+      <a href="{{ ad.link|default:'/quote/' }}" class="offer-img"><img src="{{ ad.image.url }}" alt="{{ ad.title }}" loading="lazy"></a>
+      <figcaption>
+        <span>{{ ad.title }}</span>
+        <a href="{{ ad.image.url }}" target="_blank" rel="noopener" class="offer-full" aria-label="View full size"><i class="bi bi-arrows-fullscreen"></i></a>
+      </figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+  <div class="news-dots" data-news-dots aria-hidden="true"></div>
+</section>
+{% endif %}
+
+<!-- COMPLETED PROJECTS (managed in Admin → Services → Projects) -->
+{% if projects %}
+<section class="container py-5">
+  <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+    <div><span class="section-kicker">Our work</span><h2 class="section-title-lg mb-0">Completed projects</h2>
+      <p class="text-muted mb-0">A few of the systems we've designed, installed and handed over.</p></div>
+    <a href="{% url 'services:projects' %}" class="btn btn-outline-dark">All projects <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div class="project-grid">
+    {% for p in projects %}{% include 'services/_project_card.html' %}{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- PROCESS -->
+{% if process_steps %}
+<section class="method-section">
+  <div class="container">
+    <div class="row g-5 align-items-start">
+      <div class="col-lg-5">
+        <div class="method-intro">
+          <span class="section-kicker">How we work</span>
+          <h2 class="method-title">A proven process from site visit to handover</h2>
+          <p class="method-lead">Every project follows the same disciplined method — so budgets are clear, work is done to standard, and you always know what happens next.</p>
+          <ul class="method-points">
+            <li><i class="bi bi-check2"></i> Free, no-obligation site survey</li>
+            <li><i class="bi bi-check2"></i> Itemised, transparent quotations</li>
+            <li><i class="bi bi-check2"></i> Documented, tested handover</li>
+          </ul>
+          <a href="{% url 'services:quote' %}" class="btn btn-brand btn-lg mt-2">Book a site survey <i class="bi bi-arrow-right"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <ol class="method-list">
+          {% for step in process_steps %}
+          <li class="method-step">
+            <span class="method-num">{{ forloop.counter|stringformat:"02d" }}</span>
+            <div class="method-body">
+              <h3><i class="bi bi-{{ step.icon }}"></i> {{ step.title }}</h3>
+              <p>{{ step.text }}</p>
+            </div>
+          </li>
+          {% endfor %}
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- COMPANY (Admin → Site settings → Homepage company section; commitments = "Why choose us" items) -->
+<section class="company-section">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <div class="company-media">
+          {% if company_photo %}<img src="{{ company_photo.url }}" alt="{{ shop.name }} at work" loading="lazy">{% else %}<div class="company-media-fallback"><i class="bi bi-lightning-charge"></i></div>{% endif %}
+          <div class="company-badge"><strong>{{ shop.badge_value }}</strong><span>{{ shop.badge_label }}</span></div>
+          <div class="company-accent" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <span class="section-kicker">{{ shop.company_kicker }}</span>
+        <h2 class="company-title">{{ shop.company_title }}</h2>
+        {% with paras=shop.about_paragraphs %}{% if paras %}<p class="company-lead">{{ paras.0 }}</p>{% endif %}{% endwith %}
+        {% if why_items %}
+        <div class="company-values">
+          {% for item in why_items %}
+          <div class="company-value">
+            <span class="cv-icon"><i class="bi bi-{{ item.icon }}"></i></span>
+            <div><h4>{{ item.title }}</h4><p>{{ item.text }}</p></div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <div class="company-stats">
+          {% if shop.stat1_value %}<div><strong>{{ shop.stat1_value }}</strong><span>{{ shop.stat1_label }}</span></div>{% endif %}
+          {% if shop.stat2_value %}<div><strong>{{ shop.stat2_value }}</strong><span>{{ shop.stat2_label }}</span></div>{% endif %}
+          {% if shop.stat3_value %}<div><strong>{{ shop.stat3_value }}</strong><span>{{ shop.stat3_label }}</span></div>{% endif %}
+        </div>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <a href="{% url 'pages:about' %}" class="btn btn-brand">About our company <i class="bi bi-arrow-right"></i></a>
+          <a href="tel:{{ shop.phones.0|cut:' ' }}" class="btn btn-outline-dark"><i class="bi bi-telephone"></i> Talk to an engineer</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP TEASER -->
+{% if shop_products and shop.show_shop_on_home %}
+<section class="container py-5">
+  <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+    <div><span class="section-kicker">Equipment</span><h2 class="section-title-lg mb-0">From our shop</h2>
+      <p class="text-muted mb-0">Inverters, batteries, panels and water heaters we supply and install.</p></div>
+    <a href="{% url 'store:home' %}" class="btn btn-outline-dark">Visit the shop <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div class="product-grid">
+    {% for product in shop_products %}{% include 'partials/product_card.html' %}{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- BRANDS -->
+{% if partners %}
+<section class="container pb-4">
+  <p class="text-center text-muted small text-uppercase fw-semibold mb-3" style="letter-spacing:1px">Brands we install</p>
+  <div class="brand-strip">
+    {% for brand in partners %}
+    <a href="{{ brand.get_absolute_url }}" class="brand-chip{% if brand.logo %} has-logo{% endif %}" title="{{ brand.name }}">
+      {% if brand.logo %}<img src="{{ brand.logo.url }}" alt="{{ brand.name }}" loading="lazy">{% else %}<span style="color: {{ brand.color }}">{{ brand.name }}</span>{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- CTA -->
+<section class="container pb-5">
+  <div class="cta-strip">
+    <div><h3 class="mb-1">{{ shop.cta_title }}</h3><p class="mb-0">{{ shop.cta_text }}</p></div>
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="tel:{{ shop.phones.0|cut:' ' }}" class="btn btn-light btn-lg"><i class="bi bi-telephone-fill"></i> Call now</a>
+      <a href="https://wa.me/{{ shop.whatsapp }}" class="btn btn-dark btn-lg" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* Hero background video: starts downloading only after the page has fully loaded and the browser is idle.
+   Skipped for visitors with "reduce motion", Data Saver, or slow (2G) connections – they just see the poster. */
+(function () {
+  var v = document.querySelector('.hero-video');
+  if (!v) return;
+  var c = navigator.connection || {};
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || c.saveData || /(^|-)2g$/.test(c.effectiveType || '')) return;
+
+  function start() {
+    [['webm', 'video/webm'], ['mp4', 'video/mp4']].forEach(function (s) {
+      var src = document.createElement('source');
+      src.src = v.dataset[s[0]]; src.type = s[1]; v.appendChild(src);
+    });
+    v.load();
+    v.addEventListener('canplay', function () { v.classList.add('is-ready'); v.play().catch(function () {}); }, { once: true });
+    // pause when the hero scrolls out of view to save CPU/battery
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { v.play().catch(function () {}); } else { v.pause(); } });
+      }).observe(v);
+    }
+  }
+  function whenIdle() { ('requestIdleCallback' in window) ? requestIdleCallback(start, { timeout: 2000 }) : setTimeout(start, 300); }
+  if (document.readyState === 'complete') whenIdle(); else window.addEventListener('load', whenIdle, { once: true });
+})();
+</script>
+{% endblock %}

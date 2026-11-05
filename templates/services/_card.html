@@ -1,0 +1,17 @@
+<div class="service-card{% if s.image %} has-photo{% endif %}">
+  {% if s.image %}
+  <a href="{{ s.get_absolute_url }}" class="service-photo" tabindex="-1" aria-hidden="true">
+    <img src="{{ s.image.url }}" alt="" loading="lazy">
+    <span class="service-photo-icon"><i class="bi bi-{{ s.icon }}"></i></span>
+  </a>
+  {% else %}
+  <a href="{{ s.get_absolute_url }}" class="service-icon" aria-hidden="true" tabindex="-1"><i class="bi bi-{{ s.icon }}"></i></a>
+  {% endif %}
+  <span class="service-cat">{{ s.category.name }}</span>
+  <h3><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></h3>
+  <p>{{ s.summary }}</p>
+  <div class="service-actions">
+    <a href="{{ s.get_absolute_url }}" class="btn btn-outline-dark btn-sm">View details</a>
+    <a href="{{ s.get_quote_url }}" class="btn btn-brand btn-sm">Get quote</a>
+  </div>
+</div>

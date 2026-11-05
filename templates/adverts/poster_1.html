@@ -1,0 +1,41 @@
+{% extends 'adverts/_base.html' %}
+{% block style %}
+  .bg { object-position: center 30%; filter: saturate(1.1); }
+  .shade { position: absolute; inset: 0; background:
+      linear-gradient(180deg, rgba(4,16,30,.92) 0%, rgba(4,16,30,.55) 38%, rgba(4,16,30,.25) 60%, rgba(4,16,30,.92) 100%),
+      linear-gradient(90deg, rgba(4,16,30,.85) 0%, rgba(4,16,30,0) 65%); }
+  .glow { position: absolute; width: 900px; height: 900px; right: -300px; top: 250px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(78,166,220,.35), transparent 65%); }
+  .social span { background: #1878b4; color: #fff; }
+  .copy { position: absolute; left: 60px; top: 330px; width: 640px; color: #fff; }
+  .copy h1 { font-size: 92px; line-height: .98; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; }
+  .copy h1 .hl { color: #4ea6dc; display: block; text-shadow: 0 0 40px rgba(78,166,220,.6); }
+  .rule { width: 520px; height: 3px; background: rgba(255,255,255,.8); margin: 30px 0 24px; }
+  .copy p { font-size: 34px; line-height: 1.35; color: #e8f3fb; }
+  .copy p b { color: #4ea6dc; }
+  .cta { position: absolute; left: 50%; transform: translateX(-50%); bottom: 230px; background: #1878b4; color: #fff;
+      font: 700 38px 'Montserrat', sans-serif; padding: 22px 58px; border-radius: 60px; border: 4px solid #fff; box-shadow: 0 14px 40px rgba(24,120,180,.55); }
+  .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 170px; padding: 0 60px; display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(0deg, rgba(4,16,30,.95), rgba(4,16,30,.0)); color: #fff; }
+  .bar .item { display: flex; align-items: center; gap: 22px; }
+  .bar .ic { width: 84px; height: 84px; border-radius: 50%; background: #1878b4; display: grid; place-items: center; font-size: 38px; border: 3px solid #fff; }
+  .bar small { display: block; font-size: 26px; color: #cfe8f7; }
+  .bar strong { font: 800 42px 'Montserrat', sans-serif; letter-spacing: 1px; }
+  .bar .right { text-align: right; }
+{% endblock %}
+{% block body %}
+  <img class="bg" src="{{ photo }}" alt="">
+  <div class="shade"></div><div class="glow"></div>
+  <img class="logo" src="{{ logo_light }}" alt="">
+  <div class="social"><span><i class="bi bi-whatsapp"></i></span><span><i class="bi bi-telephone-fill"></i></span></div>
+  <div class="copy">
+    <h1>Power that<br>keeps you<span class="hl">running</span></h1>
+    <div class="rule"></div>
+    <p><b>Hybrid inverters, UPS &amp; lithium batteries</b> — backup power installed properly by BNN Engineering.</p>
+  </div>
+  <div class="cta">Get a Free Quote</div>
+  <div class="bar">
+    <div class="item"><span class="ic"><i class="bi bi-telephone-fill"></i></span><div><small>Call to find out more</small><strong>{{ shop.phone1 }}</strong></div></div>
+    <div class="item right"><div><small>WhatsApp us</small><strong>{{ wa_display }}</strong></div><span class="ic"><i class="bi bi-whatsapp"></i></span></div>
+  </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+<a href="{{ s.get_absolute_url }}" class="photo-card{% if not s.image %} no-photo{% endif %}">
+  {% if s.image %}<img src="{{ s.image.url }}" alt="{{ s.name }}" loading="lazy">{% else %}<i class="bi bi-{{ s.icon }} photo-card-bgicon" aria-hidden="true"></i>{% endif %}
+  <span class="photo-card-shade" aria-hidden="true"></span>
+  <span class="photo-card-body">
+    <span class="photo-card-icon"><i class="bi bi-{{ s.icon }}"></i></span>
+    <span class="photo-card-cat">{{ s.category.name }}</span>
+    <span class="photo-card-title">{{ s.name }}</span>
+    <span class="photo-card-text">{{ s.summary }}</span>
+    <span class="photo-card-cta">View details <i class="bi bi-arrow-right"></i></span>
+  </span>
+</a>

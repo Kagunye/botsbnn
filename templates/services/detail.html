@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ service.name }} | {{ shop.name }}{% endblock %}
+{% block meta_description %}{{ service.summary }}{% endblock %}
+
+{% block content %}
+<div class="page-hero service-hero">
+  <div class="container">
+    <nav aria-label="breadcrumb"><ol class="breadcrumb mb-2">
+      <li class="breadcrumb-item"><a href="{% url 'services:home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'services:list' %}">Services</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'services:list' %}#{{ service.category.slug }}">{{ service.category.name }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ service.name }}</li>
+    </ol></nav>
+    <div class="d-flex align-items-center gap-3">
+      <span class="group-icon group-icon-lg"><i class="bi bi-{{ service.icon }}"></i></span>
+      <div>
+        <h1>{{ service.name }}</h1>
+        <p class="mb-0 opacity-75 fs-5">{{ service.summary }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row g-5">
+    <div class="col-lg-7">
+      {% if service.image %}<img src="{{ service.image.url }}" alt="{{ service.name }}" class="service-hero-img">{% endif %}
+      <h2 class="h4 fw-bold">Overview</h2>
+      <p class="fs-6">{{ service.description|default:service.summary|linebreaksbr }}</p>
+
+      {% if service.included_list %}
+      <h2 class="h4 fw-bold mt-4">What's included</h2>
+      <ul class="included-list">
+        {% for item in service.included_list %}<li><i class="bi bi-check-circle-fill"></i>{{ item }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+
+      <div class="detail-perks-box mt-4">
+        <div><i class="bi bi-clipboard-check"></i><span>Free site assessment</span></div>
+        <div><i class="bi bi-shield-check"></i><span>Standards-compliant</span></div>
+        <div><i class="bi bi-tags"></i><span>Labelled &amp; documented</span></div>
+      </div>
+
+      {% if related %}
+      <h2 class="h4 fw-bold mt-5 mb-3">Related {{ service.category.name|lower }} services</h2>
+      <div class="service-grid service-grid-2">
+        {% for s in related %}{% include 'services/_card.html' %}{% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="col-lg-5">
+      <div class="summary-box">
+        <h5>Get a quote for {{ service.name|lower }}</h5>
+        {% include 'services/_quote_form.html' %}
+        <hr>
+        <div class="d-grid gap-2">
+          <a href="tel:{{ shop.phones.0|cut:' ' }}" class="btn btn-outline-dark"><i class="bi bi-telephone-fill"></i> Call {{ shop.phones.0 }}</a>
+          <a href="https://wa.me/{{ shop.whatsapp }}?text={{ 'Hi, I need a quote for: '|urlencode }}{{ service.name|urlencode }}" class="btn btn-success" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i> WhatsApp us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
