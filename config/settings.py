@@ -153,6 +153,8 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise: serve static files directly from the app (works without running collectstatic first)
 WHITENOISE_USE_FINDERS = True
+# Re-check files on each request so CSS/JS edits show without restarting (off on Vercel, where every deploy is fresh)
+WHITENOISE_AUTOREFRESH = not os.environ.get('VERCEL')
 # Serve uploaded media (product photos, adverts) from Django. Set DJANGO_SERVE_MEDIA=False
 # if your web server (e.g. Nginx) serves /media/ itself.
 SERVE_MEDIA = os.environ.get('DJANGO_SERVE_MEDIA', 'True').strip().lower() in ('1', 'true', 'yes')

@@ -788,3 +788,7 @@ a { color: inherit; }
 @media (max-width: 991.98px) { .shop-ads-track { grid-auto-columns: calc((100% - 1rem) / 2); } .ad-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 575.98px) { .shop-ads-track { grid-auto-columns: 82%; } .shop-ads-arrow { display: none; } .ad-grid { gap: .8rem; } }
 
+/* ===== Smaller base text size (all rem-based text and spacing scale with it) ===== */
+html { font-size: 93.75%; }                                   /* 15px on phones and tablets */
+@media (min-width: 1200px) { html { font-size: 87.5%; } }    /* 14px on desktop */
+
