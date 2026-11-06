@@ -22,7 +22,7 @@ class SiteSettings(models.Model):
     # Company
     name = models.CharField('Company name', max_length=100, default='BNN Engineering')
     tagline = models.CharField(max_length=150, default='Power · Wiring · Security · Solar')
-    email = models.EmailField(default='sales@bnnengineering.co.ke')
+    email = models.EmailField(default='info@bnnengineering.co.ke')
     phone1 = models.CharField('Phone 1', max_length=30, default='+254 700 000 000')
     phone2 = models.CharField('Phone 2', max_length=30, blank=True, default='+254 711 000 000')
     whatsapp = models.CharField('WhatsApp number', max_length=20, default='254700000000',
