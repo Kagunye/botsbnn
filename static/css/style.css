@@ -1132,3 +1132,23 @@ body { line-height: 1.6; }
 .cta-strip.has-video h3 { text-shadow: 0 2px 12px rgba(0, 0, 0, .35); }
 .cta-strip.has-video p { text-shadow: 0 1px 8px rgba(0, 0, 0, .4); }
 @media (max-width: 575.98px) { .cta-strip.has-video { padding: 2rem 1.4rem; } .cta-shade { background: rgba(4, 22, 36, .55); } }
+
+/* ---- Footer payment strip: even spacing, equal tiles, no duplicate logo ---- */
+.ft-pay { justify-content: space-between; gap: 1rem 0; padding: 1.1rem 1.5rem; }
+.ft-pay-item { padding: 0 1.5rem; }
+.ft-pay-item:first-child { padding-left: 0; }
+.ft-pay-item + .ft-pay-item { border-left: 1px solid rgba(255, 255, 255, .12); }
+.ft-pay .mpesa-chip, .ft-pay .pay-tile { height: 40px; width: 92px; padding: 5px 8px; border-radius: 7px; box-shadow: none; }
+.ft-pay .mpesa-chip .mpesa-logo { height: 26px; }
+.ft-bank { width: 40px; height: 40px; }
+.ft-pay-accept { gap: .7rem; }
+.ft-pay-link { margin-left: 0; padding: .55rem 1rem; border: 1px solid rgba(120, 192, 228, .45); border-radius: 8px; }
+.ft-pay-link:hover { background: rgba(120, 192, 228, .12); border-color: #78c0e4; }
+@media (max-width: 1199.98px) {
+  .ft-pay { justify-content: flex-start; gap: 1rem 0; }
+  .ft-pay-link { margin-left: auto; }
+}
+@media (max-width: 991.98px) {
+  .ft-pay-item, .ft-pay-item:first-child { padding: 0; border-left: 0 !important; width: 100%; }
+  .ft-pay-link { margin-left: 0; }
+}

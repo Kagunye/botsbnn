@@ -1,7 +1,7 @@
 {% load static %}<div class="pay-badges{% if light %} pay-badges-light{% endif %}" aria-label="Accepted payment methods">
-  <span class="pay-tile" title="M-PESA">
+{% if not no_mpesa %}  <span class="pay-tile" title="M-PESA">
     <img src="{{ shop.mpesa_logo_url }}" alt="M-PESA" class="mpesa-logo">
-  </span>
+  </span>{% endif %}
   <span class="pay-tile" title="Visa">
     <svg viewBox="0 0 120 40" role="img" aria-label="Visa"><text x="60" y="30" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-style="italic" font-size="27" fill="#1a1f71" letter-spacing="1">VISA</text></svg>
   </span>

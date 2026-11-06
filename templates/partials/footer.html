@@ -59,8 +59,8 @@
         <span class="ft-pay-bank"><small>{{ shop.payment.bank }}</small>{{ shop.payment.account_name }}</span>
       </div>
       <div class="ft-pay-item ft-pay-accept">
-        <small>We accept</small>
-        {% include 'partials/pay_badges.html' %}
+        <small>Cards accepted</small>
+        {% include 'partials/pay_badges.html' with no_mpesa=True %}
       </div>
       <a href="{% url 'pages:how_to_pay' %}" class="ft-pay-link">How to pay <i class="bi bi-arrow-right"></i></a>
     </div>
