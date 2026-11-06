@@ -123,9 +123,9 @@ class FeatureBannerAdmin(admin.ModelAdmin):
 
 @admin.register(ShowcaseRow)
 class ShowcaseRowAdmin(admin.ModelAdmin):
-    list_display = ['thumb', 'title', 'button_text', 'link', 'is_active', 'order']
+    list_display = ['thumb', 'title', 'style', 'button_text', 'link', 'is_active', 'order']
     list_display_links = ['thumb', 'title']
-    list_editable = ['is_active', 'order']
+    list_editable = ['style', 'is_active', 'order']
 
     @admin.display(description='')
     def thumb(self, obj):

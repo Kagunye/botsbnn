@@ -276,6 +276,8 @@ class ShowcaseRow(models.Model):
     text = models.TextField()
     button_text = models.CharField(max_length=40, default='Learn more')
     link = models.CharField(max_length=200, default='/about/')
+    STYLES = [('circle', 'Round photo, light background'), ('blue', 'Photo card, blue background')]
+    style = models.CharField(max_length=10, choices=STYLES, default='circle')
     is_active = models.BooleanField(default=True)
     order = models.PositiveIntegerField(default=0)
 

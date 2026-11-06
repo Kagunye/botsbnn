@@ -359,7 +359,7 @@
 {% if showcase_rows %}
 <div class="showcase">
   {% for row in showcase_rows %}
-  <section class="showcase-row{% cycle ' tinted' '' %}">
+  <section class="showcase-row{% if row.style == 'blue' %} style-blue{% else %}{% cycle ' tinted' '' %}{% endif %}">
     <div class="container">
       <div class="showcase-inner{% if forloop.counter|divisibleby:2 %} reverse{% endif %}">
         <div class="showcase-photo"><img src="{{ row.image.url }}" alt="" loading="lazy"></div>
