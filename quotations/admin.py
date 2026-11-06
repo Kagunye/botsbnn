@@ -29,7 +29,7 @@ class QuotationItemInline(admin.TabularInline):
 @admin.register(Quotation)
 class QuotationAdmin(admin.ModelAdmin):
     list_display = ['number', 'doc_type', 'client_name', 'title', 'issue_date', 'status',
-                    'vat_flag', 'total_display', 'print_link']
+                    'vat_flag', 'total_display', 'print_link', 'convert_links']
     list_filter = ['doc_type', 'status', 'apply_tax', 'issue_date']
     list_editable = ['status']
     search_fields = ['number', 'client_name', 'client_company', 'client_phone', 'client_email', 'title']
@@ -55,7 +55,7 @@ class QuotationAdmin(admin.ModelAdmin):
 
     class Media:
         js = ['admin/quotation-v2.js']
-        css = {'all': ['admin/quotation.css']}
+        css = {'all': ['admin/quotation-v2.css']}
 
     @admin.display(description='Number')
     def number_display(self, obj):
@@ -90,7 +90,20 @@ class QuotationAdmin(admin.ModelAdmin):
 
     @admin.display(description='')
     def print_link(self, obj):
-        return format_html('<a href="{}" target="_blank">🖨 View / print</a>', obj.get_print_url())
+        return format_html('<a href="{}" target="_blank" style="white-space:nowrap">🖨 Print</a>', obj.get_print_url())
+
+    @admin.display(description='Convert')
+    def convert_links(self, obj):
+        links = []
+        if obj.doc_type == 'quotation':
+            links.append(format_html('<a class="q-mini" href="{}">→ Proforma</a>',
+                                     reverse('admin:quotations_quotation_convert', args=[obj.pk, 'proforma'])))
+        if obj.doc_type != 'invoice':
+            links.append(format_html('<a class="q-mini q-mini-inv" href="{}">→ Invoice</a>',
+                                     reverse('admin:quotations_quotation_convert', args=[obj.pk, 'invoice'])))
+        if not links:
+            return '—'
+        return format_html(' '.join(['{}'] * len(links)), *links)
 
     @admin.display(description='Document')
     def print_button(self, obj):

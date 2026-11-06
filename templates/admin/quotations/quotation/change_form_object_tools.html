@@ -1,0 +1,14 @@
+{% extends "admin/change_form_object_tools.html" %}
+{% load admin_urls %}
+{% block object-tools-items %}
+{% if original and original.pk %}
+  <li><a href="{{ original.get_print_url }}" target="_blank">🖨 Print / PDF</a></li>
+  {% if original.doc_type == 'quotation' %}
+  <li><a href="{% url 'admin:quotations_quotation_convert' original.pk 'proforma' %}" class="q-tool-convert">Convert to Proforma</a></li>
+  {% endif %}
+  {% if original.doc_type != 'invoice' %}
+  <li><a href="{% url 'admin:quotations_quotation_convert' original.pk 'invoice' %}" class="q-tool-convert q-tool-invoice">🧾 Convert to Invoice</a></li>
+  {% endif %}
+{% endif %}
+{{ block.super }}
+{% endblock %}

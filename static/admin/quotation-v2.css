@@ -10,3 +10,13 @@
 .inline-group .field-item_code input { width: 8em; }
 .inline-group .field-discount input { width: 7em; }
 .inline-group td.field-vat_display { white-space: nowrap; color: #475569; }
+/* convert buttons */
+.object-tools a.q-tool-convert { background: #0c486c; }
+.object-tools a.q-tool-invoice { background: #16a34a; }
+.object-tools a.q-tool-convert:hover { background: #0a2a40; }
+.object-tools a.q-tool-invoice:hover { background: #15803d; }
+a.q-mini { display: inline-block; padding: 3px 9px; margin: 1px 2px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  background: #e4f0f9; color: #0c486c !important; text-decoration: none; white-space: nowrap; }
+a.q-mini:hover { background: #0c486c; color: #fff !important; }
+a.q-mini-inv { background: #dcfce7; color: #15803d !important; }
+a.q-mini-inv:hover { background: #16a34a; color: #fff !important; }
