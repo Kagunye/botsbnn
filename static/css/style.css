@@ -1062,3 +1062,8 @@ body { line-height: 1.6; }
   .shop-ad img, .offer-img img, .shop-ad::after, .offer-img::after, .ad-grid .offer-card.ad-in { animation: none; }
   .ad-grid .offer-card.ad-pre { opacity: 1; }
 }
+
+/* Smaller logo */
+.site-logo img { height: 38px; }
+.ft-brand .footer-logo img, .footer-logo img { height: 38px; }
+@media (max-width: 575.98px) { .site-logo img { height: 28px; } }
