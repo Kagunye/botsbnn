@@ -35,14 +35,12 @@ ADS = [
     dict(key='brand-01', src='src01.jpg', title='Powering a brighter tomorrow', link='/services/solar-installations/',
          erase=[],
          html='''
-<img class="logo" src="__LOGO_DARK__" style="left:60px;top:16px;height:38px">
 <div class="pill" style="left:506px;top:820px;width:190px;height:44px;background:#1878b4;font-size:15px;font-weight:500">
   Get a Free Quote <i class="bi bi-arrow-right"></i></div>'''),
 
     dict(key='brand-02', src='src02.jpg', title='Sustainable power, maximum output', link='/services/solar-installations/',
          erase=[(26, 20, 162, 54), (532, 24, 708, 52), (220, 832, 516, 886)],
          html='''
-<img class="logo" src="__LOGO_LIGHT__" style="left:28px;top:16px;height:36px">
 <div style="position:absolute;right:26px;top:27px;color:#fff;font:500 12.5px Poppins;display:flex;gap:7px;align-items:center">
   <i class="bi bi-whatsapp"></i><i class="bi bi-facebook"></i><i class="bi bi-instagram"></i> @BNNEngineering</div>
 <div style="position:absolute;left:206px;top:832px;width:324px;height:52px;border-radius:26px;background:rgba(18,18,18,.9);
@@ -54,7 +52,6 @@ ADS = [
          link='/services/battery-power-backup-systems/',
          erase=[(22, 32, 204, 100), (40, 420, 194, 456), (360, 610, 445, 670), (482, 1034, 708, 1076)],
          html='''
-<img class="logo" src="__LOGO_LIGHT__" style="left:26px;top:40px;height:48px">
 <div style="position:absolute;left:45px;top:420px;color:#fff;font:300 27px Montserrat;letter-spacing:.3px">in Kenya</div>
 <div class="pill" style="left:480px;top:1034px;width:228px;height:40px;border:1.5px solid #fff;background:rgba(0,0,0,.5);font-size:17px;font-weight:500;justify-content:space-between;padding:0 6px 0 16px">
   Get a Free Quote <i class="bi bi-chevron-right" style="width:24px;height:24px;border-radius:50%;background:#f7b733;color:#111;display:grid;place-items:center;font-size:13px"></i></div>'''),
@@ -63,7 +60,6 @@ ADS = [
          erase=[(10, 20, 234, 98), (646, 14, 724, 54), (26, 384, 334, 434), (468, 336, 508, 402),
                 (10, 850, 250, 906), (400, 850, 720, 906)],
          html='''
-<img class="logo" src="__LOGO_LIGHT__" style="left:16px;top:30px;height:50px">
 <div style="position:absolute;left:31px;top:389px;color:#fff;font:500 15px/1.4 Poppins">
   <b style="color:#7ed321;font-weight:700">BNN</b> Lithium Backup–Smart Energy<br>for Brighter Tomorrow</div>
 <div style="position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(180deg,rgba(3,10,20,0),rgba(3,10,20,.92) 55%);"></div>
@@ -74,8 +70,6 @@ ADS = [
          link='/services/battery-power-backup-systems/',
          erase=[(12, 14, 146, 146), (318, 650, 408, 696), (0, 852, 736, 920)],
          html='''
-<div style="position:absolute;left:18px;top:18px;width:124px;height:124px;border-radius:50%;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.18);display:grid;place-items:center">
-  <img src="__LOGO_FULL__" style="width:96px"></div>
 <div style="position:absolute;left:8px;right:8px;top:858px;height:56px;border-radius:10px;background:#fff;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;padding:0 14px;box-shadow:0 -2px 12px rgba(0,0,0,.08)">
   <div class="info"><span class="ic"><i class="bi bi-battery-charging"></i></span><div><small>Long-life</small><b>Lithium batteries</b></div></div>
   <div class="info"><span class="ic"><i class="bi bi-tools"></i></span><div><small>Professional</small><b>Installation</b></div></div>
@@ -85,15 +79,13 @@ ADS = [
     dict(key='brand-06', src='src06.jpg', title='Reliable warmth, every time', link='/shop/category/solar-water-heaters/',
          erase=[(6, 6, 150, 60), (566, 10, 720, 60), (462, 122, 532, 150), (466, 243, 502, 264)],
          html='''
-<img class="logo" src="__LOGO_DARK__" style="left:12px;top:14px;height:38px">
 <div style="position:absolute;left:0;right:0;top:866px;height:54px;background:__BAR__;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff;font:500 15.5px Poppins;letter-spacing:.3px">
   <i class="bi bi-droplet-half"></i> Water heaters supplied &amp; installed by BNN Engineering</div>'''),
 
     dict(key='brand-07', src='src07.jpg', title='Your water heater is on right now', link='/shop/category/solar-water-heaters/',
          erase=[(350, 728, 498, 768)],
          html='''
-<div style="position:absolute;left:99px;top:246px;width:104px;height:31px;border-radius:50%;background:radial-gradient(ellipse at 50% 35%,#3c4a5c,#141c26 75%);border:2px solid #9aa4ad;box-shadow:inset 0 1px 2px rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.4);display:grid;place-items:center;color:#d8dee4;font:700 13px Montserrat;letter-spacing:2px">BNN</div>
-<img class="logo" src="__LOGO_LIGHT__" style="left:354px;top:733px;height:28px">'''),
+<div style="position:absolute;left:99px;top:246px;width:104px;height:31px;border-radius:50%;background:radial-gradient(ellipse at 50% 35%,#3c4a5c,#141c26 75%);border:2px solid #9aa4ad;box-shadow:inset 0 1px 2px rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.4);display:grid;place-items:center;color:#d8dee4;font:700 13px Montserrat;letter-spacing:2px">BNN</div>'''),
 
     dict(key='brand-08', src='src08.jpg', title='Lower carbon, smarter living', link='/shop/category/heat-pump-water-heaters/',
          erase=[(432, 402, 508, 424)],
@@ -104,13 +96,11 @@ ADS = [
     dict(key='brand-09', src='src09.jpg', title='Power your home the smart way', link='/services/solar-installations/',
          erase=[(272, 76, 468, 120), (40, 836, 384, 894)],
          html='''
-<img class="logo" src="__LOGO_DARK__" style="left:266px;top:80px;height:35px">
 <div style="position:absolute;left:52px;top:864px;color:#fff;font:500 15.5px Poppins;letter-spacing:.2px"><span style="color:#8fe33b">&#9679;</span> BNN Engineering &middot; Solar &amp; Power Solutions</div>'''),
 
     dict(key='brand-10', src='src10.jpg', title='Stop fueling expenses, start powering savings', link='/services/solar-installations/',
          erase=[(272, 58, 468, 102), (40, 836, 384, 894)],
          html='''
-<img class="logo" src="__LOGO_DARK__" style="left:266px;top:62px;height:35px">
 <div style="position:absolute;left:52px;top:864px;color:#222;font:500 15.5px Poppins;letter-spacing:.2px"><span style="color:#1e90ff">&#9679;</span> BNN Engineering &middot; Solar &amp; Power Solutions</div>'''),
 ]
 
