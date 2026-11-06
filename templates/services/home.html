@@ -101,6 +101,29 @@
   </div>
 </section>
 
+<!-- INDUSTRIES (Admin → Pages → Industries) -->
+{% if industries %}
+<section class="industries-section">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-3 mb-4">
+      <div><span class="section-kicker">Industries we serve</span>
+        <h2 class="section-title-lg mb-1">Trusted across every sector</h2>
+        <p class="text-muted mb-0">Power, wiring, security and solar solutions tailored to how each client works.</p></div>
+      <a href="{% url 'services:quote' %}" class="btn btn-outline-dark">Discuss your project <i class="bi bi-arrow-right"></i></a>
+    </div>
+    <div class="industry-grid">
+      {% for ind in industries %}
+      <div class="industry-card">
+        <span class="industry-icon"><i class="bi bi-{{ ind.icon }}"></i></span>
+        <h3>{{ ind.title }}</h3>
+        {% if ind.text %}<p>{{ ind.text }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
 <!-- COMPLETED PROJECTS (managed in Admin → Services → Projects) -->
 {% if projects %}
 <section class="container py-5">
@@ -189,6 +212,63 @@
     </div>
   </div>
 </section>
+
+<!-- TESTIMONIALS (Admin → Pages → Testimonials; hidden until real ones are added) -->
+{% if testimonials %}
+<section class="testimonials-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-kicker">Client feedback</span>
+      <h2 class="section-title-lg">What our clients say</h2>
+    </div>
+    <div class="testimonial-grid">
+      {% for t in testimonials %}
+      <figure class="testimonial-card">
+        <div class="t-stars">{% for i in t.stars %}<i class="bi bi-star-fill"></i>{% endfor %}</div>
+        <blockquote>&ldquo;{{ t.quote }}&rdquo;</blockquote>
+        <figcaption>
+          {% if t.photo %}<img src="{{ t.photo.url }}" alt="">{% else %}<span class="t-initial">{{ t.name|first }}</span>{% endif %}
+          <span><strong>{{ t.name }}</strong>{% if t.role %}<small>{{ t.role }}</small>{% endif %}</span>
+        </figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- FAQ (Admin → Pages → FAQs) -->
+{% if faqs %}
+<section class="faq-section">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-4">
+        <span class="section-kicker">FAQ</span>
+        <h2 class="section-title-lg">Frequently asked questions</h2>
+        <p class="text-muted">Can't find what you're looking for? Our team is happy to help.</p>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="{% url 'pages:contact' %}" class="btn btn-brand">Contact us</a>
+          <a href="https://wa.me/{{ shop.whatsapp }}" target="_blank" rel="noopener" class="btn btn-outline-dark"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="accordion faq-accordion" id="faqAccordion">
+          {% for f in faqs %}
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button{% if not forloop.first %} collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#faq{{ f.pk }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="faq{{ f.pk }}">{{ f.question }}</button>
+            </h3>
+            <div id="faq{{ f.pk }}" class="accordion-collapse collapse{% if forloop.first %} show{% endif %}" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">{{ f.answer|linebreaksbr }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
 
 <!-- SHOP TEASER -->
 {% if shop_products and shop.show_shop_on_home %}

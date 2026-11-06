@@ -3,7 +3,7 @@ from django.utils.html import format_html
 from django.shortcuts import redirect
 from django.urls import reverse
 
-from .models import Advert, ContactMessage, ProcessStep, SiteSettings, WhyChooseItem
+from .models import FAQ, Advert, ContactMessage, Industry, ProcessStep, SiteSettings, Testimonial, WhyChooseItem
 
 
 @admin.register(ContactMessage)
@@ -75,3 +75,24 @@ class AdvertAdmin(admin.ModelAdmin):
             return format_html('<a href="{0}" target="_blank" download><img src="{0}" style="max-height:340px;border-radius:6px"></a>'
                                '<br><a href="{0}" download>⬇ Download image for social media</a>', obj.image.url)
         return 'Upload an image and save to see it here.'
+
+
+@admin.register(Industry)
+class IndustryAdmin(admin.ModelAdmin):
+    list_display = ['title', 'icon', 'text', 'is_active', 'order']
+    list_editable = ['is_active', 'order']
+
+
+@admin.register(Testimonial)
+class TestimonialAdmin(admin.ModelAdmin):
+    list_display = ['name', 'role', 'rating', 'service', 'is_published', 'order']
+    list_editable = ['is_published', 'order']
+    list_filter = ['is_published', 'rating']
+    search_fields = ['name', 'role', 'quote']
+
+
+@admin.register(FAQ)
+class FAQAdmin(admin.ModelAdmin):
+    list_display = ['question', 'is_published', 'order']
+    list_editable = ['is_published', 'order']
+    search_fields = ['question', 'answer']

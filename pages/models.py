@@ -179,3 +179,55 @@ class Advert(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Industry(models.Model):
+    """Sectors shown in the homepage "Industries we serve" grid."""
+    icon = models.CharField(max_length=50, default='building', help_text='Bootstrap icon name')
+    title = models.CharField(max_length=80)
+    text = models.CharField(max_length=160, blank=True)
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['order', 'title']
+        verbose_name_plural = 'industries'
+
+    def __str__(self):
+        return self.title
+
+
+class Testimonial(models.Model):
+    """Real client feedback. The homepage section stays hidden until at least one is published."""
+    name = models.CharField(max_length=100)
+    role = models.CharField('Role / company', max_length=120, blank=True, help_text='e.g. Facilities Manager, ABC Hospital')
+    quote = models.TextField()
+    rating = models.PositiveSmallIntegerField(default=5, choices=[(i, f'{i} star{"s" if i > 1 else ""}') for i in range(1, 6)])
+    photo = models.ImageField(upload_to='testimonials/', blank=True)
+    service = models.ForeignKey('services.Service', null=True, blank=True, on_delete=models.SET_NULL)
+    is_published = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', '-id']
+
+    def __str__(self):
+        return f'{self.name} – {self.role}' if self.role else self.name
+
+    def stars(self):
+        return range(self.rating)
+
+
+class FAQ(models.Model):
+    question = models.CharField(max_length=200)
+    answer = models.TextField()
+    order = models.PositiveIntegerField(default=0)
+    is_published = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'FAQ'
+        verbose_name_plural = 'FAQs'
+
+    def __str__(self):
+        return self.question
