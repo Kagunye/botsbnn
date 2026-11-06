@@ -116,6 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000);
   });
 
+  // Header: slimmer with a soft shadow once the page is scrolled
+  const header = document.querySelector('.site-header');
+  if (header) {
+    const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
   // CTA strip background videos: download only when scrolled near, play while visible
   const ctaVideos = document.querySelectorAll('.cta-video');
   const conn = navigator.connection || {};

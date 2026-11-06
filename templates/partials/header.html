@@ -20,13 +20,13 @@
       </a>
 
       <div class="d-flex align-items-center gap-2 order-lg-last">
-        <a href="{% url 'cart:detail' %}" class="cart-link" aria-label="Cart">
-          <i class="bi bi-bag"></i><span class="cart-count" data-cart-count>{{ cart|length }}</span>
+        <a href="{% url 'cart:detail' %}" class="cart-link hdr-icon" aria-label="Cart">
+          <i class="bi bi-bag"></i><span class="cart-count hdr-badge" data-cart-count>{{ cart|length }}</span>
         </a>
         {% if user.is_authenticated %}
         <div class="dropdown">
-          <a href="#" class="account-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account">
-            <i class="bi bi-person-circle"></i>
+          <a href="#" class="account-link hdr-icon" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account">
+            <i class="bi bi-person"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><span class="dropdown-item-text small text-muted">{{ user.get_full_name|default:user.username }}</span></li>
@@ -37,9 +37,10 @@
           </ul>
         </div>
         {% else %}
-        <a href="{% url 'accounts:login' %}" class="account-link" aria-label="Login"><i class="bi bi-person-circle"></i></a>
+        <a href="{% url 'accounts:login' %}" class="account-link hdr-icon" aria-label="Login"><i class="bi bi-person"></i></a>
         {% endif %}
-        <a href="{% url 'services:quote' %}" class="btn btn-brand d-none d-sm-inline-block ms-2">Get a Quote</a>
+        <span class="hdr-sep d-none d-sm-block" aria-hidden="true"></span>
+        <a href="{% url 'services:quote' %}" class="btn btn-brand hdr-quote d-none d-sm-inline-flex">Get a Quote <i class="bi bi-arrow-right"></i></a>
         <button class="navbar-toggler ms-1" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
           <i class="bi bi-list"></i>
         </button>
