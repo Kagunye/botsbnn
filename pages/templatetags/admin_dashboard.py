@@ -52,6 +52,19 @@ def admin_dashboard():
     peak = max((m['value'] for m in trend), default=Decimal('0')) or Decimal('1')
     for m in trend:
         m['pct'] = int(m['value'] / peak * 100) if m['value'] else 0
+    # smooth area chart (SVG 600 x 170): x evenly spaced, y from the share of the best month
+    W, H, PAD = 600, 170, 14
+    pts = [(round(i * W / (len(trend) - 1), 1), round(H - PAD - (m['pct'] / 100) * (H - 2 * PAD), 1))
+           for i, m in enumerate(trend)]
+    path = f'M{pts[0][0]},{pts[0][1]}'
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        cx = round((x0 + x1) / 2, 1)
+        path += f' C{cx},{y0} {cx},{y1} {x1},{y1}'
+    for m, (x, y) in zip(trend, pts):
+        m['x'], m['y'] = x, y
+        m['xpct'] = round(100 * x / W, 2)
+    chart = {'line': path, 'area': f'{path} L{W},{H} L0,{H} Z', 'w': W, 'h': H,
+             'best': max(trend, key=lambda m: m['value'])}
 
     status_labels = dict(Quotation.STATUS)
     status_counts = {s: 0 for s in ('draft', 'sent', 'accepted', 'rejected', 'expired')}
@@ -72,7 +85,7 @@ def admin_dashboard():
         'conversion': conversion, 'quotes_total': len(quotes), 'avg_quote': avg_quote,
         'quotes_this_month': quotes_this_month, 'quotes_last_month': quotes_last_month,
         'quotes_delta': quotes_this_month - quotes_last_month,
-        'trend': trend, 'trend_total': total(invoices),
+        'trend': trend, 'trend_total': total(invoices), 'chart': chart,
         'statuses': statuses, 'top_services': top_services,
         'today': today,
         'open_quotes': len(open_quotes), 'open_quotes_value': total(open_quotes),

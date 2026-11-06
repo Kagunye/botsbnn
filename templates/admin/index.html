@@ -1,8 +1,12 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static humanize admin_dashboard %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'admin/bnn-dashboard.css' %}?v=6">{% endblock %}
 {% block title %}Dashboard | {{ shop.name|default:'BNN Engineering' }} Admin{% endblock %}
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="{% static 'admin/bnn-dashboard.css' %}?v=8">
+<style>.bnn-home { --bd-photo: url('{% static "video/hero-poster.jpg" %}?v=6'); }</style>
+{% endblock %}
 {% block bodyclass %}{{ block.super }} bnn-home{% endblock %}
 {% block coltype %}colM{% endblock %}
 {% block nav-breadcrumbs %}{% endblock %}
@@ -13,10 +17,10 @@
 {% block content %}
 {% admin_dashboard as d %}
 <div class="bd-layout">
-  <!-- Sidebar: every admin section -->
-  <aside class="bd-side" aria-label="Admin sections">
-    <a class="bd-side-home is-active" href="{% url 'admin:index' %}"><span class="bd-ico">▦</span> Dashboard</a>
-    <input type="checkbox" id="bd-menu" class="bd-menu-toggle"><label for="bd-menu" class="bd-menu-btn">☰ All sections</label>
+  <!-- Sidebar: every admin section (floating glass panel) -->
+  <aside class="bd-side bd-glass" aria-label="Admin sections">
+    <a class="bd-side-home is-active" href="{% url 'admin:index' %}"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
+    <input type="checkbox" id="bd-menu" class="bd-menu-toggle"><label for="bd-menu" class="bd-menu-btn"><i class="bi bi-list"></i> All sections</label>
     <div class="bd-side-groups">
     {% for app in app_list %}
     <div class="bd-side-group">
@@ -27,61 +31,81 @@
     </div>
     {% endfor %}
     </div>
-    <a class="bd-side-site" href="/" target="_blank">↗ View website</a>
+    <a class="bd-side-site" href="/" target="_blank"><i class="bi bi-box-arrow-up-right"></i> View website</a>
   </aside>
 
-  <!-- Dashboard -->
   <section class="bd-main">
-    <header class="bd-head">
-      <div>
-        <h1>Dashboard</h1>
-        <p>Welcome back{% if user.first_name %}, {{ user.first_name }}{% endif %} · {{ d.today|date:"l j F Y" }}</p>
+    <!-- Welcome banner -->
+    <header class="bd-hero">
+      <div class="bd-hero-text">
+        <span class="bd-hero-kicker"><i class="bi bi-sun"></i> {{ d.today|date:"l j F Y" }}</span>
+        <h1>Welcome back{% if user.first_name %}, {{ user.first_name }}{% endif %}</h1>
+        <p>{% if d.new_requests or d.unread_messages %}You have <strong>{{ d.new_requests }}</strong> new quote request{{ d.new_requests|pluralize }} and <strong>{{ d.unread_messages }}</strong> unread message{{ d.unread_messages|pluralize }} waiting.{% else %}Everything is up to date — here's how the business is doing.{% endif %}</p>
+        <div class="bd-hero-stats">
+          <div><span>Invoiced this month</span><strong>KSh {{ d.month_invoiced|floatformat:0|intcomma }}</strong></div>
+          <div><span>Outstanding</span><strong>KSh {{ d.unpaid_value|floatformat:0|intcomma }}</strong></div>
+          <div><span>Conversion</span><strong>{% if d.conversion is not None %}{{ d.conversion }}%{% else %}—{% endif %}</strong></div>
+        </div>
+        <div class="bd-actions">
+          <a class="bd-btn bd-btn-white" href="{% url 'admin:quotations_quotation_add' %}"><i class="bi bi-file-earmark-plus"></i> New quotation</a>
+          <a class="bd-btn bd-btn-green" href="{% url 'admin:quotations_quotation_add' %}?doc_type=invoice"><i class="bi bi-receipt"></i> New invoice</a>
+          <a class="bd-btn bd-btn-ghost" href="{% url 'admin:services_service_add' %}"><i class="bi bi-plus-lg"></i> Service</a>
+          <a class="bd-btn bd-btn-ghost" href="{% url 'admin:store_product_add' %}"><i class="bi bi-plus-lg"></i> Product</a>
+        </div>
       </div>
-      <div class="bd-actions">
-        <a class="bd-btn bd-btn-primary" href="{% url 'admin:quotations_quotation_add' %}">+ New quotation</a>
-        <a class="bd-btn bd-btn-green" href="{% url 'admin:quotations_quotation_add' %}?doc_type=invoice">+ New invoice</a>
-        <a class="bd-btn" href="{% url 'admin:services_service_add' %}">+ Service</a>
-        <a class="bd-btn" href="{% url 'admin:store_product_add' %}">+ Product</a>
-      </div>
+      <div class="bd-hero-art" aria-hidden="true"
+           style="background-image: url('{% if shop.process_image %}{{ shop.process_image.url }}{% else %}{% static "video/hero-poster.jpg" %}{% endif %}')"></div>
     </header>
 
+    <!-- KPI cards -->
     <div class="bd-cards">
-      <a class="bd-card" href="{% url 'admin:quotations_quotation_changelist' %}?doc_type__exact=quotation">
+      <a class="bd-card bd-glass" href="{% url 'admin:quotations_quotation_changelist' %}?doc_type__exact=quotation">
+        <span class="bd-card-ico bd-ico-blue"><i class="bi bi-file-earmark-text"></i></span>
         <span class="bd-card-label">Open quotations</span><strong>{{ d.open_quotes }}</strong>
-        <span class="bd-card-sub">KSh {{ d.open_quotes_value|floatformat:2|intcomma }} in draft / sent</span></a>
-      <a class="bd-card bd-warn" href="{% url 'admin:quotations_quotation_changelist' %}?doc_type__exact=invoice">
+        <span class="bd-card-sub">KSh {{ d.open_quotes_value|floatformat:0|intcomma }} in draft / sent</span></a>
+      <a class="bd-card bd-glass" href="{% url 'admin:quotations_quotation_changelist' %}?doc_type__exact=invoice">
+        <span class="bd-card-ico bd-ico-amber"><i class="bi bi-hourglass-split"></i></span>
         <span class="bd-card-label">Unpaid invoices</span><strong>{{ d.unpaid }}</strong>
-        <span class="bd-card-sub">KSh {{ d.unpaid_value|floatformat:2|intcomma }} outstanding</span></a>
-      <a class="bd-card bd-good" href="{% url 'admin:quotations_quotation_changelist' %}?doc_type__exact=invoice">
+        <span class="bd-card-sub">KSh {{ d.unpaid_value|floatformat:0|intcomma }} outstanding</span></a>
+      <a class="bd-card bd-glass" href="{% url 'admin:quotations_quotation_changelist' %}?doc_type__exact=invoice">
+        <span class="bd-card-ico bd-ico-green"><i class="bi bi-graph-up-arrow"></i></span>
         <span class="bd-card-label">Invoiced this month</span><strong>KSh {{ d.month_invoiced|floatformat:0|intcomma }}</strong>
         <span class="bd-card-sub">{{ d.month_invoice_count }} invoice{{ d.month_invoice_count|pluralize }}</span></a>
-      <a class="bd-card" href="{% url 'admin:services_quoterequest_changelist' %}">
+      <a class="bd-card bd-glass" href="{% url 'admin:services_quoterequest_changelist' %}">
+        <span class="bd-card-ico bd-ico-sky"><i class="bi bi-inbox"></i></span>
         <span class="bd-card-label">New quote requests</span><strong>{{ d.new_requests }}</strong>
         <span class="bd-card-sub">From the website</span></a>
-      <a class="bd-card" href="{% url 'admin:pages_contactmessage_changelist' %}">
+      <a class="bd-card bd-glass" href="{% url 'admin:pages_contactmessage_changelist' %}">
+        <span class="bd-card-ico bd-ico-violet"><i class="bi bi-chat-dots"></i></span>
         <span class="bd-card-label">Unread messages</span><strong>{{ d.unread_messages }}</strong>
         <span class="bd-card-sub">Contact form</span></a>
-      <a class="bd-card" href="{% url 'admin:store_order_changelist' %}">
+      <a class="bd-card bd-glass" href="{% url 'admin:store_order_changelist' %}">
+        <span class="bd-card-ico bd-ico-navy"><i class="bi bi-bag-check"></i></span>
         <span class="bd-card-label">Pending orders</span><strong>{{ d.pending_orders }}</strong>
         <span class="bd-card-sub">{{ d.products }} products · {{ d.services }} services live</span></a>
     </div>
 
     <!-- Metrics -->
     <div class="bd-metrics">
-      <div class="bd-panel bd-chart-panel">
-        <div class="bd-panel-head"><h2>Invoiced — last 6 months</h2><span class="bd-muted">KSh {{ d.trend_total|floatformat:0|intcomma }} total</span></div>
-        <div class="bd-chart" role="img" aria-label="Invoiced amount per month">
-          {% for m in d.trend %}
-          <div class="bd-bar-col" title="{{ m.label }}: KSh {{ m.value|floatformat:0|intcomma }}">
-            <span class="bd-bar-val">{% if m.value %}{{ m.value|floatformat:0|intcomma }}{% endif %}</span>
-            <div class="bd-bar-track"><div class="bd-bar{% if forloop.last %} is-now{% endif %}" style="height: {{ m.pct }}%"></div></div>
-            <span class="bd-bar-label">{{ m.label }}</span>
-          </div>
-          {% endfor %}
+      <div class="bd-panel bd-glass bd-chart-panel">
+        <div class="bd-panel-head">
+          <div><h2>Invoiced — last 6 months</h2><span class="bd-big">KSh {{ d.trend_total|floatformat:0|intcomma }}</span></div>
+          {% if d.chart.best.value %}<span class="bd-pill"><i class="bi bi-trophy"></i> Best: {{ d.chart.best.label }}</span>{% endif %}
         </div>
+        <div class="bd-area">
+          <svg viewBox="0 0 {{ d.chart.w }} {{ d.chart.h }}" preserveAspectRatio="none" role="img" aria-label="Invoiced amount per month">
+            <defs><linearGradient id="bdArea" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1878b4" stop-opacity=".35"/><stop offset="100%" stop-color="#1878b4" stop-opacity="0"/></linearGradient></defs>
+            <line x1="0" y1="56" x2="{{ d.chart.w }}" y2="56" class="bd-grid"/><line x1="0" y1="113" x2="{{ d.chart.w }}" y2="113" class="bd-grid"/>
+            <path d="{{ d.chart.area }}" fill="url(#bdArea)"/>
+            <path d="{{ d.chart.line }}" fill="none" stroke="#1878b4" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+          </svg>
+          {% for m in d.trend %}<span class="bd-dotpt{% if forloop.last %} is-now{% endif %}" style="left: {{ m.xpct }}%; top: {{ m.y }}px" title="{{ m.label }}: KSh {{ m.value|floatformat:0|intcomma }}"></span>{% endfor %}
+        </div>
+        <div class="bd-area-labels">{% for m in d.trend %}<span>{{ m.label }}<em>{% if m.value %}{{ m.value|floatformat:0|intcomma }}{% else %}—{% endif %}</em></span>{% endfor %}</div>
       </div>
 
-      <div class="bd-panel">
+      <div class="bd-panel bd-glass">
         <div class="bd-panel-head"><h2>Quote performance</h2></div>
         <div class="bd-kpis">
           <div class="bd-kpi">
@@ -90,7 +114,7 @@
           </div>
           <div class="bd-kpi-list">
             <div><span>Average quote</span><strong>KSh {{ d.avg_quote|floatformat:0|intcomma }}</strong></div>
-            <div><span>Quotes this month</span><strong>{{ d.quotes_this_month }}
+            <div><span>This month</span><strong>{{ d.quotes_this_month }}
               {% if d.quotes_delta > 0 %}<em class="bd-up">▲ {{ d.quotes_delta }}</em>{% elif d.quotes_delta < 0 %}<em class="bd-down">▼ {{ d.quotes_delta|stringformat:"d"|cut:"-" }}</em>{% endif %}</strong></div>
             <div><span>Last month</span><strong>{{ d.quotes_last_month }}</strong></div>
             <div><span>All quotations</span><strong>{{ d.quotes_total }}</strong></div>
@@ -98,7 +122,7 @@
         </div>
       </div>
 
-      <div class="bd-panel">
+      <div class="bd-panel bd-glass">
         <div class="bd-panel-head"><h2>Quotations by status</h2></div>
         {% for s in d.statuses %}
         <div class="bd-hbar"><span class="bd-hbar-label">{{ s.label }}</span>
@@ -107,7 +131,7 @@
         {% endfor %}
       </div>
 
-      <div class="bd-panel">
+      <div class="bd-panel bd-glass">
         <div class="bd-panel-head"><h2>Most requested services</h2></div>
         {% for s in d.top_services %}
         <div class="bd-hbar"><span class="bd-hbar-label">{{ s.service__name|truncatechars:26 }}</span>
@@ -117,8 +141,9 @@
       </div>
     </div>
 
+    <!-- Activity -->
     <div class="bd-panels">
-      <div class="bd-panel bd-panel-wide">
+      <div class="bd-panel bd-glass bd-panel-wide">
         <div class="bd-panel-head"><h2>Latest quotations &amp; invoices</h2><a href="{% url 'admin:quotations_quotation_changelist' %}">View all →</a></div>
         {% if d.recent_docs %}
         <table class="bd-table">
@@ -131,7 +156,7 @@
               <td>{{ q.issue_date|date:"j M" }}</td>
               <td><span class="bd-status bd-st-{{ q.status }}">{{ q.get_status_display }}</span></td>
               <td class="r">{{ q.total|floatformat:2|intcomma }}</td>
-              <td class="r"><a href="{{ q.get_print_url }}" target="_blank">Print</a></td>
+              <td class="r"><a href="{{ q.get_print_url }}" target="_blank" title="Print"><i class="bi bi-printer"></i></a></td>
             </tr>
           {% endfor %}
           </tbody>
@@ -139,8 +164,8 @@
         {% else %}<p class="bd-empty">No quotations yet. <a href="{% url 'admin:quotations_quotation_add' %}">Create the first one →</a></p>{% endif %}
       </div>
 
-      <div class="bd-panel">
-        <div class="bd-panel-head"><h2>Quote requests</h2><a href="{% url 'admin:services_quoterequest_changelist' %}">All →</a></div>
+      <div class="bd-panel bd-glass">
+        <div class="bd-panel-head"><h2><i class="bi bi-inbox"></i> Quote requests</h2><a href="{% url 'admin:services_quoterequest_changelist' %}">All →</a></div>
         {% for r in d.recent_requests %}
           <a class="bd-row" href="{% url 'admin:services_quoterequest_change' r.pk %}">
             <span><strong>{{ r.name }}</strong><small>{{ r.service|default:"General enquiry" }} · {{ r.location }}</small></span>
@@ -148,8 +173,8 @@
         {% empty %}<p class="bd-empty">No requests yet.</p>{% endfor %}
       </div>
 
-      <div class="bd-panel">
-        <div class="bd-panel-head"><h2>Messages</h2><a href="{% url 'admin:pages_contactmessage_changelist' %}">All →</a></div>
+      <div class="bd-panel bd-glass">
+        <div class="bd-panel-head"><h2><i class="bi bi-chat-dots"></i> Messages</h2><a href="{% url 'admin:pages_contactmessage_changelist' %}">All →</a></div>
         {% for m in d.recent_messages %}
           <a class="bd-row" href="{% url 'admin:pages_contactmessage_change' m.pk %}">
             <span><strong>{{ m.name }}</strong><small>{{ m.subject|truncatechars:40 }}</small></span>
@@ -157,8 +182,8 @@
         {% empty %}<p class="bd-empty">No messages yet.</p>{% endfor %}
       </div>
 
-      <div class="bd-panel">
-        <div class="bd-panel-head"><h2>Shop orders</h2><a href="{% url 'admin:store_order_changelist' %}">All →</a></div>
+      <div class="bd-panel bd-glass">
+        <div class="bd-panel-head"><h2><i class="bi bi-bag-check"></i> Shop orders</h2><a href="{% url 'admin:store_order_changelist' %}">All →</a></div>
         {% for o in d.recent_orders %}
           <a class="bd-row" href="{% url 'admin:store_order_change' o.pk %}">
             <span><strong>#{{ o.pk }} · {{ o.full_name }}</strong><small>{{ o.town }} · {{ o.created|date:"j M" }}</small></span>
