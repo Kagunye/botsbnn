@@ -4,7 +4,7 @@ from django.db.models import Case, Count, IntegerField, When
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from pages.models import FAQ, FeatureBanner, HomePanel, Industry, ProcessStep, Testimonial, WhyChooseItem
+from pages.models import FAQ, FeatureBanner, HomePanel, Industry, ProcessStep, ShowcaseRow, Testimonial, WhyChooseItem
 from store.models import Brand, Product
 
 from .models import Project, QuoteRequest, Service, ServiceCategory
@@ -64,6 +64,7 @@ def home(request):
         'process_steps': ProcessStep.objects.all(),
         'industries': Industry.objects.filter(is_active=True),
         'home_panels': HomePanel.objects.filter(is_active=True)[:3],
+        'showcase_rows': ShowcaseRow.objects.filter(is_active=True),
         'feature_banner': FeatureBanner.objects.filter(is_active=True).exclude(image='').first(),
         'testimonials': Testimonial.objects.filter(is_published=True)[:6],
         'faqs': FAQ.objects.filter(is_published=True),

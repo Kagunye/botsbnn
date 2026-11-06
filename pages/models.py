@@ -267,3 +267,21 @@ class FeatureBanner(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ShowcaseRow(models.Model):
+    """Rows above the footer on the homepage: round photo beside a heading, text and button (alternating sides)."""
+    image = models.ImageField(upload_to='home_panels/', help_text='Square photo works best (shown as a circle)')
+    title = models.CharField(max_length=100)
+    text = models.TextField()
+    button_text = models.CharField(max_length=40, default='Learn more')
+    link = models.CharField(max_length=200, default='/about/')
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'homepage showcase row'
+
+    def __str__(self):
+        return self.title

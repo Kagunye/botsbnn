@@ -3,8 +3,8 @@ from django.utils.html import format_html
 from django.shortcuts import redirect
 from django.urls import reverse
 
-from .models import (FAQ, Advert, ContactMessage, FeatureBanner, HomePanel, Industry, ProcessStep, SiteSettings,
-                     Testimonial, WhyChooseItem)
+from .models import (FAQ, Advert, ContactMessage, FeatureBanner, HomePanel, Industry, ProcessStep, ShowcaseRow,
+                     SiteSettings, Testimonial, WhyChooseItem)
 
 
 @admin.register(ContactMessage)
@@ -119,3 +119,14 @@ class FeatureBannerAdmin(admin.ModelAdmin):
     @admin.display(description='')
     def thumb(self, obj):
         return format_html('<img src="{}" style="height:56px;width:110px;object-fit:cover;border-radius:4px">', obj.image.url) if obj.image else 'No photo yet'
+
+
+@admin.register(ShowcaseRow)
+class ShowcaseRowAdmin(admin.ModelAdmin):
+    list_display = ['thumb', 'title', 'button_text', 'link', 'is_active', 'order']
+    list_display_links = ['thumb', 'title']
+    list_editable = ['is_active', 'order']
+
+    @admin.display(description='')
+    def thumb(self, obj):
+        return format_html('<img src="{}" style="height:56px;width:56px;object-fit:cover;border-radius:50%">', obj.image.url) if obj.image else '—'

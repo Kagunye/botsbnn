@@ -330,6 +330,25 @@
 </section>
 {% endif %}
 
+<!-- SHOWCASE ROWS above the footer (Admin → Pages → Homepage showcase rows) -->
+{% if showcase_rows %}
+<div class="showcase">
+  {% for row in showcase_rows %}
+  <section class="showcase-row{% cycle ' tinted' '' %}">
+    <div class="container">
+      <div class="showcase-inner{% if forloop.counter|divisibleby:2 %} reverse{% endif %}">
+        <div class="showcase-photo"><img src="{{ row.image.url }}" alt="" loading="lazy"></div>
+        <div class="showcase-text">
+          <h2>{{ row.title }}</h2>
+          <p>{{ row.text|linebreaksbr }}</p>
+          <a href="{{ row.link }}" class="btn showcase-btn">{{ row.button_text }}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endfor %}
+</div>
+{% endif %}
 {% endblock %}
 
 {% block extra_js %}
