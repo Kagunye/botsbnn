@@ -1,19 +1,4 @@
 {% load static %}<footer class="site-footer ft">
-  <!-- Call to action -->
-  <div class="container">
-    <div class="ft-cta">
-      <div class="ft-cta-text">
-        <span class="ft-cta-kicker">Let's work together</span>
-        <h3>Ready to start your project?</h3>
-        <p>Talk to our engineers about backup power, wiring, security or solar — free site survey and an itemised quote.</p>
-      </div>
-      <div class="ft-cta-actions">
-        <a href="{% url 'services:quote' %}" class="btn ft-btn-light">Get a free quote <i class="bi bi-arrow-right"></i></a>
-        <a href="tel:{{ shop.phones.0|cut:' ' }}" class="btn ft-btn-outline"><i class="bi bi-telephone"></i> {{ shop.phones.0 }}</a>
-      </div>
-    </div>
-  </div>
-
   <!-- Main columns -->
   <div class="container">
     <div class="ft-main">

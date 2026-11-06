@@ -298,16 +298,6 @@
 </section>
 {% endif %}
 
-<!-- CTA -->
-<section class="container pb-5">
-  <div class="cta-strip">
-    <div><h3 class="mb-1">{{ shop.cta_title }}</h3><p class="mb-0">{{ shop.cta_text }}</p></div>
-    <div class="d-flex gap-2 flex-wrap">
-      <a href="tel:{{ shop.phones.0|cut:' ' }}" class="btn btn-light btn-lg"><i class="bi bi-telephone-fill"></i> Call now</a>
-      <a href="https://wa.me/{{ shop.whatsapp }}" class="btn btn-dark btn-lg" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i> WhatsApp</a>
-    </div>
-  </div>
-</section>
 {% endblock %}
 
 {% block extra_js %}

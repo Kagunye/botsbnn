@@ -889,3 +889,5 @@ body { line-height: 1.6; }
   .testimonial-grid { grid-template-columns: 1fr; }
 }
 
+/* Footer without the call-to-action banner: normal top padding */
+.site-footer.ft { padding-top: 3.5rem; margin-top: 0; }
