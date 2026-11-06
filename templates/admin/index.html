@@ -1,0 +1,120 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static humanize admin_dashboard %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'admin/bnn-dashboard.css' %}?v=4">{% endblock %}
+{% block title %}Dashboard | {{ shop.name|default:'BNN Engineering' }} Admin{% endblock %}
+{% block bodyclass %}{{ block.super }} bnn-home{% endblock %}
+{% block coltype %}colM{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block content_title %}{% endblock %}
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+{% admin_dashboard as d %}
+<div class="bd-layout">
+  <!-- Sidebar: every admin section -->
+  <aside class="bd-side" aria-label="Admin sections">
+    <a class="bd-side-home is-active" href="{% url 'admin:index' %}"><span class="bd-ico">▦</span> Dashboard</a>
+    <input type="checkbox" id="bd-menu" class="bd-menu-toggle"><label for="bd-menu" class="bd-menu-btn">☰ All sections</label>
+    <div class="bd-side-groups">
+    {% for app in app_list %}
+    <div class="bd-side-group">
+      <div class="bd-side-title">{{ app.name }}</div>
+      {% for model in app.models %}
+        {% if model.admin_url %}<a href="{{ model.admin_url }}">{{ model.name }}</a>{% else %}<span>{{ model.name }}</span>{% endif %}
+      {% endfor %}
+    </div>
+    {% endfor %}
+    </div>
+    <a class="bd-side-site" href="/" target="_blank">↗ View website</a>
+  </aside>
+
+  <!-- Dashboard -->
+  <section class="bd-main">
+    <header class="bd-head">
+      <div>
+        <h1>Dashboard</h1>
+        <p>Welcome back{% if user.first_name %}, {{ user.first_name }}{% endif %} · {{ d.today|date:"l j F Y" }}</p>
+      </div>
+      <div class="bd-actions">
+        <a class="bd-btn bd-btn-primary" href="{% url 'admin:quotations_quotation_add' %}">+ New quotation</a>
+        <a class="bd-btn bd-btn-green" href="{% url 'admin:quotations_quotation_add' %}?doc_type=invoice">+ New invoice</a>
+        <a class="bd-btn" href="{% url 'admin:services_service_add' %}">+ Service</a>
+        <a class="bd-btn" href="{% url 'admin:store_product_add' %}">+ Product</a>
+      </div>
+    </header>
+
+    <div class="bd-cards">
+      <a class="bd-card" href="{% url 'admin:quotations_quotation_changelist' %}?doc_type__exact=quotation">
+        <span class="bd-card-label">Open quotations</span><strong>{{ d.open_quotes }}</strong>
+        <span class="bd-card-sub">KSh {{ d.open_quotes_value|floatformat:2|intcomma }} in draft / sent</span></a>
+      <a class="bd-card bd-warn" href="{% url 'admin:quotations_quotation_changelist' %}?doc_type__exact=invoice">
+        <span class="bd-card-label">Unpaid invoices</span><strong>{{ d.unpaid }}</strong>
+        <span class="bd-card-sub">KSh {{ d.unpaid_value|floatformat:2|intcomma }} outstanding</span></a>
+      <a class="bd-card bd-good" href="{% url 'admin:quotations_quotation_changelist' %}?doc_type__exact=invoice">
+        <span class="bd-card-label">Invoiced this month</span><strong>KSh {{ d.month_invoiced|floatformat:0|intcomma }}</strong>
+        <span class="bd-card-sub">{{ d.month_invoice_count }} invoice{{ d.month_invoice_count|pluralize }}</span></a>
+      <a class="bd-card" href="{% url 'admin:services_quoterequest_changelist' %}">
+        <span class="bd-card-label">New quote requests</span><strong>{{ d.new_requests }}</strong>
+        <span class="bd-card-sub">From the website</span></a>
+      <a class="bd-card" href="{% url 'admin:pages_contactmessage_changelist' %}">
+        <span class="bd-card-label">Unread messages</span><strong>{{ d.unread_messages }}</strong>
+        <span class="bd-card-sub">Contact form</span></a>
+      <a class="bd-card" href="{% url 'admin:store_order_changelist' %}">
+        <span class="bd-card-label">Pending orders</span><strong>{{ d.pending_orders }}</strong>
+        <span class="bd-card-sub">{{ d.products }} products · {{ d.services }} services live</span></a>
+    </div>
+
+    <div class="bd-panels">
+      <div class="bd-panel bd-panel-wide">
+        <div class="bd-panel-head"><h2>Latest quotations &amp; invoices</h2><a href="{% url 'admin:quotations_quotation_changelist' %}">View all →</a></div>
+        {% if d.recent_docs %}
+        <table class="bd-table">
+          <thead><tr><th>Number</th><th>Client</th><th>Date</th><th>Status</th><th class="r">Total (KSh)</th><th></th></tr></thead>
+          <tbody>
+          {% for q in d.recent_docs %}
+            <tr>
+              <td><a href="{% url 'admin:quotations_quotation_change' q.pk %}">{{ q.number }}</a><span class="bd-type bd-type-{{ q.doc_type }}">{{ q.get_doc_type_display }}</span></td>
+              <td>{{ q.client_name }}</td>
+              <td>{{ q.issue_date|date:"j M" }}</td>
+              <td><span class="bd-status bd-st-{{ q.status }}">{{ q.get_status_display }}</span></td>
+              <td class="r">{{ q.total|floatformat:2|intcomma }}</td>
+              <td class="r"><a href="{{ q.get_print_url }}" target="_blank">Print</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% else %}<p class="bd-empty">No quotations yet. <a href="{% url 'admin:quotations_quotation_add' %}">Create the first one →</a></p>{% endif %}
+      </div>
+
+      <div class="bd-panel">
+        <div class="bd-panel-head"><h2>Quote requests</h2><a href="{% url 'admin:services_quoterequest_changelist' %}">All →</a></div>
+        {% for r in d.recent_requests %}
+          <a class="bd-row" href="{% url 'admin:services_quoterequest_change' r.pk %}">
+            <span><strong>{{ r.name }}</strong><small>{{ r.service|default:"General enquiry" }} · {{ r.location }}</small></span>
+            <span class="bd-status bd-st-{{ r.status }}">{{ r.get_status_display }}</span></a>
+        {% empty %}<p class="bd-empty">No requests yet.</p>{% endfor %}
+      </div>
+
+      <div class="bd-panel">
+        <div class="bd-panel-head"><h2>Messages</h2><a href="{% url 'admin:pages_contactmessage_changelist' %}">All →</a></div>
+        {% for m in d.recent_messages %}
+          <a class="bd-row" href="{% url 'admin:pages_contactmessage_change' m.pk %}">
+            <span><strong>{{ m.name }}</strong><small>{{ m.subject|truncatechars:40 }}</small></span>
+            {% if not m.handled %}<span class="bd-dot" title="Not handled"></span>{% endif %}</a>
+        {% empty %}<p class="bd-empty">No messages yet.</p>{% endfor %}
+      </div>
+
+      <div class="bd-panel">
+        <div class="bd-panel-head"><h2>Shop orders</h2><a href="{% url 'admin:store_order_changelist' %}">All →</a></div>
+        {% for o in d.recent_orders %}
+          <a class="bd-row" href="{% url 'admin:store_order_change' o.pk %}">
+            <span><strong>#{{ o.pk }} · {{ o.full_name }}</strong><small>{{ o.town }} · {{ o.created|date:"j M" }}</small></span>
+            <span class="bd-status bd-st-{{ o.status }}">{{ o.get_status_display }}</span></a>
+        {% empty %}<p class="bd-empty">No orders yet.</p>{% endfor %}
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
