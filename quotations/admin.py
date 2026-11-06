@@ -1,4 +1,5 @@
 from django.contrib import admin, messages
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.urls import path, reverse
@@ -10,7 +11,8 @@ from .models import Quotation, QuotationItem
 class QuotationItemInline(admin.TabularInline):
     model = QuotationItem
     extra = 3
-    fields = ['order', 'product', 'item_code', 'description', 'quantity', 'unit', 'unit_price', 'discount',
+    # typed items first; picking from inventory is optional
+    fields = ['order', 'item_code', 'description', 'product', 'quantity', 'unit', 'unit_price', 'discount',
               'taxable', 'vat_display', 'line_total_display']
     readonly_fields = ['vat_display', 'line_total_display']
     autocomplete_fields = ['product']
@@ -33,12 +35,12 @@ class QuotationAdmin(admin.ModelAdmin):
     search_fields = ['number', 'client_name', 'client_company', 'client_phone', 'client_email', 'title']
     date_hierarchy = 'issue_date'
     inlines = [QuotationItemInline]
-    readonly_fields = ['number', 'totals_box', 'print_button', 'source']
+    readonly_fields = ['number_display', 'totals_box', 'print_button', 'source']
     autocomplete_fields = ['quote_request']
     actions = ['make_invoice', 'make_proforma', 'mark_sent', 'mark_accepted', 'mark_paid', 'duplicate']
     save_on_top = True
     fieldsets = [
-        (None, {'fields': [('doc_type', 'number', 'status'), 'title', ('issue_date', 'valid_until', 'required_date'),
+        (None, {'fields': [('doc_type', 'number_display', 'status'), 'title', ('issue_date', 'valid_until', 'required_date'),
                            ('sales_person', 'sales_phone'), 'quote_request', 'source', 'print_button']}),
         ('Sold to (client)', {'fields': [('client_name', 'client_company'), ('client_phone', 'client_email'),
                                          'client_address', ('client_kra_pin', 'account_no')]}),
@@ -52,8 +54,31 @@ class QuotationAdmin(admin.ModelAdmin):
     ]
 
     class Media:
-        js = ['admin/quotation.js']
+        js = ['admin/quotation-v2.js']
         css = {'all': ['admin/quotation.css']}
+
+    @admin.display(description='Number')
+    def number_display(self, obj):
+        if obj and obj.number:
+            return format_html('<strong id="q-number">{}</strong>', obj.number)
+        # new document: show the number it will get; quotation.js switches it when the type changes
+        nxt = {k: Quotation.next_number(k) for k in Quotation.PREFIX}
+        return format_html('<strong id="q-number" data-next-quotation="{}" data-next-proforma="{}" '
+                           'data-next-invoice="{}">{}</strong> <span class="q-number-note">(assigned when saved)</span>',
+                           nxt['quotation'], nxt['proforma'], nxt['invoice'], nxt['quotation'])
+
+    def save_formset(self, request, form, formset, change):
+        super().save_formset(request, form, formset, change)
+        if formset.model is QuotationItem and form.instance.pk:
+            # keep line numbers 1, 2, 3 ... in the order shown
+            for i, item in enumerate(form.instance.items.order_by('order', 'id'), start=1):
+                if item.order != i:
+                    QuotationItem.objects.filter(pk=item.pk).update(order=i)
+
+    def product_info(self, request, pk):
+        from store.models import Product
+        p = get_object_or_404(Product, pk=pk)
+        return JsonResponse({'name': p.name, 'sku': p.sku or '', 'price': str(p.price) if p.price is not None else ''})
 
     @admin.display(description='VAT', boolean=True)
     def vat_flag(self, obj):
@@ -91,7 +116,9 @@ class QuotationAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         custom = [path('<int:pk>/convert/<str:doc_type>/', self.admin_site.admin_view(self.convert_view),
-                       name='quotations_quotation_convert')]
+                       name='quotations_quotation_convert'),
+                  path('product-info/<int:pk>/', self.admin_site.admin_view(self.product_info),
+                       name='quotations_product_info')]
         return custom + super().get_urls()
 
     def convert_view(self, request, pk, doc_type):

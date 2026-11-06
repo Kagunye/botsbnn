@@ -94,13 +94,19 @@ class Quotation(models.Model):
     def __str__(self):
         return f'{self.number or "New " + self.get_doc_type_display().lower()} – {self.client_name}'
 
+    @classmethod
+    def next_number(cls, doc_type='quotation', year=None):
+        """The number the next document of this type will get, e.g. BNN-QU2026-0001."""
+        year = year or timezone.localdate().year
+        prefix = f'BNN-{cls.PREFIX[doc_type]}{year}-'
+        n = cls.objects.filter(number__startswith=prefix).count() + 1
+        while cls.objects.filter(number=f'{prefix}{n:04d}').exists():
+            n += 1
+        return f'{prefix}{n:04d}'
+
     def save(self, *args, **kwargs):
         if not self.number:
-            prefix = f'BNN-{self.PREFIX[self.doc_type]}{self.issue_date:%Y}-'
-            n = Quotation.objects.filter(number__startswith=prefix).count() + 1
-            while Quotation.objects.filter(number=f'{prefix}{n:04d}').exists():
-                n += 1
-            self.number = f'{prefix}{n:04d}'
+            self.number = self.next_number(self.doc_type, self.issue_date.year)
         super().save(*args, **kwargs)
 
     def get_print_url(self):
@@ -193,15 +199,18 @@ class QuotationItem(models.Model):
              ('hrs', 'HRS'), ('days', 'DAYS'), ('job', 'JOB'), ('kit', 'KIT')]
     quotation = models.ForeignKey(Quotation, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey('store.Product', null=True, blank=True, on_delete=models.SET_NULL,
-                                help_text='Optional – pick a shop product to fill in name and price')
-    item_code = models.CharField('Item', max_length=60, blank=True, help_text='Item code or short name')
-    description = models.CharField(max_length=255, blank=True)
+                                verbose_name='From inventory (optional)',
+                                help_text='Optional – pick a shop product to fill in name, code and price. '
+                                          'Items not in inventory: just type them in Item / Description.')
+    item_code = models.CharField('Item', max_length=60, blank=True, help_text='Type any item code or short name')
+    description = models.CharField('Description', max_length=255, blank=True,
+                                   help_text='Type anything – it does not need to be in inventory')
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=1)
     unit = models.CharField(max_length=10, choices=UNITS, default='ea')
     unit_price = models.DecimalField('Unit price', max_digits=12, decimal_places=2, default=0)
     discount = models.DecimalField('Discount (KSh)', max_digits=12, decimal_places=2, default=0)
     taxable = models.BooleanField('VAT', default=True, help_text='Untick for VAT-exempt lines')
-    order = models.PositiveIntegerField(default=0)
+    order = models.PositiveIntegerField('#', default=0)
 
     class Meta:
         ordering = ['order', 'id']
