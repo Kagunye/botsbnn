@@ -926,3 +926,12 @@ body { line-height: 1.6; }
   .feature-banner-body { padding: 1.8rem 1.4rem; }
 }
 
+
+/* Photo panels: zoomed out (wider 3:2 shape shows more of each photo, lighter headlines) */
+.home-panel { aspect-ratio: 3 / 2; }
+.home-panel-title { font-size: clamp(1rem, 1.35vw, 1.25rem); }
+.home-panel-body { padding: 1.2rem 1.3rem 1.3rem; gap: .5rem; }
+.home-panel-link { font-size: .85rem; }
+.home-panel-shade { background: linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, .3) 70%, rgba(0, 0, 0, .75) 100%); }
+@media (max-width: 991.98px) { .home-panels .home-panel:last-child { aspect-ratio: 3 / 1.4; } }
+@media (max-width: 575.98px) { .home-panels .home-panel:last-child { aspect-ratio: 3 / 2; } }
