@@ -1,11 +1,17 @@
 {% extends "admin/base.html" %}
 {% load static %}
-{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | BNN Engineering Admin{% endblock %}
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ shop.name|default:"BNN Engineering" }} Admin{% endblock %}
+{% block extrastyle %}{{ block.super }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'admin/bnn-admin.css' %}?v=1">
+{% endblock %}
 {% block extrahead %}{{ block.super }}<link rel="icon" href="{% if shop.favicon %}{{ shop.favicon_url }}{% else %}{% static 'img/favicon.ico' %}{% endif %}">{% endblock %}
 {% block branding %}
 <div id="site-name"><a href="{% url 'admin:index' %}" style="display:flex;align-items:center;gap:.6rem">
   <img src="{{ shop.logo_light_url }}" alt="{{ shop.name }}" style="height:34px;width:auto">
-  <span style="font-size:.9rem;opacity:.8">Admin</span></a></div>
+  <span style="font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:20px;background:rgba(255,255,255,.12)">Admin</span></a></div>
 {% if user.is_anonymous %}{% include "admin/color_theme_toggle.html" %}{% endif %}
 {% endblock %}
 {% block nav-global %}{% endblock %}

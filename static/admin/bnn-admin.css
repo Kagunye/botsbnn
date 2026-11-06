@@ -1,0 +1,120 @@
+/* BNN Engineering admin theme — matches the main site (navy + brand blue, Montserrat / Rubik) */
+:root, html[data-theme="light"] {
+  --primary: #1878b4;            /* brand blue */
+  --secondary: #0c486c;          /* brand navy */
+  --accent: #78c0e4;
+  --primary-fg: #fff;
+  --body-fg: #1c2b3a;
+  --body-bg: #ffffff;
+  --body-quiet-color: #6b7785;
+  --body-loud-color: #0b2233;
+  --header-color: #e6f1f8;
+  --header-branding-color: #ffffff;
+  --header-bg: #0a2a40;
+  --header-link-color: #e6f1f8;
+  --breadcrumbs-fg: #cfe3f1;
+  --breadcrumbs-link-fg: #ffffff;
+  --breadcrumbs-bg: #0c486c;
+  --link-fg: #1878b4;
+  --link-hover-color: #0c486c;
+  --link-selected-fg: #0c486c;
+  --hairline-color: #e6ebf0;
+  --border-color: #d9e1e8;
+  --error-fg: #c0392b;
+  --message-success-bg: #e6f6ec;
+  --message-warning-bg: #fff6df;
+  --message-error-bg: #fdecea;
+  --darkened-bg: #f2f6fa;
+  --selected-bg: #e4f0f9;
+  --selected-row: #fff8d6;
+  --button-fg: #fff;
+  --button-bg: #1878b4;
+  --button-hover-bg: #0c486c;
+  --default-button-bg: #0c486c;
+  --default-button-hover-bg: #0a2a40;
+  --close-button-bg: #6b7785;
+  --close-button-hover-bg: #4a5561;
+  --delete-button-bg: #c0392b;
+  --delete-button-hover-bg: #9e2b20;
+  --object-tools-fg: #fff;
+  --object-tools-bg: #1878b4;
+  --object-tools-hover-bg: #0c486c;
+  --font-family-primary: 'Rubik', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --primary: #4ea6dc; --secondary: #0c486c; --accent: #78c0e4;
+    --body-fg: #e3ecf3; --body-bg: #0d1b26; --body-quiet-color: #9fb2c1; --body-loud-color: #ffffff;
+    --header-bg: #071c2b; --breadcrumbs-bg: #0c3a57;
+    --link-fg: #78c0e4; --link-hover-color: #b6dcf1; --link-selected-fg: #b6dcf1;
+    --hairline-color: #1d3344; --border-color: #27455b; --darkened-bg: #11263a; --selected-bg: #143349; --selected-row: #2a3a1a;
+    --button-bg: #1878b4; --button-hover-bg: #2d8fcc; --default-button-bg: #0c486c; --default-button-hover-bg: #12608f;
+    --object-tools-bg: #1878b4; --object-tools-hover-bg: #2d8fcc;
+    --message-success-bg: #12362a; --message-warning-bg: #3a3214; --message-error-bg: #3d1a17;
+  }
+}
+html[data-theme="dark"] {
+  --primary: #4ea6dc; --secondary: #0c486c; --accent: #78c0e4;
+  --body-fg: #e3ecf3; --body-bg: #0d1b26; --body-quiet-color: #9fb2c1; --body-loud-color: #ffffff;
+  --header-bg: #071c2b; --breadcrumbs-bg: #0c3a57;
+  --link-fg: #78c0e4; --link-hover-color: #b6dcf1; --link-selected-fg: #b6dcf1;
+  --hairline-color: #1d3344; --border-color: #27455b; --darkened-bg: #11263a; --selected-bg: #143349; --selected-row: #2a3a1a;
+  --button-bg: #1878b4; --button-hover-bg: #2d8fcc; --default-button-bg: #0c486c; --default-button-hover-bg: #12608f;
+  --object-tools-bg: #1878b4; --object-tools-hover-bg: #2d8fcc;
+  --message-success-bg: #12362a; --message-warning-bg: #3a3214; --message-error-bg: #3d1a17;
+}
+
+/* type */
+body { font-family: var(--font-family-primary); }
+h1, h2, h3, #site-name, .module caption, .module h2, #content h1, #content h2 { font-family: 'Montserrat', system-ui, sans-serif; }
+#content h1 { font-weight: 800; color: var(--body-loud-color); letter-spacing: -.2px; }
+
+/* header: navy like the site footer, with a thin brand-blue accent */
+#header { background: linear-gradient(90deg, #0a2a40 0%, #0c486c 100%); border-bottom: 3px solid #1878b4; padding: 12px 40px; }
+html[data-theme="dark"] #header { background: linear-gradient(90deg, #071c2b 0%, #0c3a57 100%); }
+#site-name a { color: #fff !important; }
+#user-tools { font-size: .82rem; }
+#user-tools a { border-bottom: 0; color: #cfe3f1; }
+#user-tools a:hover { color: #fff; }
+div.breadcrumbs { background: var(--breadcrumbs-bg); padding: 10px 40px; font-size: .82rem; }
+
+/* cards / modules */
+.module { border-radius: 10px; overflow: hidden; box-shadow: 0 1px 2px rgba(12, 40, 64, .06); border: 1px solid var(--hairline-color); }
+.module h2, .module caption, .inline-group h2 { background: #0c486c; color: #fff; font-weight: 700; letter-spacing: .3px; text-transform: none; font-size: .92rem; padding: 10px 14px; }
+html[data-theme="dark"] .module h2, html[data-theme="dark"] .module caption { background: #0c3a57; }
+.dashboard .module table th { font-weight: 500; }
+.dashboard .module caption a { color: #fff; }
+fieldset.module { border-radius: 10px; }
+#changelist .actions { border-radius: 8px; }
+#changelist-filter { border-radius: 10px; overflow: hidden; }
+#changelist-filter h2 { background: #0c486c; color: #fff; }
+
+/* buttons */
+.button, input[type=submit], input[type=button], .submit-row input, a.button, .object-tools a {
+  border-radius: 8px !important; font-weight: 600; letter-spacing: .1px; transition: background .2s, transform .15s; }
+.button:hover, input[type=submit]:hover, .submit-row input:hover, .object-tools a:hover { transform: translateY(-1px); }
+.submit-row { border-radius: 10px; }
+.object-tools a { padding: 6px 14px; }
+.addlink, .changelink, .inlinechangelink, .deletelink { font-weight: 500; }
+
+/* inputs */
+input[type=text], input[type=password], input[type=email], input[type=url], input[type=number], input[type=tel],
+input[type=search], textarea, select, .vTextField {
+  border-radius: 7px; border: 1px solid var(--border-color); padding: 6px 9px; }
+input:focus, textarea:focus, select:focus { outline: 2px solid rgba(24, 120, 180, .25); border-color: #1878b4; }
+
+/* tables */
+#result_list thead th { background: var(--darkened-bg); font-weight: 600; }
+#result_list tbody tr:hover { background: var(--selected-bg); }
+
+/* sidebar nav */
+#nav-sidebar .current-model { background: var(--selected-bg); }
+#nav-sidebar .module th a { font-weight: 500; }
+
+/* login page: branded card on navy */
+body.login { background: radial-gradient(70% 60% at 85% 0%, rgba(78, 166, 220, .25) 0%, rgba(78, 166, 220, 0) 70%), linear-gradient(160deg, #0a2a40 0%, #0c486c 100%); min-height: 100vh; }
+body.login #container { border-radius: 16px; overflow: hidden; box-shadow: 0 24px 60px rgba(0, 0, 0, .35); border: 0; margin-top: 8vh; }
+body.login #header { justify-content: center; padding: 22px 30px; border-bottom: 3px solid #1878b4; }
+body.login #content { padding: 24px 30px 30px; }
+body.login .form-row label { font-weight: 600; }
+body.login .submit-row input { width: 100%; padding: 11px; font-size: .95rem; }
