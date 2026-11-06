@@ -2,7 +2,9 @@
 {% load admin_urls %}
 {% block object-tools-items %}
 {% if original and original.pk %}
-  <li><a href="{{ original.get_print_url }}" target="_blank">🖨 Print / PDF</a></li>
+  <li><a href="{{ original.get_print_url }}" class="q-tool-preview" data-preview="{{ original.get_print_url }}?embed=1" data-title="{{ original.get_doc_type_display }} {{ original.number }}">👁 Preview</a></li>
+  <li><a href="{{ original.get_print_url }}?print=1" target="_blank" class="q-tool-print">🖨 Print</a></li>
+  <li><a href="{{ original.get_print_url }}?pdf=1" target="_blank" class="q-tool-pdf">⬇ PDF</a></li>
   {% if original.doc_type == 'quotation' %}
   <li><a href="{% url 'admin:quotations_quotation_convert' original.pk 'proforma' %}" class="q-tool-convert">Convert to Proforma</a></li>
   {% endif %}

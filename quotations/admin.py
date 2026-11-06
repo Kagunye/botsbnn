@@ -54,8 +54,8 @@ class QuotationAdmin(admin.ModelAdmin):
     ]
 
     class Media:
-        js = ['admin/quotation-v2.js']
-        css = {'all': ['admin/quotation-v2.css']}
+        js = ['admin/quotation-v3.js']
+        css = {'all': ['admin/quotation-v3.css']}
 
     @admin.display(description='Number')
     def number_display(self, obj):

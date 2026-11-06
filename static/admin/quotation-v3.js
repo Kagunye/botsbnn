@@ -115,3 +115,45 @@
     renumber(); showNumber(); recalc();
   });
 })();
+
+// Preview the printable document in a pop-up, with Print and Download PDF buttons
+(function () {
+  function openPreview(url, title, printUrl) {
+    const wrap = document.createElement('div');
+    wrap.className = 'q-modal';
+    wrap.innerHTML = `
+      <div class="q-modal-box" role="dialog" aria-modal="true" aria-label="Preview">
+        <div class="q-modal-bar">
+          <strong></strong>
+          <span class="q-modal-actions">
+            <button type="button" class="q-m-print">🖨 Print</button>
+            <button type="button" class="q-m-pdf">⬇ Download PDF</button>
+            <a class="q-m-open" target="_blank">Open in new tab ↗</a>
+            <button type="button" class="q-m-close" aria-label="Close">✕</button>
+          </span>
+        </div>
+        <iframe title="Document preview"></iframe>
+      </div>`;
+    wrap.querySelector('strong').textContent = title;
+    wrap.querySelector('.q-m-open').href = printUrl;
+    const frame = wrap.querySelector('iframe');
+    frame.src = url;
+    const close = () => { wrap.remove(); document.removeEventListener('keydown', onKey); };
+    const onKey = e => { if (e.key === 'Escape') close(); };
+    wrap.addEventListener('click', e => { if (e.target === wrap) close(); });
+    wrap.querySelector('.q-m-close').addEventListener('click', close);
+    wrap.querySelector('.q-m-print').addEventListener('click', () => frame.contentWindow.print());
+    wrap.querySelector('.q-m-pdf').addEventListener('click', () => {
+      const w = frame.contentWindow;
+      if (w && w.bnnDownloadPdf) w.bnnDownloadPdf(); else window.open(printUrl + '?pdf=1', '_blank');
+    });
+    document.addEventListener('keydown', onKey);
+    document.body.appendChild(wrap);
+  }
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a.q-tool-preview');
+    if (!a) return;
+    e.preventDefault();
+    openPreview(a.dataset.preview, a.dataset.title, a.getAttribute('href'));
+  });
+})();
