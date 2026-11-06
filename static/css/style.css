@@ -806,3 +806,46 @@ body { line-height: 1.6; }
 .photo-grid > .photo-card:first-child .photo-card-title { font-size: 1.5rem; }
 .ft-cta h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); font-weight: 700; }
 
+/* ===== Below hero: commitment bar + corporate expertise list ===== */
+.commit-bar { background: #fff; border-bottom: 1px solid #e6edf3; box-shadow: 0 8px 24px rgba(15, 35, 55, .05); position: relative; z-index: 2; }
+.commit-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+.commit-item { display: flex; align-items: center; gap: .9rem; padding: 1.4rem 1.2rem; border-right: 1px solid #e6edf3; }
+.commit-item:last-child { border-right: 0; }
+.commit-item > i { width: 44px; height: 44px; flex-shrink: 0; border-radius: 10px; background: #e8f3fb; color: var(--brand); display: grid; place-items: center; font-size: 1.25rem; }
+.commit-item strong { display: block; font-family: var(--font-head); font-weight: 700; font-size: .95rem; color: var(--ink); }
+.commit-item span { font-size: .84rem; color: var(--muted); }
+
+.expertise-section { padding: 5rem 0; background: #fff; }
+.expertise-intro { position: sticky; top: 140px; }
+.expertise-intro .section-title-lg { margin-bottom: 1rem; }
+.expertise-list { border-top: 1px solid #e3eaf1; }
+.expertise-row { display: grid; grid-template-columns: 44px 56px 1fr 44px; gap: 1.1rem; align-items: start; padding: 1.6rem .4rem; border-bottom: 1px solid #e3eaf1; transition: background .25s; }
+.expertise-row:hover { background: linear-gradient(90deg, rgba(24, 120, 180, .05), transparent 75%); }
+.expertise-num { font-family: var(--font-head); font-weight: 700; color: #9fb3c4; padding-top: .9rem; font-size: .9rem; }
+.expertise-icon { width: 56px; height: 56px; border-radius: 12px; background: var(--brand-dark); color: #fff; display: grid; place-items: center; font-size: 1.5rem; transition: background .25s; }
+.expertise-row:hover .expertise-icon { background: var(--brand); }
+.expertise-body h3 { font-family: var(--font-head); font-weight: 700; font-size: 1.15rem; margin: .2rem 0 .3rem; }
+.expertise-body h3 a { color: var(--ink); text-decoration: none; }
+.expertise-body h3 a:hover { color: var(--brand); }
+.expertise-body p { color: var(--muted); margin: 0 0 .7rem; font-size: .95rem; }
+.expertise-services { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+.expertise-services a { display: inline-block; font-size: .82rem; color: var(--ink); text-decoration: none; padding: .28rem .7rem; border: 1px solid #dbe4ec; border-radius: 30px; background: #fff; transition: all .2s; }
+.expertise-services a:hover { border-color: var(--brand); color: var(--brand); background: #f3f9fd; }
+.expertise-go { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #dbe4ec; color: var(--ink); display: grid; place-items: center; text-decoration: none; margin-top: .4rem; transition: all .2s; }
+.expertise-row:hover .expertise-go { background: var(--brand); border-color: var(--brand); color: #fff; }
+@media (max-width: 991.98px) {
+  .commit-grid { grid-template-columns: repeat(2, 1fr); }
+  .commit-item:nth-child(2) { border-right: 0; }
+  .commit-item:nth-child(-n+2) { border-bottom: 1px solid #e6edf3; }
+  .expertise-intro { position: static; }
+  .expertise-section { padding: 3.5rem 0; }
+}
+@media (max-width: 575.98px) {
+  .commit-grid { grid-template-columns: 1fr; }
+  .commit-item { border-right: 0; border-bottom: 1px solid #e6edf3; padding: 1rem .2rem; }
+  .commit-item:last-child { border-bottom: 0; }
+  .expertise-row { grid-template-columns: 48px 1fr; gap: .9rem; }
+  .expertise-num, .expertise-go { display: none; }
+  .expertise-icon { width: 48px; height: 48px; font-size: 1.3rem; }
+}
+

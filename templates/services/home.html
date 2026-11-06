@@ -38,39 +38,54 @@
   </div>
 </section>
 
-<!-- SERVICE GROUPS -->
-<section class="container py-5 news-section">
-  <div class="news-head">
-    <div>
-      <span class="section-kicker">What we do</span>
-      <h2 class="section-title-lg mb-1">Engineering services</h2>
-      <p class="text-muted mb-0">{{ shop.services_intro }}</p>
-    </div>
-    <div class="news-nav">
-      <a href="{% url 'services:list' %}" class="news-all">View all <i class="bi bi-arrow-right"></i></a>
-      <button type="button" class="news-btn" data-news-prev aria-label="Previous"><i class="bi bi-chevron-left"></i></button>
-      <button type="button" class="news-btn" data-news-next aria-label="Next"><i class="bi bi-chevron-right"></i></button>
+<!-- COMMITMENT BAR -->
+<section class="commit-bar">
+  <div class="container">
+    <div class="commit-grid">
+      <div class="commit-item"><i class="bi bi-clipboard-check"></i><div><strong>Free site survey</strong><span>Load assessment before we quote</span></div></div>
+      <div class="commit-item"><i class="bi bi-person-badge"></i><div><strong>Qualified technicians</strong><span>Safe, standards-compliant work</span></div></div>
+      <div class="commit-item"><i class="bi bi-patch-check"></i><div><strong>Genuine equipment</strong><span>Trusted brands with warranty</span></div></div>
+      <div class="commit-item"><i class="bi bi-headset"></i><div><strong>24/7 emergency support</strong><span>Fast call-outs when power fails</span></div></div>
     </div>
   </div>
-  <div class="news-track" data-news-track tabindex="0" aria-label="Our services">
-    {% for s in slider_services %}{% with img=s.card_image %}
-    <article class="news-card">
-      <a href="{{ s.get_absolute_url }}" class="news-img" tabindex="-1" aria-hidden="true">
-        {% if img %}<img src="{{ img.url }}" alt="" loading="lazy">{% else %}<span class="news-img-fallback"><i class="bi bi-{{ s.icon }}"></i></span>{% endif %}
-        <span class="news-badge"><i class="bi bi-{{ s.category.icon }}"></i> {{ s.category.name }}</span>
-      </a>
-      <div class="news-body">
-        <h3 class="news-title"><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></h3>
-        <p class="news-excerpt">{{ s.summary }}</p>
-        <div class="news-foot">
-          <a href="{{ s.get_absolute_url }}" class="news-more">Read more <i class="bi bi-arrow-right"></i></a>
-          <a href="{{ s.get_quote_url }}" class="news-quote">Get quote</a>
+</section>
+
+<!-- OUR EXPERTISE (service categories & services from Admin → Services) -->
+<section class="expertise-section">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-4">
+        <div class="expertise-intro">
+          <span class="section-kicker">Our expertise</span>
+          <h2 class="section-title-lg">Electrical engineering for homes, businesses and industry</h2>
+          <p class="text-muted">{{ shop.services_intro }}</p>
+          <p class="text-muted">From the first site survey to testing and handover, one {{ shop.name }} team designs, installs and maintains your power, wiring, security and solar systems.</p>
+          <div class="d-flex flex-wrap gap-2 mt-3">
+            <a href="{% url 'services:list' %}" class="btn btn-brand">All services <i class="bi bi-arrow-right"></i></a>
+            <a href="{% url 'services:quote' %}" class="btn btn-outline-dark">Request a quote</a>
+          </div>
         </div>
       </div>
-    </article>
-    {% endwith %}{% endfor %}
+      <div class="col-lg-8">
+        <div class="expertise-list">
+          {% for cat in service_categories %}
+          <article class="expertise-row">
+            <span class="expertise-num">{{ forloop.counter|stringformat:"02d" }}</span>
+            <span class="expertise-icon"><i class="bi bi-{{ cat.icon }}"></i></span>
+            <div class="expertise-body">
+              <h3><a href="{% url 'services:list' %}#{{ cat.slug }}">{{ cat.name }}</a></h3>
+              {% if cat.tagline %}<p>{{ cat.tagline }}</p>{% endif %}
+              <ul class="expertise-services">
+                {% for s in cat.services.all %}{% if s.is_active %}<li><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></li>{% endif %}{% endfor %}
+              </ul>
+            </div>
+            <a href="{% url 'services:list' %}#{{ cat.slug }}" class="expertise-go" aria-label="Explore {{ cat.name }}"><i class="bi bi-arrow-up-right"></i></a>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="news-dots" data-news-dots aria-hidden="true"></div>
 </section>
 
 <!-- FEATURED SERVICES -->
