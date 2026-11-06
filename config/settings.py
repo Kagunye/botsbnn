@@ -78,6 +78,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'accounts.middleware.ReadOnlyDatabaseMiddleware',  # friendly page if saving fails on a read-only database
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -132,7 +133,8 @@ if os.environ.get('DATABASE_URL'):
 # (pages, products, services show), and sessions are kept in signed cookies so the cart and admin login work.
 # Saving anything (quote requests, orders, admin edits) needs DATABASE_URL.
 ON_VERCEL = bool(os.environ.get('VERCEL'))
-if ON_VERCEL and not os.environ.get('DATABASE_URL'):
+READ_ONLY_DB = ON_VERCEL and not os.environ.get('DATABASE_URL')
+if READ_ONLY_DB:
     SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 
