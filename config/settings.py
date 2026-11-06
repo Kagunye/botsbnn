@@ -35,13 +35,20 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False').strip().lower() in ('1', 'true', 'yes')
 
+SITE_DOMAINS = ['www.bnnengineering.co.ke', 'bnnengineering.co.ke']  # the live company domain
+
 ALLOWED_HOSTS = [h.strip() for h in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()]
+ALLOWED_HOSTS += [d for d in SITE_DOMAINS if d not in ALLOWED_HOSTS]
 CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()]
+CSRF_TRUSTED_ORIGINS += [f'https://{d}' for d in SITE_DOMAINS if f'https://{d}' not in CSRF_TRUSTED_ORIGINS]
 if os.environ.get('VERCEL'):
-    # Vercel preview/production domains (*.vercel.app); add your own domain via the variables above
+    # Vercel preview/production domains (*.vercel.app) as well as the company domain above
     ALLOWED_HOSTS += ['.vercel.app']
     CSRF_TRUSTED_ORIGINS += ['https://*.vercel.app']
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    # the live site is HTTPS only: keep login/session and CSRF cookies off plain HTTP
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 
 # Application definition

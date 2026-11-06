@@ -92,3 +92,12 @@ Admin → Quotations → Add:
 - Make sure you have the right to use any product photos and descriptions you imported.
 - Set `DEBUG = False`, a new `SECRET_KEY`, `ALLOWED_HOSTS`; use PostgreSQL; run `collectstatic`; serve `/media/`.
 - Optionally email staff on new quote requests and integrate M-Pesa for shop payments.
+
+## Deploying to Vercel with www.bnnengineering.co.ke
+
+1. Environment variables: in Vercel open **Project → Settings → Environment Variables → Import .env** and pick the
+   private `.env` file (template: `.env.example`). Never commit `.env`.
+2. Domain: **Project → Settings → Domains → Add** `www.bnnengineering.co.ke` (and `bnnengineering.co.ke`, set to
+   redirect to www). At your domain registrar add the DNS records Vercel shows (usually `CNAME www → cname.vercel-dns.com`
+   and an `A` record for the root domain).
+3. Redeploy. Both domains are already allowed in `config/settings.py`.
