@@ -1017,3 +1017,23 @@ body { line-height: 1.6; }
 .showcase-row.style-blue .showcase-btn:hover { background: #0a2238; color: #fff; }
 @media (max-width: 767.98px) { .showcase-row.style-blue .showcase-photo img { width: 240px; height: 290px; } }
 
+/* Blue showcase row: plain photo (no card), flush with the bottom of the section */
+.showcase-row.style-blue { padding-bottom: 0; }
+.showcase-row.style-blue .showcase-inner { align-items: end; }
+.showcase-row.style-blue .showcase-text { align-self: center; padding-bottom: 3.5rem; }
+.showcase-row.style-blue .showcase-photo img { width: 340px; height: 420px; border-radius: 0; box-shadow: none; object-position: center top; }
+@media (max-width: 767.98px) {
+  .showcase-row.style-blue .showcase-text { padding-bottom: 0; }
+  .showcase-row.style-blue .showcase-photo img { width: 260px; height: 320px; margin: 0 auto; }
+}
+.showcase-row.style-blue .showcase-photo img {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 18%, #000 82%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 28%);
+  -webkit-mask-composite: source-in; mask-composite: intersect;
+  mask-image: linear-gradient(to right, transparent 0, #000 18%, #000 82%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 28%);
+}
+/* Blue showcase row: background matches the photo's sky so the image blends in */
+.showcase-row.style-blue { background: linear-gradient(180deg, #a9d3fd 0%, #c6e1fb 30%, #e0ecf8 52%, #a6d1fb 78%, #5fb2fd 100%); color: var(--ink); }
+.showcase-row.style-blue .showcase-text h2 { color: #0a2a45; }
+.showcase-row.style-blue .showcase-text p { color: #1f3b55; }
+.showcase-row.style-blue .showcase-btn { background: var(--brand-dark); color: #fff; }
+.showcase-row.style-blue .showcase-btn:hover { background: #0a2238; color: #fff; }

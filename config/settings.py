@@ -88,6 +88,15 @@ TEMPLATES = [
     },
 ]
 
+# Outside Vercel, re-read templates on every request so edits show without restarting the server
+# (Django otherwise caches templates whenever DEBUG is off).
+if not os.environ.get('VERCEL'):
+    TEMPLATES[0]['APP_DIRS'] = False
+    TEMPLATES[0]['OPTIONS']['loaders'] = [
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    ]
+
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
