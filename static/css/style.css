@@ -975,3 +975,26 @@ body { line-height: 1.6; }
           mask: radial-gradient(circle, transparent 0 9%, #000 9.2%, #000 70%, transparent 70.2%); }
 .sunburst-rays::after { display: none; }
 @media (max-width: 991.98px) { .sunburst-rays { right: -520px; bottom: -520px; width: 1000px; height: 1000px; opacity: .55; } }
+
+/* ===== Testimonials: split layout (quote slider left, photo right) ===== */
+.tsplit { display: grid; grid-template-columns: 1fr 1fr; min-height: 440px; background: #fff; }
+.tsplit-text { display: flex; align-items: center; justify-content: flex-end; padding: 3.5rem 3rem; }
+.tsplit-inner { width: 100%; max-width: 440px; }
+.tsplit-inner .section-title-lg { margin-bottom: 1.6rem; }
+.tquote { position: relative; margin: 0; background: #f4f8fb; padding: 2rem 1.6rem 1.4rem; border-radius: 6px; }
+.tquote-mark { position: absolute; top: -16px; left: 1.4rem; width: 34px; height: 34px; border-radius: 50%; background: var(--brand); color: #fff; display: grid; place-items: center; font-size: 1.2rem; }
+.tquote blockquote { margin: 0 0 1rem; color: var(--ink); line-height: 1.7; font-size: .95rem; }
+.tquote strong { display: block; font-family: var(--font-head); color: var(--ink); font-size: .9rem; }
+.tquote figcaption span { font-size: .82rem; color: var(--muted); }
+.tnav { display: flex; justify-content: flex-end; gap: .6rem; margin-top: 1rem; }
+.tnav button { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid #c7d3de; background: #fff; color: var(--ink); display: grid; place-items: center; transition: all .2s; }
+.tnav button:hover { border-color: var(--brand); background: var(--brand); color: #fff; }
+.tsplit-photo { position: relative; overflow: hidden; }
+.tsplit-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+@media (max-width: 991.98px) {
+  .tsplit { grid-template-columns: 1fr; }
+  .tsplit-text { justify-content: center; padding: 3rem 1.2rem; }
+  .tsplit-photo { height: 320px; order: -1; }
+}
+
+#tCarousel .carousel-item { padding-top: 18px; }

@@ -247,25 +247,33 @@
 
 <!-- TESTIMONIALS (Admin → Pages → Testimonials; hidden until real ones are added) -->
 {% if testimonials %}
-<section class="testimonials-section">
-  <div class="container">
-    <div class="text-center mb-5">
+<section class="tsplit">
+  <div class="tsplit-text">
+    <div class="tsplit-inner">
       <span class="section-kicker">Client feedback</span>
-      <h2 class="section-title-lg">What our clients say</h2>
-    </div>
-    <div class="testimonial-grid">
-      {% for t in testimonials %}
-      <figure class="testimonial-card">
-        <div class="t-stars">{% for i in t.stars %}<i class="bi bi-star-fill"></i>{% endfor %}</div>
-        <blockquote>&ldquo;{{ t.quote }}&rdquo;</blockquote>
-        <figcaption>
-          {% if t.photo %}<img src="{{ t.photo.url }}" alt="">{% else %}<span class="t-initial">{{ t.name|first }}</span>{% endif %}
-          <span><strong>{{ t.name }}</strong>{% if t.role %}<small>{{ t.role }}</small>{% endif %}</span>
-        </figcaption>
-      </figure>
-      {% endfor %}
+      <h2 class="section-title-lg">What are our clients saying?</h2>
+      <div id="tCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000">
+        <div class="carousel-inner">
+          {% for t in testimonials %}
+          <div class="carousel-item{% if forloop.first %} active{% endif %}">
+            <figure class="tquote">
+              <span class="tquote-mark"><i class="bi bi-quote"></i></span>
+              <blockquote>{{ t.quote }}</blockquote>
+              <figcaption><strong>{{ t.name }}</strong>{% if t.role %}<span>{{ t.role }}</span>{% endif %}</figcaption>
+            </figure>
+          </div>
+          {% endfor %}
+        </div>
+        {% if testimonials|length > 1 %}
+        <div class="tnav">
+          <button type="button" data-bs-target="#tCarousel" data-bs-slide="prev" aria-label="Previous"><i class="bi bi-arrow-left"></i></button>
+          <button type="button" data-bs-target="#tCarousel" data-bs-slide="next" aria-label="Next"><i class="bi bi-arrow-right"></i></button>
+        </div>
+        {% endif %}
+      </div>
     </div>
   </div>
+  <div class="tsplit-photo"><img src="/media/home_panels/testimonial-woman.jpg" alt="" loading="lazy"></div>
 </section>
 {% endif %}
 
