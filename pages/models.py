@@ -87,6 +87,8 @@ class SiteSettings(models.Model):
     hero_video_webm = models.FileField('Hero video (WebM, optional)', upload_to='site/video/', blank=True,
                                        help_text='Smaller version for Chrome/Android; leave blank if you only have MP4')
     testimonials_image = models.ImageField('"What clients are saying" photo', upload_to='site/', blank=True)
+    about_image = models.ImageField('About page "Who we are" photo', upload_to='site/', blank=True,
+                                    help_text='Portrait photo on a blue background works best (the section is blue)')
     mpesa_logo = models.ImageField('M-PESA logo', upload_to='site/', blank=True)
 
     badge_value = models.CharField('Photo badge value', max_length=20, default='24/7')

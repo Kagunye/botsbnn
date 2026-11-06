@@ -4,21 +4,27 @@
 
 {% block content %}
 <div class="page-hero"><div class="container"><h1>About {{ shop.name }}</h1><p class="mb-0 opacity-75">Electrical engineering you can trust — from the switchboard to the solar array.</p></div></div>
-<div class="container py-5">
-  <div class="row g-5 align-items-center">
-    <div class="col-lg-6">
-      <h2 class="section-title">{{ shop.about_title }}</h2>
-      {% for para in shop.about_paragraphs %}<p>{{ para|linebreaksbr }}</p>{% endfor %}
-      <div class="row g-3 mt-3 text-center">
-        <div class="col-4"><div class="stat"><strong>{{ shop.stat1_value }}</strong><span>{{ shop.stat1_label }}</span></div></div>
-        <div class="col-4"><div class="stat"><strong>{{ shop.stat2_value }}</strong><span>{{ shop.stat2_label }}</span></div></div>
-        <div class="col-4"><div class="stat"><strong>{{ shop.stat3_value }}</strong><span>{{ shop.stat3_label }}</span></div></div>
+<section class="who-blue">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-6 who-text">
+        <span class="who-kicker">About us</span>
+        <h2>{{ shop.about_title }}</h2>
+        {% for para in shop.about_paragraphs %}<p>{{ para|linebreaksbr }}</p>{% endfor %}
+        <div class="who-stats">
+          <div><strong>{{ shop.stat1_value }}</strong><span>{{ shop.stat1_label }}</span></div>
+          <div><strong>{{ shop.stat2_value }}</strong><span>{{ shop.stat2_label }}</span></div>
+          <div><strong>{{ shop.stat3_value }}</strong><span>{{ shop.stat3_label }}</span></div>
+        </div>
+      </div>
+      <div class="col-lg-6 who-photo-col">
+        {% if shop.about_image %}<img class="who-photo" src="{{ shop.about_image.url }}" alt="{{ shop.name }} engineer">{% else %}<div class="who-photo-fallback"><i class="bi bi-lightning-charge"></i></div>{% endif %}
       </div>
     </div>
-    <div class="col-lg-6">
-      <div class="about-art theme-blue"><i class="bi bi-lightning-charge"></i></div>
-    </div>
   </div>
+</section>
+
+<div class="container py-5">
   {% if values %}
   <div class="row g-4 mt-5">
     {% for v in values %}
