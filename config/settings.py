@@ -214,7 +214,7 @@ if SUPABASE_URL and SUPABASE_SERVICE_KEY and os.environ.get('DJANGO_MEDIA_STORAG
     MEDIA_URL = f'{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/'
     SERVE_MEDIA = False
 
-LOGIN_URL = 'accounts:login'
+LOGIN_URL = 'admin:login'  # no customer accounts; staff sign in through the admin
 LOGIN_REDIRECT_URL = 'services:home'
 LOGOUT_REDIRECT_URL = 'services:home'
 CART_SESSION_ID = 'cart'
