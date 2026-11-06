@@ -57,14 +57,13 @@ class WhyChooseItemAdmin(admin.ModelAdmin):
 
 @admin.register(Advert)
 class AdvertAdmin(admin.ModelAdmin):
-    list_display = ['thumb', 'title', 'link', 'is_active', 'show_on_home', 'show_in_shop_slider',
-                    'show_in_shop_promos', 'order']
+    list_display = ['thumb', 'title', 'link', 'is_active', 'show_in_shop_slider', 'show_in_shop_promos', 'order']
     list_display_links = ['thumb', 'title']
-    list_editable = ['is_active', 'show_on_home', 'show_in_shop_slider', 'show_in_shop_promos', 'order']
-    list_filter = ['is_active', 'show_on_home', 'show_in_shop_slider', 'show_in_shop_promos']
+    list_editable = ['is_active', 'show_in_shop_slider', 'show_in_shop_promos', 'order']
+    list_filter = ['is_active', 'show_in_shop_slider', 'show_in_shop_promos']
     readonly_fields = ['preview']
     fields = ['title', 'image', 'preview', 'caption', 'link', 'is_active',
-              ('show_on_home', 'show_in_shop_slider', 'show_in_shop_promos'), 'order']
+              ('show_in_shop_slider', 'show_in_shop_promos'), 'order']
 
     @admin.display(description='')
     def thumb(self, obj):

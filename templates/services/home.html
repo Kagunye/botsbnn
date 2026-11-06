@@ -86,35 +86,6 @@
   </div>
 </section>
 
-<!-- OFFERS & UPDATES (Admin → Pages → Adverts) -->
-{% if adverts %}
-<section class="container py-5 news-section offers-section">
-  <div class="news-head">
-    <div>
-      <span class="section-kicker">Offers &amp; updates</span>
-      <h2 class="section-title-lg mb-1">Latest from BNN Engineering</h2>
-      <p class="text-muted mb-0">Current promotions on backup power, solar and water heating.</p>
-    </div>
-    <div class="news-nav">
-      <button type="button" class="news-btn" data-news-prev aria-label="Previous"><i class="bi bi-chevron-left"></i></button>
-      <button type="button" class="news-btn" data-news-next aria-label="Next"><i class="bi bi-chevron-right"></i></button>
-    </div>
-  </div>
-  <div class="news-track offers-track" data-news-track tabindex="0" aria-label="Offers and updates">
-    {% for ad in adverts %}
-    <figure class="offer-card">
-      <a href="{{ ad.link|default:'/quote/' }}" class="offer-img"><img src="{{ ad.image.url }}" alt="{{ ad.title }}" loading="lazy"></a>
-      <figcaption>
-        <span>{{ ad.title }}</span>
-        <a href="{{ ad.image.url }}" target="_blank" rel="noopener" class="offer-full" aria-label="View full size"><i class="bi bi-arrows-fullscreen"></i></a>
-      </figcaption>
-    </figure>
-    {% endfor %}
-  </div>
-  <div class="news-dots" data-news-dots aria-hidden="true"></div>
-</section>
-{% endif %}
-
 <!-- COMPLETED PROJECTS (managed in Admin → Services → Projects) -->
 {% if projects %}
 <section class="container py-5">
