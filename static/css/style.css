@@ -891,3 +891,38 @@ body { line-height: 1.6; }
 
 /* Footer without the call-to-action banner: normal top padding */
 .site-footer.ft { padding-top: 3.5rem; margin-top: 0; }
+
+/* ===== Homepage photo panels (3 full-bleed) + wide feature banner ===== */
+.home-panels { display: grid; grid-template-columns: repeat(3, 1fr); }
+.home-panel { position: relative; display: block; aspect-ratio: 1.18 / 1; overflow: hidden; color: #fff; text-decoration: none; isolation: isolate; background: #0a2238; }
+.home-panel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform .7s ease; }
+.home-panel:hover img { transform: scale(1.05); }
+.home-panel-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, .35) 62%, rgba(0, 0, 0, .78) 100%); }
+.home-panel-body { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.6rem 1.4rem 1.7rem; display: flex; flex-direction: column; gap: .7rem; }
+.home-panel-title { font-family: var(--font-head); font-weight: 700; font-size: clamp(1.15rem, 1.8vw, 1.55rem); line-height: 1.25; text-shadow: 0 2px 12px rgba(0, 0, 0, .4); }
+.home-panel-link { font-size: .9rem; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; align-self: flex-start; }
+.home-panel:hover .home-panel-link { color: #9fd0ef; }
+
+.feature-banner-wrap { padding-top: 3rem; padding-bottom: 1rem; }
+.feature-banner { position: relative; border-radius: 10px; overflow: hidden; min-height: 300px; display: flex; align-items: center; isolation: isolate; background: #111; }
+.feature-banner img { position: absolute; top: 0; right: 0; height: 100%; width: 72%; object-fit: cover; object-position: center 35%; z-index: -2; }
+.feature-banner-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, #121212 0%, #121212 28%, rgba(18, 18, 18, .85) 42%, rgba(18, 18, 18, .2) 70%, rgba(18, 18, 18, 0) 100%); }
+.feature-banner-body { color: #fff; padding: 2.4rem 2.6rem; max-width: 620px; }
+.feature-banner-body h2 { font-family: var(--font-head); font-weight: 700; font-size: clamp(1.5rem, 2.6vw, 2.1rem); line-height: 1.2; margin: 0 0 .9rem; }
+.feature-banner-body p { color: rgba(255, 255, 255, .88); margin: 0 0 .6rem; font-size: .95rem; }
+.feature-banner-strong { font-weight: 700; color: #fff !important; font-size: 1.02rem !important; }
+.feature-banner-btn { margin-top: 1.2rem; border: 1.5px solid #fff; color: #fff; padding: .55rem 1.4rem; border-radius: 4px; font-weight: 600; }
+.feature-banner-btn:hover { background: #fff; color: #111; }
+
+@media (max-width: 991.98px) {
+  .home-panels { grid-template-columns: 1fr 1fr; }
+  .home-panels .home-panel:last-child { grid-column: 1 / -1; aspect-ratio: 2 / 1; }
+  .feature-banner img { width: 100%; }
+  .feature-banner-shade { background: linear-gradient(90deg, rgba(18, 18, 18, .92) 0%, rgba(18, 18, 18, .6) 60%, rgba(18, 18, 18, .3) 100%); }
+}
+@media (max-width: 575.98px) {
+  .home-panels { grid-template-columns: 1fr; }
+  .home-panels .home-panel:last-child { aspect-ratio: 1.18 / 1; }
+  .feature-banner-body { padding: 1.8rem 1.4rem; }
+}
+

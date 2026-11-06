@@ -88,6 +88,38 @@
   </div>
 </section>
 
+<!-- PHOTO PANELS (Admin → Pages → Homepage photo panels) -->
+{% if home_panels %}
+<section class="home-panels" aria-label="Highlights">
+  {% for p in home_panels %}
+  <a href="{{ p.link }}" class="home-panel">
+    <img src="{{ p.image.url }}" alt="" loading="lazy">
+    <span class="home-panel-shade" aria-hidden="true"></span>
+    <span class="home-panel-body">
+      <span class="home-panel-title">{{ p.title }}</span>
+      <span class="home-panel-link">{{ p.link_text }}</span>
+    </span>
+  </a>
+  {% endfor %}
+</section>
+{% endif %}
+
+<!-- FEATURE BANNER (Admin → Pages → Homepage feature banners; shows once a photo is uploaded) -->
+{% if feature_banner %}
+<section class="container feature-banner-wrap">
+  <div class="feature-banner">
+    <img src="{{ feature_banner.image.url }}" alt="" loading="lazy">
+    <div class="feature-banner-shade" aria-hidden="true"></div>
+    <div class="feature-banner-body">
+      <h2>{{ feature_banner.title }}</h2>
+      {% if feature_banner.text %}<p>{{ feature_banner.text }}</p>{% endif %}
+      {% if feature_banner.highlight %}<p class="feature-banner-strong">{{ feature_banner.highlight }}</p>{% endif %}
+      <a href="{{ feature_banner.link }}" class="btn feature-banner-btn">{{ feature_banner.button_text }}</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
 <!-- FEATURED SERVICES -->
 <section class="bg-soft py-5">
   <div class="container">

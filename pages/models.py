@@ -231,3 +231,39 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
+
+
+class HomePanel(models.Model):
+    """Full-bleed photo panels on the homepage (3 side by side) with a headline and link over the photo."""
+    image = models.ImageField(upload_to='home_panels/')
+    title = models.CharField('Headline', max_length=120)
+    link_text = models.CharField(max_length=60, default='Learn more')
+    link = models.CharField(max_length=200, default='/services/')
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'homepage photo panel'
+
+    def __str__(self):
+        return self.title
+
+
+class FeatureBanner(models.Model):
+    """Wide homepage banner: text on the left over a dark fade, photo on the right."""
+    title = models.CharField('Headline', max_length=140)
+    text = models.TextField(blank=True)
+    highlight = models.CharField('Bold line', max_length=120, blank=True, help_text='Short bold line under the text')
+    button_text = models.CharField(max_length=40, default='Explore')
+    link = models.CharField(max_length=200, default='/services/')
+    image = models.ImageField(upload_to='home_panels/', blank=True, help_text='The banner only shows once a photo is uploaded')
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'homepage feature banner'
+
+    def __str__(self):
+        return self.title

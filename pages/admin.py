@@ -3,7 +3,8 @@ from django.utils.html import format_html
 from django.shortcuts import redirect
 from django.urls import reverse
 
-from .models import FAQ, Advert, ContactMessage, Industry, ProcessStep, SiteSettings, Testimonial, WhyChooseItem
+from .models import (FAQ, Advert, ContactMessage, FeatureBanner, HomePanel, Industry, ProcessStep, SiteSettings,
+                     Testimonial, WhyChooseItem)
 
 
 @admin.register(ContactMessage)
@@ -96,3 +97,25 @@ class FAQAdmin(admin.ModelAdmin):
     list_display = ['question', 'is_published', 'order']
     list_editable = ['is_published', 'order']
     search_fields = ['question', 'answer']
+
+
+@admin.register(HomePanel)
+class HomePanelAdmin(admin.ModelAdmin):
+    list_display = ['thumb', 'title', 'link_text', 'link', 'is_active', 'order']
+    list_display_links = ['thumb', 'title']
+    list_editable = ['is_active', 'order']
+
+    @admin.display(description='')
+    def thumb(self, obj):
+        return format_html('<img src="{}" style="height:56px;width:84px;object-fit:cover;border-radius:4px">', obj.image.url) if obj.image else '—'
+
+
+@admin.register(FeatureBanner)
+class FeatureBannerAdmin(admin.ModelAdmin):
+    list_display = ['thumb', 'title', 'button_text', 'link', 'is_active', 'order']
+    list_display_links = ['thumb', 'title']
+    list_editable = ['is_active', 'order']
+
+    @admin.display(description='')
+    def thumb(self, obj):
+        return format_html('<img src="{}" style="height:56px;width:110px;object-fit:cover;border-radius:4px">', obj.image.url) if obj.image else 'No photo yet'
