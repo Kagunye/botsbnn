@@ -124,16 +124,32 @@ DATABASES = {
     }
 }
 
-# Hosted database (e.g. Vercel Postgres / Neon / Supabase): set DATABASE_URL=postgres://...
-if os.environ.get('DATABASE_URL'):
-    import dj_database_url
-    DATABASES['default'] = dj_database_url.parse(os.environ['DATABASE_URL'], conn_max_age=0, ssl_require=True)
+# Hosted database (Supabase / Neon / Vercel Postgres). DATABASE_URL wins; POSTGRES_URL is what the Supabase
+# integration on Vercel sets automatically, so either works.
+def _database_url():
+    from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
+    url = os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL') or ''
+    if not url:
+        return ''
+    parts = urlsplit(url)
+    # keep only options psycopg understands (Supabase adds e.g. supa=base-pooler.x / pgbouncer=true)
+    query = [(k, v) for k, v in parse_qsl(parts.query) if k in ('sslmode', 'connect_timeout')]
+    return urlunsplit(parts._replace(query=urlencode(query)))
 
-# On Vercel the file system is read-only. Without DATABASE_URL the bundled SQLite file can still be READ
-# (pages, products, services show), and sessions are kept in signed cookies so the cart and admin login work.
-# Saving anything (quote requests, orders, admin edits) needs DATABASE_URL.
+
+DB_URL = _database_url()
+if DB_URL:
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.parse(DB_URL, conn_max_age=0, ssl_require=True)
+    if ':6543' in DB_URL:
+        # Supabase transaction pooler (PgBouncer): server-side cursors are not supported
+        DATABASES['default']['DISABLE_SERVER_SIDE_CURSORS'] = True
+
+# On Vercel the file system is read-only. Without a hosted database the bundled SQLite file can still be READ
+# (pages, products, services show), and sessions are kept in signed cookies so the cart and logins work.
+# Saving anything (quote requests, orders, admin edits) needs DATABASE_URL / POSTGRES_URL.
 ON_VERCEL = bool(os.environ.get('VERCEL'))
-READ_ONLY_DB = ON_VERCEL and not os.environ.get('DATABASE_URL')
+READ_ONLY_DB = ON_VERCEL and not DB_URL
 if READ_ONLY_DB:
     SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
@@ -184,6 +200,19 @@ WHITENOISE_AUTOREFRESH = not os.environ.get('VERCEL')
 SERVE_MEDIA = os.environ.get('DJANGO_SERVE_MEDIA', 'True').strip().lower() in ('1', 'true', 'yes')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Uploaded images in Supabase Storage (public bucket), so admin uploads work on Vercel too.
+# Uses the variables the Supabase integration sets: NEXT_PUBLIC_SUPABASE_URL / SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.
+SUPABASE_URL = (os.environ.get('SUPABASE_URL') or os.environ.get('NEXT_PUBLIC_SUPABASE_URL') or '').rstrip('/')
+SUPABASE_SERVICE_KEY = os.environ.get('SUPABASE_SERVICE_ROLE_KEY') or os.environ.get('SUPABASE_SECRET_KEY') or ''
+SUPABASE_BUCKET = os.environ.get('SUPABASE_BUCKET', 'media')
+if SUPABASE_URL and SUPABASE_SERVICE_KEY and os.environ.get('DJANGO_MEDIA_STORAGE', 'supabase') == 'supabase':
+    STORAGES = {
+        'default': {'BACKEND': 'config.supabase_storage.SupabaseStorage'},
+        'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage'},
+    }
+    MEDIA_URL = f'{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/'
+    SERVE_MEDIA = False
 
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'services:home'

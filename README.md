@@ -101,3 +101,27 @@ Admin → Quotations → Add:
    redirect to www). At your domain registrar add the DNS records Vercel shows (usually `CNAME www → cname.vercel-dns.com`
    and an `A` record for the root domain).
 3. Redeploy. Both domains are already allowed in `config/settings.py`.
+
+## Database and images: Supabase
+
+The live site keeps its data in **Supabase Postgres** and uploaded images in the public **Supabase Storage** bucket `media`.
+
+Settings read either name for each value, so Vercel's Supabase integration works without extra setup:
+
+| Purpose | Variable (either works) |
+|---|---|
+| Database | `DATABASE_URL` or `POSTGRES_URL` (transaction pooler, port 6543) |
+| Storage URL | `SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_URL` |
+| Storage key (server only) | `SUPABASE_SERVICE_ROLE_KEY` or `SUPABASE_SECRET_KEY` |
+
+Without them the site falls back to the bundled SQLite file and `/media/` (read-only on Vercel).
+
+**After changing models**, apply migrations to Supabase from your computer, with the private `.env` loaded and the
+session pooler (port 5432):
+
+```bash
+DATABASE_URL="<POSTGRES_URL_NON_POOLING>" python manage.py migrate
+```
+
+`python manage.py runserver` on its own still uses the local `db.sqlite3`. Edits made there do **not** reach the live
+site; make content changes in the live admin.
