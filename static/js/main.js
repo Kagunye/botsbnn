@@ -100,16 +100,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     window.addEventListener('resize', buildDots);
     buildDots();
-    // gentle auto-advance; pauses on hover/focus/touch and for reduced-motion users
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      let paused = false;
-      ['mouseenter', 'focusin', 'touchstart'].forEach(ev => section.addEventListener(ev, () => { paused = true; }, { passive: true }));
-      ['mouseleave', 'focusout'].forEach(ev => section.addEventListener(ev, () => { paused = false; }));
-      setInterval(() => {
-        if (paused || document.hidden) return;
-        if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 2) track.scrollTo({ left: 0 });
-        else track.scrollBy({ left: step() });
-      }, 5000);
-    }
+    // auto-advance every 5s; pauses while hovered, resumes 6s after a touch.
+    // Visitors with "reduce motion" still get auto-advance, but without the smooth glide.
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) track.style.scrollBehavior = 'auto';
+    let paused = false, touchTimer = null;
+    section.addEventListener('mouseenter', () => { paused = true; });
+    section.addEventListener('mouseleave', () => { paused = false; });
+    section.addEventListener('touchstart', () => { paused = true; clearTimeout(touchTimer); }, { passive: true });
+    section.addEventListener('touchend', () => { clearTimeout(touchTimer); touchTimer = setTimeout(() => { paused = false; }, 6000); }, { passive: true });
+    setInterval(() => {
+      if (paused || document.hidden) return;
+      if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 2) track.scrollTo({ left: 0 });
+      else track.scrollBy({ left: step() });
+    }, 5000);
   });
 });
