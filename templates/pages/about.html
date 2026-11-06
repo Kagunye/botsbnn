@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}About Us | {{ shop.name }}{% endblock %}
 
@@ -11,6 +12,27 @@
         <span class="who-kicker">About us</span>
         <h2>{{ shop.about_title }}</h2>
         {% for para in shop.about_paragraphs %}<p>{{ para|linebreaksbr }}</p>{% endfor %}
+        <p class="who-reach"><i class="bi bi-geo-alt-fill"></i> Proudly serving <strong>homes, communities and businesses</strong>
+          across <strong>Kenya, East Africa and beyond</strong>.</p>
+        <ul class="who-tags">
+          <li><i class="bi bi-house-heart"></i> Domestic</li>
+          <li><i class="bi bi-people"></i> Community</li>
+          <li><i class="bi bi-building"></i> Commercial &amp; industrial</li>
+        </ul>
+        <div class="who-where">
+          <span class="who-where-title">Where we work</span>
+          <ul class="who-flags" aria-label="Countries we serve">
+            <li class="who-flag is-home"><span class="who-flag-disc"><img src="{% static 'img/flags/ke.svg' %}" alt="" width="64" height="64" loading="lazy"></span><span class="who-flag-name">Kenya</span></li>
+            <li class="who-flag"><span class="who-flag-disc"><img src="{% static 'img/flags/ug.svg' %}" alt="" width="64" height="64" loading="lazy"></span><span class="who-flag-name">Uganda</span></li>
+            <li class="who-flag"><span class="who-flag-disc"><img src="{% static 'img/flags/tz.svg' %}" alt="" width="64" height="64" loading="lazy"></span><span class="who-flag-name">Tanzania</span></li>
+            <li class="who-flag"><span class="who-flag-disc"><img src="{% static 'img/flags/rw.svg' %}" alt="" width="64" height="64" loading="lazy"></span><span class="who-flag-name">Rwanda</span></li>
+            <li class="who-flag"><span class="who-flag-disc"><img src="{% static 'img/flags/bi.svg' %}" alt="" width="64" height="64" loading="lazy"></span><span class="who-flag-name">Burundi</span></li>
+            <li class="who-flag"><span class="who-flag-disc"><img src="{% static 'img/flags/ss.svg' %}" alt="" width="64" height="64" loading="lazy"></span><span class="who-flag-name">South Sudan</span></li>
+            <li class="who-flag"><span class="who-flag-disc"><img src="{% static 'img/flags/cd.svg' %}" alt="" width="64" height="64" loading="lazy"></span><span class="who-flag-name">DR Congo</span></li>
+            <li class="who-flag"><span class="who-flag-disc"><img src="{% static 'img/flags/so.svg' %}" alt="" width="64" height="64" loading="lazy"></span><span class="who-flag-name">Somalia</span></li>
+            <li class="who-flag is-beyond"><span class="who-flag-disc"><i class="bi bi-globe-europe-africa"></i></span><span class="who-flag-name">&amp; beyond</span></li>
+          </ul>
+        </div>
         <div class="who-stats">
           <div><strong>{{ shop.stat1_value }}</strong><span>{{ shop.stat1_label }}</span></div>
           <div><strong>{{ shop.stat2_value }}</strong><span>{{ shop.stat2_label }}</span></div>
