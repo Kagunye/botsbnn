@@ -177,31 +177,41 @@
 
 <!-- PROCESS (How we work) -->
 {% if process_steps %}
-<section class="gw">
+<section class="gw{% if shop.process_image %} gw-split{% endif %}">
   <div class="container">
-    <header class="gw-head">
-      <span class="gw-kicker"><i class="bi bi-diagram-3"></i> How we work</span>
-      <h2>A proven process from site visit to handover</h2>
-      <p>Every project follows the same disciplined method — so budgets are clear, work is done to standard, and you always know what happens next.</p>
-      <ul class="gw-chips">
-        <li><i class="bi bi-check-circle-fill"></i> Free, no-obligation site survey</li>
-        <li><i class="bi bi-check-circle-fill"></i> Itemised, transparent quotations</li>
-        <li><i class="bi bi-check-circle-fill"></i> Documented, tested handover</li>
-      </ul>
-    </header>
-    <ol class="gw-steps">
-      {% for step in process_steps %}
-      <li class="gw-step">
-        <span class="gw-icon"><i class="bi bi-{{ step.icon }}"></i><b>{{ forloop.counter }}</b></span>
-        <span class="gw-label">Step {{ forloop.counter|stringformat:"02d" }}</span>
-        <h3>{{ step.title }}</h3>
-        <p>{{ step.text }}</p>
-      </li>
-      {% endfor %}
-    </ol>
-    <div class="gw-cta">
-      <a href="{% url 'services:quote' %}" class="btn gw-btn">Book a free site survey <i class="bi bi-arrow-right"></i></a>
-      <span>No obligation · We reply within one working day</span>
+    <div class="gw-grid">
+      {% if shop.process_image %}
+      <figure class="gw-photo">
+        <img src="{{ shop.process_image.url }}" alt="Solar panels installed on a home roof" loading="lazy">
+        <figcaption class="gw-photo-badge"><i class="bi bi-sun"></i><span><strong>Free site survey</strong>Load assessment before we quote</span></figcaption>
+      </figure>
+      {% endif %}
+      <div class="gw-main">
+        <header class="gw-head">
+          <span class="gw-kicker"><i class="bi bi-diagram-3"></i> How we work</span>
+          <h2>A proven process from site visit to handover</h2>
+          <p>Every project follows the same disciplined method — so budgets are clear, work is done to standard, and you always know what happens next.</p>
+          <ul class="gw-chips">
+            <li><i class="bi bi-check-circle-fill"></i> Free, no-obligation site survey</li>
+            <li><i class="bi bi-check-circle-fill"></i> Itemised, transparent quotations</li>
+            <li><i class="bi bi-check-circle-fill"></i> Documented, tested handover</li>
+          </ul>
+        </header>
+        <ol class="gw-steps">
+          {% for step in process_steps %}
+          <li class="gw-step">
+            <span class="gw-icon"><i class="bi bi-{{ step.icon }}"></i><b>{{ forloop.counter }}</b></span>
+            <span class="gw-label">Step {{ forloop.counter|stringformat:"02d" }}</span>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.text }}</p>
+          </li>
+          {% endfor %}
+        </ol>
+        <div class="gw-cta">
+          <a href="{% url 'services:quote' %}" class="btn gw-btn">Book a free site survey <i class="bi bi-arrow-right"></i></a>
+          <span>No obligation · We reply within one working day</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>

@@ -1232,3 +1232,46 @@ body { line-height: 1.6; }
   .gw-label, .gw-step h3, .gw-step p { width: 100%; max-width: none; }
   .gw-chips li { font-size: .82rem; }
 }
+
+/* ---- How we work with photo (split layout) ---- */
+.gw-split .gw-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 3.5rem; align-items: stretch; }
+.gw-photo { position: relative; margin: 0; min-height: 520px; border-radius: 22px; overflow: hidden; }
+.gw-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 70%; }
+.gw-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5, 61, 44, 0) 55%, rgba(5, 61, 44, .55) 100%); }
+.gw-photo-badge { position: absolute; left: 1.1rem; right: 1.1rem; bottom: 1.1rem; z-index: 1; display: flex; align-items: center; gap: .8rem; padding: .85rem 1rem; border-radius: 14px; background: rgba(255, 255, 255, .95); color: #053d2c; box-shadow: 0 10px 30px rgba(0, 0, 0, .2); }
+.gw-photo-badge i { display: grid; place-items: center; width: 42px; height: 42px; flex-shrink: 0; border-radius: 50%; background: linear-gradient(145deg, #a3e635, #22c55e); color: #053d2c; font-size: 1.2rem; }
+.gw-photo-badge strong { display: block; font-size: .95rem; }
+.gw-photo-badge span { font-size: .8rem; color: #3f6b5a; line-height: 1.35; }
+.gw-split .gw-head { text-align: left; margin: 0 0 2rem; max-width: none; }
+.gw-split .gw-head p { margin-left: 0; }
+.gw-split .gw-chips { justify-content: flex-start; }
+/* vertical timeline beside the photo */
+.gw-split .gw-steps { grid-template-columns: 1fr; gap: 0; }
+.gw-split .gw-steps::before { display: none; }
+.gw-split .gw-step { display: block; text-align: left; padding: 0 0 1.4rem 84px; min-height: 64px; }
+.gw-split .gw-step::before { content: ''; position: absolute; left: 31px; top: 64px; bottom: 0; width: 2px; background: repeating-linear-gradient(180deg, rgba(190, 242, 100, .6) 0 6px, transparent 6px 12px); }
+.gw-split .gw-step:last-child { padding-bottom: 0; }
+.gw-split .gw-step:last-child::before { display: none; }
+.gw-split .gw-icon { position: absolute; left: 0; top: 0; width: 64px; height: 64px; margin: 0; font-size: 1.45rem; box-shadow: 0 0 0 6px rgba(6, 95, 70, .9), 0 8px 20px rgba(0, 0, 0, .25); }
+.gw-split .gw-step:hover .gw-icon { transform: scale(1.05); }
+.gw-split .gw-label { display: block; margin: .3rem 0 .15rem; }
+.gw-split .gw-step h3 { margin-bottom: .25rem; }
+.gw-split .gw-step p { max-width: 520px; }
+.gw-split .gw-cta { align-items: flex-start; margin-top: 2.25rem; }
+@media (max-width: 991.98px) {
+  .gw-split .gw-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .gw-photo { min-height: 340px; max-height: 420px; }
+  .gw-split .gw-steps { grid-template-columns: 1fr; row-gap: 0; }
+}
+@media (max-width: 575.98px) {
+  .gw-photo { min-height: 280px; border-radius: 16px; }
+  .gw-split .gw-step { padding-left: 76px; }
+  .gw-split .gw-icon { width: 56px; height: 56px; font-size: 1.25rem; }
+  .gw-split .gw-step::before { left: 27px; top: 56px; }
+}
+@media (max-width: 991.98px) {
+  .gw-photo img { object-position: center 82%; }
+  .gw-photo::after { background: linear-gradient(0deg, rgba(5, 61, 44, 0) 60%, rgba(5, 61, 44, .35) 100%); }
+  .gw-photo-badge { top: 1rem; bottom: auto; right: auto; max-width: calc(100% - 2rem); padding: .6rem .85rem; }
+  .gw-photo-badge i { width: 36px; height: 36px; font-size: 1rem; }
+}

@@ -90,6 +90,8 @@ class SiteSettings(models.Model):
     about_image = models.ImageField('About page "Who we are" photo', upload_to='site/', blank=True,
                                     help_text='Portrait photo on a blue background works best (the section is blue)')
     mpesa_logo = models.ImageField('M-PESA logo', upload_to='site/', blank=True)
+    process_image = models.ImageField('"How we work" photo', upload_to='site/', blank=True,
+                                      help_text='Tall portrait photo shown beside the steps')
     cta_video = models.FileField('"Have a project in mind?" background video (MP4)', upload_to='site/video/', blank=True,
                                  help_text='Short muted landscape loop behind the quote banners, under ~3 MB')
 
