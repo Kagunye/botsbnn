@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ shop.name }} – Electrical, Backup Power, Security & Solar Engineering in Kenya{% endblock %}</title>
   <meta name="description" content="{% block meta_description %}Backup power, UPS, generators, building wiring, switchgear, control panels, electric fencing, automatic gates and solar installations in Nairobi and across Kenya.{% endblock %}">
-  <link rel="icon" href="{% static 'img/favicon.ico' %}" sizes="any">
+  {% if shop.favicon %}<link rel="icon" type="image/png" href="{{ shop.favicon_url }}">
+  <link rel="apple-touch-icon" href="{{ shop.favicon_url }}">{% else %}<link rel="icon" href="{% static 'img/favicon.ico' %}" sizes="any">
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
-  <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
-  <meta property="og:image" content="{% static 'img/logo-full.png' %}">
+  <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">{% endif %}
+  <meta property="og:image" content="{% if shop.logo %}{{ shop.logo_url }}{% else %}{% static 'img/logo-full.png' %}{% endif %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">

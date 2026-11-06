@@ -71,6 +71,24 @@ class SiteSettings(models.Model):
                                      default='A trusted engineering partner for homes, businesses and industry')
     company_image = models.ImageField('Company section photo', upload_to='site/', blank=True,
                                       help_text='Leave blank to use one of your service photos')
+    # Site images (leave blank to keep the built-in default)
+    logo = models.ImageField('Header logo', upload_to='site/', blank=True,
+                             help_text='Wide logo for a light background (PNG with transparency, about 760 × 128 px)')
+    logo_light = models.ImageField('Footer logo (light)', upload_to='site/', blank=True,
+                                   help_text='White/light version for the navy footer, admin and dark backgrounds')
+    favicon = models.ImageField('Browser tab icon', upload_to='site/', blank=True,
+                                help_text='Square PNG, at least 180 × 180 px')
+    hero_image = models.ImageField('Hero background image', upload_to='site/', blank=True,
+                                   help_text='Shown while the video loads, or instead of it (landscape, about 1920 × 1080 px)')
+    hero_video_on = models.BooleanField('Play hero video', default=True,
+                                        help_text='Untick to show only the hero image')
+    hero_video_mp4 = models.FileField('Hero video (MP4)', upload_to='site/video/', blank=True,
+                                      help_text='Short muted loop, landscape, under ~5 MB')
+    hero_video_webm = models.FileField('Hero video (WebM, optional)', upload_to='site/video/', blank=True,
+                                       help_text='Smaller version for Chrome/Android; leave blank if you only have MP4')
+    testimonials_image = models.ImageField('"What clients are saying" photo', upload_to='site/', blank=True)
+    mpesa_logo = models.ImageField('M-PESA logo', upload_to='site/', blank=True)
+
     badge_value = models.CharField('Photo badge value', max_length=20, default='24/7')
     badge_label = models.CharField('Photo badge text', max_length=40, default='Emergency support')
 
@@ -121,6 +139,57 @@ class SiteSettings(models.Model):
     def payment(self):
         return {'bank': self.bank_name, 'account_name': self.account_name,
                 'account_no': self.account_no, 'paybill': self.paybill}
+
+    # Image URLs: the uploaded file, or the built-in default from /static/
+    def _img(self, field, default):
+        f = getattr(self, field)
+        if f:
+            return f.url
+        from django.templatetags.static import static
+        return static(default)
+
+    @property
+    def logo_url(self):
+        return self._img('logo', 'img/logo-horizontal.png')
+
+    @property
+    def logo_light_url(self):
+        return self._img('logo_light', 'img/logo-horizontal-light.png')
+
+    @property
+    def favicon_url(self):
+        return self._img('favicon', 'img/favicon.png')
+
+    @property
+    def hero_image_url(self):
+        return self.hero_image.url if self.hero_image else self._img('hero_image', 'video/hero-poster.jpg') + '?v=6'
+
+    @property
+    def hero_mp4_url(self):
+        if self.hero_video_mp4:
+            return self.hero_video_mp4.url
+        if self.hero_video_webm:
+            return ''
+        return self._img('hero_video_mp4', 'video/hero.mp4') + '?v=6'
+
+    @property
+    def hero_webm_url(self):
+        if self.hero_video_webm:
+            return self.hero_video_webm.url
+        if self.hero_video_mp4:
+            return ''  # an uploaded MP4 replaces the built-in pair
+        return self._img('hero_video_webm', 'video/hero.webm') + '?v=6'
+
+    @property
+    def testimonials_image_url(self):
+        if self.testimonials_image:
+            return self.testimonials_image.url
+        from django.conf import settings
+        return settings.MEDIA_URL + 'home_panels/testimonial-family.jpg'
+
+    @property
+    def mpesa_logo_url(self):
+        return self._img('mpesa_logo', 'img/mpesa-logo.png')
 
     def about_paragraphs(self):
         return [p.strip() for p in self.about_body.split('\n\n') if p.strip()]

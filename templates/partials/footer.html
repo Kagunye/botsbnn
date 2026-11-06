@@ -4,7 +4,7 @@
     <div class="ft-main">
       <div class="ft-brand">
         <a href="{% url 'services:home' %}" class="footer-logo d-inline-block">
-          <img src="{% static 'img/logo-horizontal-light.png' %}" alt="{{ shop.name }}" width="760" height="128">
+          <img src="{{ shop.logo_light_url }}" alt="{{ shop.name }}" width="760" height="128">
         </a>
         <p>{{ shop.footer_about }}</p>
         <div class="ft-social">
@@ -51,7 +51,7 @@
     <!-- Payment strip -->
     <div class="ft-pay">
       <div class="ft-pay-item">
-        <span class="mpesa-chip"><img src="{% static 'img/mpesa-logo.png' %}" alt="M-PESA" class="mpesa-logo"></span>
+        <span class="mpesa-chip"><img src="{{ shop.mpesa_logo_url }}" alt="M-PESA" class="mpesa-logo"></span>
         <span class="footer-pay-text">Paybill {{ shop.payment.paybill }}<br>Acc. {{ shop.payment.account_no }}</span>
       </div>
       <div class="ft-pay-item">

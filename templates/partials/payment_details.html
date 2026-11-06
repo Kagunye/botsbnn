@@ -1,7 +1,7 @@
 {% load static %}{% load humanize %}{% with pay=shop.payment %}
 <div class="pay-box">
   <div class="pay-option">
-    <div class="pay-head"><img src="{% static 'img/mpesa-logo.png' %}" alt="M-PESA" class="mpesa-logo" style="height:30px"><strong>Pay via M-PESA Paybill</strong></div>
+    <div class="pay-head"><img src="{{ shop.mpesa_logo_url }}" alt="M-PESA" class="mpesa-logo" style="height:30px"><strong>Pay via M-PESA Paybill</strong></div>
     <dl class="pay-fields">
       <div><dt>Business No. (Paybill)</dt><dd><span>{{ pay.paybill }}</span><button type="button" class="copy-btn" data-copy="{{ pay.paybill }}" aria-label="Copy paybill number"><i class="bi bi-copy"></i></button></dd></div>
       <div><dt>Account No.</dt><dd><span>{{ pay.account_no }}</span><button type="button" class="copy-btn" data-copy="{{ pay.account_no }}" aria-label="Copy account number"><i class="bi bi-copy"></i></button></dd></div>

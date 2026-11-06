@@ -87,7 +87,7 @@
 <div class="sheet">
   <div class="hdr">
     <div class="hdr-left">
-      <img src="{% static 'img/logo-horizontal.png' %}" alt="{{ shop.name }}">
+      <img src="{{ shop.logo_url }}" alt="{{ shop.name }}">
       <div class="contact">{{ shop.address }}{% if shop.postal_address %}. {{ shop.postal_address }}{% endif %} | Tel: {% for p in shop.phones %}{{ p }}{% if not forloop.last %} / {% endif %}{% endfor %} | Email: {{ shop.email }}</div>
     </div>
     <div class="doc-title">

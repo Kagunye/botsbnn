@@ -17,7 +17,7 @@
   <nav class="mainnav navbar navbar-expand-lg">
     <div class="container">
       <a href="{% url 'services:home' %}" class="navbar-brand site-logo">
-        <img src="{% static 'img/logo-horizontal.png' %}" alt="{{ shop.name }}" width="760" height="128">
+        <img src="{{ shop.logo_url }}" alt="{{ shop.name }}" width="760" height="128">
       </a>
 
       <div class="d-flex align-items-center gap-2 order-lg-last">
