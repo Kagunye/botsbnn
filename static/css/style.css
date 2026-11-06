@@ -1087,3 +1087,6 @@ body { line-height: 1.6; }
 .svc-tile:hover .svc-tile-link i { transform: translateX(3px); }
 .svc-tile-link i { display: inline-block; transition: transform .2s; }
 @media (max-width: 575.98px) { .svc-grid { grid-template-columns: 1fr 1fr; gap: .75rem; } .svc-tile-body { padding: .75rem; } .svc-tile p { display: none; } .svc-tile h3 { font-size: .92rem; } }
+/* image always fills the 4:3 frame (portrait photos were overflowing instead of covering) */
+.svc-tile-img { position: relative; }
+.svc-tile-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
