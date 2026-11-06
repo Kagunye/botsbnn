@@ -1,7 +1,7 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static humanize admin_dashboard %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'admin/bnn-dashboard.css' %}?v=4">{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'admin/bnn-dashboard.css' %}?v=6">{% endblock %}
 {% block title %}Dashboard | {{ shop.name|default:'BNN Engineering' }} Admin{% endblock %}
 {% block bodyclass %}{{ block.super }} bnn-home{% endblock %}
 {% block coltype %}colM{% endblock %}
@@ -64,6 +64,57 @@
       <a class="bd-card" href="{% url 'admin:store_order_changelist' %}">
         <span class="bd-card-label">Pending orders</span><strong>{{ d.pending_orders }}</strong>
         <span class="bd-card-sub">{{ d.products }} products · {{ d.services }} services live</span></a>
+    </div>
+
+    <!-- Metrics -->
+    <div class="bd-metrics">
+      <div class="bd-panel bd-chart-panel">
+        <div class="bd-panel-head"><h2>Invoiced — last 6 months</h2><span class="bd-muted">KSh {{ d.trend_total|floatformat:0|intcomma }} total</span></div>
+        <div class="bd-chart" role="img" aria-label="Invoiced amount per month">
+          {% for m in d.trend %}
+          <div class="bd-bar-col" title="{{ m.label }}: KSh {{ m.value|floatformat:0|intcomma }}">
+            <span class="bd-bar-val">{% if m.value %}{{ m.value|floatformat:0|intcomma }}{% endif %}</span>
+            <div class="bd-bar-track"><div class="bd-bar{% if forloop.last %} is-now{% endif %}" style="height: {{ m.pct }}%"></div></div>
+            <span class="bd-bar-label">{{ m.label }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="bd-panel">
+        <div class="bd-panel-head"><h2>Quote performance</h2></div>
+        <div class="bd-kpis">
+          <div class="bd-kpi">
+            <div class="bd-ring" style="--p: {{ d.conversion|default:0 }}"><span>{% if d.conversion is not None %}{{ d.conversion }}%{% else %}—{% endif %}</span></div>
+            <small>Conversion rate<br><em>accepted or converted</em></small>
+          </div>
+          <div class="bd-kpi-list">
+            <div><span>Average quote</span><strong>KSh {{ d.avg_quote|floatformat:0|intcomma }}</strong></div>
+            <div><span>Quotes this month</span><strong>{{ d.quotes_this_month }}
+              {% if d.quotes_delta > 0 %}<em class="bd-up">▲ {{ d.quotes_delta }}</em>{% elif d.quotes_delta < 0 %}<em class="bd-down">▼ {{ d.quotes_delta|stringformat:"d"|cut:"-" }}</em>{% endif %}</strong></div>
+            <div><span>Last month</span><strong>{{ d.quotes_last_month }}</strong></div>
+            <div><span>All quotations</span><strong>{{ d.quotes_total }}</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bd-panel">
+        <div class="bd-panel-head"><h2>Quotations by status</h2></div>
+        {% for s in d.statuses %}
+        <div class="bd-hbar"><span class="bd-hbar-label">{{ s.label }}</span>
+          <div class="bd-hbar-track"><div class="bd-hbar-fill bd-st-{{ s.key }}" style="width: {{ s.pct }}%"></div></div>
+          <strong>{{ s.count }}</strong></div>
+        {% endfor %}
+      </div>
+
+      <div class="bd-panel">
+        <div class="bd-panel-head"><h2>Most requested services</h2></div>
+        {% for s in d.top_services %}
+        <div class="bd-hbar"><span class="bd-hbar-label">{{ s.service__name|truncatechars:26 }}</span>
+          <div class="bd-hbar-track"><div class="bd-hbar-fill bd-hbar-blue" style="width: {{ s.pct }}%"></div></div>
+          <strong>{{ s.n }}</strong></div>
+        {% empty %}<p class="bd-empty">Appears once quote requests come in from the website.</p>{% endfor %}
+      </div>
     </div>
 
     <div class="bd-panels">

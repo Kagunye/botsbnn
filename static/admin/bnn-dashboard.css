@@ -91,3 +91,50 @@
   .bd-menu-toggle:checked ~ .bd-side-groups { display: block; }
   .bd-side-site { margin: 0 0 0 auto; border-top: 0; padding-top: 6px !important; }
 }
+
+/* ---- metrics ---- */
+.bd-metrics { display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.bd-muted { font-size: .8rem; color: var(--body-quiet-color); }
+.bd-chart { display: flex; align-items: flex-end; gap: 10px; height: 170px; padding-top: 6px; }
+.bd-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; min-width: 0; }
+.bd-bar-val { font-size: .66rem; color: var(--body-quiet-color); height: 16px; white-space: nowrap; }
+.bd-bar-track { flex: 1; width: 100%; max-width: 46px; display: flex; align-items: flex-end; background: var(--darkened-bg); border-radius: 7px 7px 3px 3px; overflow: hidden; }
+.bd-bar { width: 100%; min-height: 3px; background: linear-gradient(180deg, #4ea6dc, #1878b4); border-radius: 7px 7px 0 0; transition: height .6s ease; }
+.bd-bar.is-now { background: linear-gradient(180deg, #4ade80, #16a34a); }
+.bd-bar-label { margin-top: 6px; font-size: .74rem; font-weight: 600; color: var(--body-quiet-color); }
+.bd-kpis { display: flex; gap: 16px; align-items: center; }
+.bd-kpi { text-align: center; flex-shrink: 0; }
+.bd-kpi small { display: block; margin-top: 6px; font-size: .74rem; color: var(--body-quiet-color); line-height: 1.3; }
+.bd-kpi em { font-style: normal; opacity: .8; }
+.bd-ring { --p: 0; width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center;
+  background: conic-gradient(#16a34a calc(var(--p) * 1%), var(--darkened-bg) 0); }
+.bd-ring span { width: 70px; height: 70px; border-radius: 50%; display: grid; place-items: center; background: var(--body-bg);
+  font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--body-loud-color); }
+.bd-kpi-list { flex: 1; display: grid; gap: 7px; min-width: 0; }
+.bd-kpi-list div { display: flex; justify-content: space-between; gap: 8px; font-size: .84rem; border-bottom: 1px dashed var(--hairline-color); padding-bottom: 5px; }
+.bd-kpi-list div:last-child { border-bottom: 0; }
+.bd-kpi-list span { color: var(--body-quiet-color); }
+.bd-kpi-list strong { white-space: nowrap; }
+.bd-up { color: #16a34a; font-style: normal; font-size: .72rem; margin-left: 4px; }
+.bd-down { color: #dc2626; font-style: normal; font-size: .72rem; margin-left: 4px; }
+.bd-hbar { display: grid; grid-template-columns: 96px 1fr 28px; align-items: center; gap: 8px; margin: 9px 0; font-size: .82rem; }
+.bd-hbar-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--body-fg); }
+.bd-hbar-track { height: 9px; background: var(--darkened-bg); border-radius: 6px; overflow: hidden; }
+.bd-hbar-fill { height: 100%; border-radius: 6px; min-width: 2px; }
+.bd-hbar strong { text-align: right; font-variant-numeric: tabular-nums; }
+.bd-hbar-fill.bd-st-draft { background: #f59e0b; } .bd-hbar-fill.bd-st-sent { background: #1878b4; }
+.bd-hbar-fill.bd-st-accepted { background: #16a34a; } .bd-hbar-fill.bd-st-rejected { background: #dc2626; }
+.bd-hbar-fill.bd-st-expired { background: #94a3b8; } .bd-hbar-blue { background: #1878b4; }
+@media (max-width: 1250px) { .bd-metrics { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 800px) { .bd-metrics { grid-template-columns: 1fr; } .bd-hbar { grid-template-columns: 110px 1fr 28px; } }
+
+/* ---- fixed header + sidebar while scrolling (desktop) ---- */
+@media (min-width: 801px) {
+  .bnn-home #header { position: sticky; top: 0; z-index: 50; }
+  .bnn-home #container, .bnn-home #main, .bnn-home .main { overflow: visible !important; }
+  .bnn-home .bd-side { position: sticky; top: 64px; height: calc(100vh - 64px); max-height: none; overflow-y: auto; }
+}
+.bd-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 1680px) { .bd-metrics { grid-template-columns: 1.5fr 1.3fr 1fr 1fr; } }
+@media (max-width: 800px) { .bd-metrics { grid-template-columns: 1fr; } }
+.bd-hbar { grid-template-columns: 120px 1fr 28px; }
