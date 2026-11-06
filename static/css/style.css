@@ -1062,3 +1062,33 @@ body { line-height: 1.6; }
   .shop-ad img, .offer-img img, .shop-ad::after, .offer-img::after, .ad-grid .offer-card.ad-in { animation: none; }
   .ad-grid .offer-card.ad-pre { opacity: 1; }
 }
+
+/* ===== Footer: same sky theme as the "Switch to solar" section ===== */
+.site-footer.ft { background: linear-gradient(180deg, #a9d3fd 0%, #c6e1fb 28%, #e0ecf8 55%, #b4d8fc 82%, #8cc6fd 100%); color: #1f3b55; }
+.site-footer.ft::before { background: linear-gradient(90deg, #0c486c, #1878b4, #0c486c); }
+.ft-brand p { color: #1f3b55; }
+.ft-social a { background: rgba(255,255,255,.6); border-color: rgba(12,72,108,.18); color: #0c486c; }
+.ft-social a:hover { background: #1878b4; border-color: #1878b4; color: #fff; }
+.ft-col h6 { color: #0a2a45; }
+.ft-col h6::after { background: #1878b4; }
+.ft-col a { color: #1f3b55; }
+.ft-col nav a:hover, .ft-col li > a:hover { color: #0c486c; }
+.ft-ico { background: rgba(255,255,255,.65); color: #1878b4; }
+.ft-contact small { color: #4a6580; }
+.ft-contact a, .ft-contact li { color: #0a2a45; }
+.ft-contact a:hover { color: #1878b4; }
+.ft-emergency { color: #0c486c; }
+.ft-pay { background: rgba(255,255,255,.55); border-color: rgba(12,72,108,.15); }
+.footer-pay-text { color: #0a2a45; }
+.ft-pay-bank { color: #0a2a45; }
+.ft-pay-bank small, .ft-pay-accept small { color: #4a6580; }
+.ft-pay-link { color: #0c486c; }
+.ft-pay-link:hover { color: #1878b4; }
+.ft-bottom { background: #0c486c; border-top: 0; color: rgba(255,255,255,.75); }
+.ft-bottom a { color: rgba(255,255,255,.85); }
+.ft-bottom a:hover { color: #fff; }
+.ft-top { border-color: rgba(255,255,255,.35); }
+.site-footer.ft ul a { color: #1f3b55; }
+.site-footer.ft ul a:hover { color: #0c486c; }
+.site-footer.ft .ft-contact a { color: #0a2a45; }
+.site-footer.ft .ft-bottom a { color: rgba(255,255,255,.85); }
