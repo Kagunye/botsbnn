@@ -1037,3 +1037,28 @@ body { line-height: 1.6; }
 .showcase-row.style-blue .showcase-text p { color: #1f3b55; }
 .showcase-row.style-blue .showcase-btn { background: var(--brand-dark); color: #fff; }
 .showcase-row.style-blue .showcase-btn:hover { background: #0a2238; color: #fff; }
+
+/* ===== Advert poster animations (shop slider + promo rows) ===== */
+@keyframes adZoom { 0% { transform: scale(1); } 100% { transform: scale(1.08); } }
+@keyframes adShine { 0%, 72% { transform: translateX(-130%) skewX(-18deg); } 100% { transform: translateX(260%) skewX(-18deg); } }
+@keyframes adRise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+.shop-ad, .offer-img { position: relative; overflow: hidden; }
+.shop-ad img, .offer-img img { animation: adZoom 9s ease-in-out infinite alternate; transform-origin: center 35%; }
+.shop-ad::after, .offer-img::after { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 38%; pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.28), rgba(255,255,255,0));
+  animation: adShine 6s ease-in-out infinite; }
+.shop-ad:nth-child(3n+2) img, .ad-grid .offer-card:nth-child(4n+2) .offer-img img { animation-delay: -3s; }
+.shop-ad:nth-child(3n) img, .ad-grid .offer-card:nth-child(4n+3) .offer-img img { animation-delay: -6s; }
+.ad-grid .offer-card:nth-child(4n) .offer-img img { animation-delay: -4.5s; }
+.shop-ad:nth-child(3n+2)::after, .ad-grid .offer-card:nth-child(4n+2) .offer-img::after { animation-delay: 1.5s; }
+.shop-ad:nth-child(3n)::after, .ad-grid .offer-card:nth-child(4n+3) .offer-img::after { animation-delay: 3s; }
+.ad-grid .offer-card:nth-child(4n) .offer-img::after { animation-delay: 4.5s; }
+.shop-ad { transition: transform .35s ease, box-shadow .35s ease; }
+.shop-ad:hover { transform: translateY(-5px); box-shadow: 0 18px 36px rgba(15, 35, 55, .22); }
+.shop-ad:hover img, .offer-card:hover .offer-img img { animation-duration: 3s; }
+.ad-grid .offer-card.ad-pre { opacity: 0; }
+.ad-grid .offer-card.ad-in { animation: adRise .7s cubic-bezier(.2, .7, .2, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .shop-ad img, .offer-img img, .shop-ad::after, .offer-img::after, .ad-grid .offer-card.ad-in { animation: none; }
+  .ad-grid .offer-card.ad-pre { opacity: 1; }
+}

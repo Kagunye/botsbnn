@@ -115,4 +115,22 @@ document.addEventListener('DOMContentLoaded', () => {
       else track.scrollBy({ left: step() });
     }, 5000);
   });
+
+  // Advert promo grids: rise in one after another when scrolled into view
+  const adCards = document.querySelectorAll('.ad-grid .offer-card');
+  if (adCards.length && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    adCards.forEach(c => c.classList.add('ad-pre'));
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const i = [...e.target.parentElement.children].indexOf(e.target);
+        e.target.style.animationDelay = (i * 0.12) + 's';
+        e.target.classList.remove('ad-pre'); e.target.classList.add('ad-in');
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.15 });
+    adCards.forEach(c => io.observe(c));
+    // safety net: never leave a poster hidden
+    setTimeout(() => adCards.forEach(c => { if (c.classList.contains('ad-pre')) { c.classList.remove('ad-pre'); c.classList.add('ad-in'); } }), 4000);
+  }
 });
