@@ -214,6 +214,22 @@ if SUPABASE_URL and SUPABASE_SERVICE_KEY and os.environ.get('DJANGO_MEDIA_STORAG
     MEDIA_URL = f'{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/'
     SERVE_MEDIA = False
 
+# ---- Email (Zoho Mail: info@bnnengineering.co.ke) ----
+# Set EMAIL_HOST_PASSWORD (the mailbox password, or a Zoho app-specific password if 2FA is on) in .env / Vercel.
+# Without it, emails are only printed to the server log, so the site keeps working.
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.zoho.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '465'))
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', 'True' if EMAIL_PORT == 465 else 'False').lower() in ('1', 'true', 'yes')
+EMAIL_USE_TLS = not EMAIL_USE_SSL and EMAIL_PORT == 587
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'info@bnnengineering.co.ke')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_TIMEOUT = 15
+EMAIL_BACKEND = ('django.core.mail.backends.smtp.EmailBackend' if EMAIL_HOST_PASSWORD
+                 else 'django.core.mail.backends.console.EmailBackend')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', f'BNN Engineering <{EMAIL_HOST_USER}>')
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+NOTIFY_EMAIL = os.environ.get('NOTIFY_EMAIL', EMAIL_HOST_USER)  # where new requests / messages / orders are sent
+
 LOGIN_URL = 'admin:login'  # no customer accounts; staff sign in through the admin
 LOGIN_REDIRECT_URL = 'services:home'
 LOGOUT_REDIRECT_URL = 'services:home'

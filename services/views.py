@@ -96,6 +96,8 @@ def quote(request):
     if request.method == 'POST':
         if form.is_valid():
             q = form.save()
+            from pages import notify
+            notify.quote_request(request, q)
             messages.success(request, f'Thanks {q.name}! Your quote request has been received — '
                                       f'our team will call you on {q.phone} shortly.')
             nxt = request.POST.get('next')

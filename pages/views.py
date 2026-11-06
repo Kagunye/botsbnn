@@ -28,7 +28,9 @@ def how_to_pay(request):
 def contact(request):
     form = ContactForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
-        form.save()
+        msg = form.save()
+        from pages import notify
+        notify.contact_message(request, msg)
         messages.success(request, 'Thanks for reaching out — our team will get back to you shortly.')
         return redirect('pages:contact')
     return render(request, 'pages/contact.html', {'form': form})

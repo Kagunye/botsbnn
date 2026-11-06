@@ -100,6 +100,8 @@ def checkout(request):
                 p.stock = max(0, p.stock - item['quantity'])
                 p.save(update_fields=['stock'])
         cart.clear()
+        from pages import notify
+        notify.new_order(request, order)
         request.session['last_order_id'] = order.id
         return redirect('cart:order_complete', order_id=order.id)
 

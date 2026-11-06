@@ -125,3 +125,14 @@ DATABASE_URL="<POSTGRES_URL_NON_POOLING>" python manage.py migrate
 
 `python manage.py runserver` on its own still uses the local `db.sqlite3`. Edits made there do **not** reach the live
 site; make content changes in the live admin.
+
+## Email (Zoho Mail)
+
+The site sends mail through Zoho SMTP as `info@bnnengineering.co.ke` (`smtp.zoho.com`, port 465 SSL):
+
+- a notification to `NOTIFY_EMAIL` for every quote request, contact message and shop order (Reply-To = the customer);
+- a confirmation to the customer when they give an email address.
+
+Set `EMAIL_HOST_PASSWORD` (mailbox password, or an app-specific password if two-factor sign-in is on) in `.env` and
+in Vercel's environment variables. Without it, emails are only written to the server log and forms keep working.
+If the Zoho account is in another region, set `EMAIL_HOST` (e.g. `smtp.zoho.eu`). For port 587 set `EMAIL_PORT=587`.
