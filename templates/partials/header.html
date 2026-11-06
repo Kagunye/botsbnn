@@ -5,7 +5,6 @@
     <div class="container d-flex justify-content-between align-items-center">
       <div class="d-flex gap-4">
         <span><i class="bi bi-envelope-fill me-1"></i><a href="mailto:{{ shop.email }}">{{ shop.email }}</a></span>
-        <span><i class="bi bi-telephone-fill me-1"></i>{% with p=shop.phones.0 %}<a href="tel:{{ p|cut:' ' }}">{{ p }}</a>{% endwith %}</span>
       </div>
       <div class="d-flex gap-3 align-items-center">
         <span class="text-white-50"><i class="bi bi-alarm me-1"></i>24/7 emergency call-outs</span>
