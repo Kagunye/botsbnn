@@ -32,7 +32,7 @@
     {% endfor %}
   </div>
   {% endif %}
-  <div class="cta-strip mt-5">
+  <div class="cta-strip has-video mt-5">{% include 'partials/cta_video.html' %}
     <div><h3 class="mb-1">Have a project in mind?</h3><p class="mb-0">Tell us about it and get a free, no-obligation quote.</p></div>
     <a href="{% url 'services:quote' %}" class="btn btn-light btn-lg">Request a quote</a>
   </div>

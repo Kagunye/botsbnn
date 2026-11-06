@@ -28,7 +28,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
                                  'show_shop_on_home']}),
         ('Site images', {'description': 'Upload to replace a built-in image. Leave a field empty to keep the default.',
                          'fields': [('logo', 'logo_light'), 'favicon', 'hero_image', 'hero_video_on',
-                                    ('hero_video_mp4', 'hero_video_webm'), 'testimonials_image', 'about_image', 'mpesa_logo']}),
+                                    ('hero_video_mp4', 'hero_video_webm'), 'testimonials_image', 'about_image', 'cta_video', 'mpesa_logo']}),
         ('Homepage company section', {'fields': ['company_kicker', 'company_title', 'company_image',
                                                  ('badge_value', 'badge_label')]}),
         ('About page & footer', {'fields': ['about_title', 'about_body', 'footer_about']}),

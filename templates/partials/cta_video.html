@@ -1,0 +1,4 @@
+{# Background video for .cta-strip; sources are attached by main.js only when the strip scrolls into view #}
+<video class="cta-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"{% if shop.cta_poster_url %} poster="{{ shop.cta_poster_url }}"{% endif %}
+       data-webm="{{ shop.cta_webm_url }}" data-mp4="{{ shop.cta_mp4_url }}"></video>
+<span class="cta-shade" aria-hidden="true"></span>

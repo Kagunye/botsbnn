@@ -116,6 +116,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000);
   });
 
+  // CTA strip background videos: download only when scrolled near, play while visible
+  const ctaVideos = document.querySelectorAll('.cta-video');
+  const conn = navigator.connection || {};
+  const skipVideo = window.matchMedia('(prefers-reduced-motion: reduce)').matches || conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '');
+  if (ctaVideos.length && !skipVideo && 'IntersectionObserver' in window) {
+    const vio = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        const v = e.target;
+        if (e.isIntersecting) {
+          if (!v.dataset.loaded) {
+            [['webm', 'video/webm'], ['mp4', 'video/mp4']].forEach(([k, type]) => {
+              if (!v.dataset[k]) return;
+              const s = document.createElement('source'); s.src = v.dataset[k]; s.type = type; v.appendChild(s);
+            });
+            v.dataset.loaded = '1'; v.load();
+          }
+          v.play().catch(() => {});
+        } else if (v.dataset.loaded) {
+          v.pause();
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+    ctaVideos.forEach(v => vio.observe(v));
+  }
+
   // Advert promo grids: rise in one after another when scrolled into view
   const adCards = document.querySelectorAll('.ad-grid .offer-card');
   if (adCards.length && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {

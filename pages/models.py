@@ -90,6 +90,8 @@ class SiteSettings(models.Model):
     about_image = models.ImageField('About page "Who we are" photo', upload_to='site/', blank=True,
                                     help_text='Portrait photo on a blue background works best (the section is blue)')
     mpesa_logo = models.ImageField('M-PESA logo', upload_to='site/', blank=True)
+    cta_video = models.FileField('"Have a project in mind?" background video (MP4)', upload_to='site/video/', blank=True,
+                                 help_text='Short muted landscape loop behind the quote banners, under ~3 MB')
 
     badge_value = models.CharField('Photo badge value', max_length=20, default='24/7')
     badge_label = models.CharField('Photo badge text', max_length=40, default='Emergency support')
@@ -188,6 +190,18 @@ class SiteSettings(models.Model):
             return self.testimonials_image.url
         from django.conf import settings
         return settings.MEDIA_URL + 'home_panels/testimonial-family.jpg'
+
+    @property
+    def cta_mp4_url(self):
+        return self.cta_video.url if self.cta_video else self._img('cta_video', 'video/cta.mp4') + '?v=1'
+
+    @property
+    def cta_webm_url(self):
+        return '' if self.cta_video else self._img('cta_video', 'video/cta.webm') + '?v=1'
+
+    @property
+    def cta_poster_url(self):
+        return '' if self.cta_video else self._img('cta_video', 'video/cta-poster.jpg') + '?v=1'
 
     @property
     def mpesa_logo_url(self):
