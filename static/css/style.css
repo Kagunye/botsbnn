@@ -998,3 +998,4 @@ body { line-height: 1.6; }
 }
 
 #tCarousel .carousel-item { padding-top: 18px; }
+.tsplit-photo img { object-position: 60% 55%; }
