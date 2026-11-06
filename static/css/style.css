@@ -999,3 +999,12 @@ body { line-height: 1.6; }
 
 #tCarousel .carousel-item { padding-top: 18px; }
 .tsplit-photo img { object-position: 60% 55%; }
+
+/* Most requested services: single-row slider of photo cards */
+.popular-track { grid-auto-columns: calc((100% - 3 * 1.2rem) / 4); gap: 1.2rem; }
+.popular-track .photo-card { height: 360px; scroll-snap-align: start; }
+.popular-track .photo-card .photo-card-text { max-height: 4.5em; opacity: 1; }
+@media (max-width: 1199.98px) { .popular-track { grid-auto-columns: calc((100% - 2 * 1.2rem) / 3); } }
+@media (max-width: 767.98px) { .popular-track { grid-auto-columns: calc((100% - 1rem) / 2); gap: 1rem; } .popular-track .photo-card { height: 300px; } }
+@media (max-width: 519.98px) { .popular-track { grid-auto-columns: 85%; } }
+

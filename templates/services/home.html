@@ -122,14 +122,19 @@
 
 <!-- FEATURED SERVICES -->
 <section class="bg-soft py-5">
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+  <div class="container news-section">
+    <div class="news-head">
       <div><span class="section-kicker">Popular</span><h2 class="section-title-lg mb-0">Most requested services</h2></div>
-      <a href="{% url 'services:list' %}" class="btn btn-outline-dark">All services <i class="bi bi-arrow-right"></i></a>
+      <div class="news-nav">
+        <a href="{% url 'services:list' %}" class="news-all">All services <i class="bi bi-arrow-right"></i></a>
+        <button type="button" class="news-btn" data-news-prev aria-label="Previous"><i class="bi bi-chevron-left"></i></button>
+        <button type="button" class="news-btn" data-news-next aria-label="Next"><i class="bi bi-chevron-right"></i></button>
+      </div>
     </div>
-    <div class="photo-grid">
+    <div class="news-track popular-track" data-news-track tabindex="0" aria-label="Most requested services">
       {% for s in featured_services %}{% include 'services/_photo_card.html' %}{% endfor %}
     </div>
+    <div class="news-dots" data-news-dots aria-hidden="true"></div>
   </div>
 </section>
 
