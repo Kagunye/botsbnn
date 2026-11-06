@@ -330,6 +330,18 @@
 </section>
 {% endif %}
 
+<!-- SUNBURST CTA -->
+<section class="sunburst">
+  <div class="sunburst-rays" aria-hidden="true"></div>
+  <div class="container">
+    <div class="sunburst-body">
+      <h2>Discover your perfect solar-powered solution</h2>
+      <p>Explore our range of reliable, genuine solar panels, inverters, batteries and water heaters — supplied and installed by {{ shop.name }}.</p>
+      <a href="{% url 'store:home' %}" class="btn sunburst-btn">Explore our range <i class="bi bi-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
 <!-- SHOWCASE ROWS above the footer (Admin → Pages → Homepage showcase rows) -->
 {% if showcase_rows %}
 <div class="showcase">

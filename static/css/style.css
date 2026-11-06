@@ -954,3 +954,24 @@ body { line-height: 1.6; }
   .showcase-row { padding: 2.8rem 0; }
 }
 
+/* ===== Sunburst call-to-action ===== */
+.sunburst { position: relative; overflow: hidden; background: var(--brand); color: #fff; padding: 3.2rem 0; isolation: isolate; }
+.sunburst-rays { position: absolute; z-index: -1; right: -18%; bottom: -95%; width: 110%; aspect-ratio: 1; border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, #4ea6dc 0deg 4.5deg, transparent 4.5deg 9deg);
+  -webkit-mask: radial-gradient(circle, transparent 0 16%, #000 16.2%); mask: radial-gradient(circle, transparent 0 16%, #000 16.2%); }
+.sunburst-rays::after { content: ''; position: absolute; inset: 0; border-radius: 50%;
+  background: linear-gradient(90deg, var(--brand) 0%, rgba(24, 120, 180, .6) 30%, transparent 55%); }
+.sunburst-body { max-width: 420px; margin-left: 30%; }
+.sunburst-body h2 { font-family: var(--font-head); font-weight: 700; font-size: clamp(1.5rem, 2.4vw, 1.9rem); line-height: 1.2; margin: 0 0 .7rem; }
+.sunburst-body p { color: rgba(255, 255, 255, .9); font-size: .95rem; margin: 0 0 1.2rem; }
+.sunburst-btn { background: #0a2238; color: #fff; border-radius: 30px; padding: .5rem 1.3rem; font-weight: 600; font-size: .88rem; }
+.sunburst-btn:hover { background: #fff; color: var(--brand-dark); }
+@media (max-width: 991.98px) { .sunburst-body { margin-left: 0; } .sunburst-rays { right: -45%; width: 150%; bottom: -110%; } }
+
+/* Sunburst: anchor the sun at the bottom-right corner so rays fan across the right side */
+.sunburst-rays { right: -420px; bottom: -420px; width: 1000px; height: 1000px; aspect-ratio: auto;
+  background: repeating-conic-gradient(from 0deg, #4ea6dc 0deg 5deg, rgba(78, 166, 220, 0) 5deg 10deg);
+  -webkit-mask: radial-gradient(circle, transparent 0 9%, #000 9.2%, #000 70%, transparent 70.2%);
+          mask: radial-gradient(circle, transparent 0 9%, #000 9.2%, #000 70%, transparent 70.2%); }
+.sunburst-rays::after { display: none; }
+@media (max-width: 991.98px) { .sunburst-rays { right: -520px; bottom: -520px; width: 1000px; height: 1000px; opacity: .55; } }
