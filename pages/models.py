@@ -25,7 +25,7 @@ class SiteSettings(models.Model):
     email = models.EmailField(default='info@bnnengineering.co.ke')
     phone1 = models.CharField('Phone 1', max_length=30, default='+254 184 786 662')
     phone2 = models.CharField('Phone 2', max_length=30, blank=True, default='+254 184 786 663')
-    whatsapp = models.CharField('WhatsApp number', max_length=20, default='254700000000',
+    whatsapp = models.CharField('WhatsApp number', max_length=20, default='254184786662',
                                 help_text='International format without + or spaces, e.g. 254712345678')
     address = models.CharField(max_length=200, default='Nairobi, Kenya')
     hours = models.CharField('Opening hours', max_length=100, default='Mon – Sat, 8:00am – 6:00pm')
