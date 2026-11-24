@@ -8,6 +8,14 @@ from django.utils.safestring import mark_safe
 register = template.Library()
 
 
+def _e164(phone):
+    """'+254 184 786 662' or '0184 786 662' -> '+254184786662' (the format Google expects)."""
+    digits = ''.join(c for c in phone if c.isdigit())
+    if digits.startswith('0'):
+        digits = '254' + digits[1:]
+    return '+' + digits
+
+
 @register.simple_tag(takes_context=True)
 def seo_jsonld(context):
     request = context.get('request')
@@ -35,6 +43,20 @@ def seo_jsonld(context):
     }
     if same_as:
         business['sameAs'] = same_as
+    # Every phone line, the email and WhatsApp as contact points, so Google can show how to reach the business
+    contact_url = base + '/contact/'
+    langs = ['English', 'Swahili']
+    points = [{'@type': 'ContactPoint', 'telephone': _e164(p), 'contactType': kind, 'email': shop.email,
+               'areaServed': 'KE', 'availableLanguage': langs, 'url': contact_url}
+              for p, kind in zip(shop.phones, ('customer service', 'sales'))]
+    if shop.whatsapp:
+        points.append({'@type': 'ContactPoint', 'telephone': '+' + shop.whatsapp.lstrip('+'),
+                       'contactType': 'customer support (WhatsApp)',
+                       'url': 'https://wa.me/' + shop.whatsapp.lstrip('+'), 'areaServed': 'KE',
+                       'availableLanguage': langs})
+    if points:
+        business['contactPoint'] = points
+        business['telephone'] = points[0]['telephone']
     def block(d):  # escape '<' inside the JSON so no value can close the <script> tag early
         return '<script type="application/ld+json">' + json.dumps(d, ensure_ascii=False).replace('<', '\\u003c') + '</script>'
     return mark_safe(''.join(block(d) for d in (website, business)))
