@@ -53,7 +53,7 @@ class Command(BaseCommand):
         shop = SiteSettings.load()
         static_img = Path(settings.BASE_DIR) / 'static' / 'img'
         wa = shop.whatsapp or ''
-        wa_display = ('+' + wa[:3] + ' ' + wa[3:6] + ' ' + wa[6:]) if len(wa) >= 9 else wa
+        wa_display = ('+' + ' '.join([wa[:3], wa[3:6], wa[6:9], wa[9:]]).strip()) if len(wa) >= 9 else wa
         tmp = Path(tempfile.mkdtemp(prefix='bnn-adverts-'))
         try:
             for i, (key, tpl, photo, title, link, caption) in enumerate(POSTERS):
